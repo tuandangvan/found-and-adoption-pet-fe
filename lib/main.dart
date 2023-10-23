@@ -5,8 +5,7 @@ import 'package:found_adoption_application/screens/user_screens/animal_detail_sc
 import 'package:found_adoption_application/screens/user_screens/login_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/registration_form.dart';
-import 'package:found_adoption_application/screens/user_screens/signUp_screen.dart';
+
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
 
 void main() {
