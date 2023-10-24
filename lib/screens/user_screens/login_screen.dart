@@ -1,9 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:found_adoption_application/screens/user_screens/signUp_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:found_adoption_application/custom_widget/input_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+import 'package:http/http.dart' as http;
+
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  Future<void> login(String email, String password) async {
+    print('bnbbbbbbbbbbb');
+    try {
+      final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/sign-in");
+      print('aaaaaaaaaaaa');
+
+      final response = await http.post(
+        apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+        // Đăng nhập thành công, xử lý dữ liệu phản hồi (response.body) ở đây
+        final responseData = json.decode(response.body);
+        print('Đăng nhập thành công: $responseData');
+      } else {
+        // Đăng nhập không thành công, xử lý lỗi (response.statusCode) ở đây
+        print('Lỗi khi đăng nhập, mã trạng thái: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +98,12 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
-                    children: <Widget>[
-                      inputFile(label: "Email"),
-                      inputFile(label: "Password", obscureText: true)
+                    children: [
+                      inputField(label: "Email", controller: emailController),
+                      inputField(
+                          label: "Password",
+                          obscureText: true,
+                          controller: passwordController)
                     ],
                   ),
                 ),
@@ -83,10 +130,12 @@ class LoginScreen extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MenuFrame()));
+                          login(emailController.text.toString(),
+                              passwordController.text.toString());
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => MenuFrame()));
                         },
                         child: Text(
                           "Login",
@@ -137,34 +186,4 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-// we will be creating a widget for text field
-Widget inputFile({label, obscureText = false}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
-      ),
-      SizedBox(
-        height: 5,
-      ),
-      TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400),
-            ),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade400))),
-      ),
-      SizedBox(
-        height: 10,
-      )
-    ],
-  );
 }

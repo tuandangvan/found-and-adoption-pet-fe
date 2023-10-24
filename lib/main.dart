@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
@@ -11,6 +13,8 @@ import 'package:found_adoption_application/screens/user_screens/welcome_screen.d
 void main() {
   runApp(MyApp());
 }
+
+
 
 Color mainColor = const Color.fromRGBO(48, 96, 96, 1.0);
 Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
