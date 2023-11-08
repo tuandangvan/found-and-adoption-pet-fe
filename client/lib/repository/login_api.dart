@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/models/user.dart';
+import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:hive/hive.dart';
 

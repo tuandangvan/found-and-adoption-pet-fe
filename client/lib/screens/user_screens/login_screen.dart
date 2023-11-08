@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/repository/login_api.dart';
 import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
-import 'package:found_adoption_application/models/user.dart';
+import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:found_adoption_application/screens/user_screens/signUp_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
