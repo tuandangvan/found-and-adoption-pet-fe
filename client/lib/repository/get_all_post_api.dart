@@ -49,24 +49,25 @@
 import 'dart:convert';
 
 import 'package:found_adoption_application/repository/auth_api.dart';
-import 'package:found_adoption_application/models/user_post.dart';
+import 'package:found_adoption_application/models/post.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> getAllPost() async {
+Future<Post> getAllPost() async {
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
   var accessToken = currentUser.accessToken;
+  var responseData = {};
+  var response;
   try {
     final apiUrl =
         Uri.parse("http://10.0.2.2:8050/api/v1/post/65445509c0d354dc99df83b8");
 
-    var response = await http.post(apiUrl, headers: {
+    response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer ${accessToken}',
     });
-
-    var responseData = json.decode(response.body);
-    print('Response get ALL POST: $responseData');
+    responseData = json.decode(response.body);
+    // print('Response get ALL POST: $responseData');
 
     if (responseData['messages'] == 'jwt expired') {
       //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
@@ -79,21 +80,10 @@ Future<void> getAllPost() async {
       });
 
       responseData = json.decode(response.body);
+      // print(responseData);
     }
-
-    var userPostBox = await Hive.openBox('userPostBox'); // Lấy Hive box đã mở
-    var userpost = UserPost()
-      ..id = responseData['data']['_id']
-      ..userId = responseData['data']['userId']
-      ..createdAt = responseData['data']['createdAt']
-      ..content = responseData['data']['content']
-      // ..reaction = responseData['data']['reaction']
-      ..images = responseData['data']['images'];
-    // ..status = responseData['data']['status']
-    // ..comments = responseData['data']['comments'];
-
-    await userPostBox.put('userPost', userpost);
   } catch (e) {
     print(e);
   }
+  return Post.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
 }

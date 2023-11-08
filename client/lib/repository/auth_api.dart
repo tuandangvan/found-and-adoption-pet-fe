@@ -14,6 +14,8 @@ Future<String> refreshAccessToken() async {
     'Content-Type': 'application/json',
   });
 
+  print('call from refreshToken');
+
   if (response.statusCode == 200) {
     final responseData = json.decode(response.body);
     final newAccessToken = responseData['accessToken'];

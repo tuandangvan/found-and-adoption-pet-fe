@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/custom_widget/time_countdown.dart';
-import 'package:found_adoption_application/models/user_post.dart';
-import 'package:found_adoption_application/models/user.dart';
+import 'package:found_adoption_application/models/post.dart';
+import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/animal_detail_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/login_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/test.dart';
 
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
 import 'package:hive/hive.dart';
@@ -20,7 +21,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
-  Hive.registerAdapter(UserPostAdapter());
 
   runApp(MyApp());
 }
@@ -38,7 +38,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: FeedScreen(),
+//       home: SliderScreen(),
 //     );
 //   }
 // }
