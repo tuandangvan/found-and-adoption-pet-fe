@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen.dart';
 
@@ -46,10 +47,7 @@ class _MenuFrameState extends State<MenuFrame>
   Map<int, Widget> screens = {
     0: AdoptionScreen(),
     1: FeedScreen(),
-    2: Container(
-      decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(40)),
-    ),
+    2: EditProfileScreen(),
   };
 
   late List<Widget> screenSnapshot;
