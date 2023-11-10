@@ -18,19 +18,19 @@ class _MenuScreenState extends State<MenuScreen> {
   List<String> menuItems = [
     'Adoption',
     'Pet Stories',
-    'Add pet',
+    'Profile',
     'Favorite',
     'Messages',
-    'Profile'
+    'Add pet',
   ];
 
   List<IconData> icons = [
     FontAwesomeIcons.paw,
     FontAwesomeIcons.newspaper,
-    FontAwesomeIcons.plus,
+    FontAwesomeIcons.userAlt,
     FontAwesomeIcons.heart,
     FontAwesomeIcons.envelope,
-    FontAwesomeIcons.userAlt,
+    FontAwesomeIcons.plus,
   ];
 
   Widget buildMenuRow(int index) {

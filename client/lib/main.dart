@@ -8,6 +8,7 @@ import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/login_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
@@ -38,7 +39,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: SliderScreen(),
+//       home: EditProfileScreen(),
 //     );
 //   }
 // }
