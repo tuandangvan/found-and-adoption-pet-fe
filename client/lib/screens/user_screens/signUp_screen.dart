@@ -16,7 +16,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String? signupType;
+  String signupType = 'USER';
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     groupValue: signupType,
                                     onChanged: (value) {
                                       setState(() {
-                                        signupType = value;
+                                        signupType = value!;
                                       });
                                     },
                                   ),
@@ -129,11 +129,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Row(
                                 children: [
                                   Radio<String>(
-                                    value: 'PETCENTER',
+                                    value: 'CENTER',
                                     groupValue: signupType,
                                     onChanged: (value) {
                                       setState(() {
-                                        signupType = value;
+                                        signupType = value!;
                                       });
                                     },
                                   ),
@@ -166,12 +166,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 60,
                   onPressed: () async {
                     signup(context, emailController.text.toString(),
-                        passwordController.text.toString(), signupType!);
+                        passwordController.text.toString(), signupType);
+
+                    print(
+                        'From  Sign Up Screen with signUpType: ${signupType}');
 
                     final email = emailController.text.toString();
                     final emailRegisterBox =
                         await Hive.openBox('emailRegisterBox');
                     emailRegisterBox.put('email', email);
+                    emailRegisterBox.put('role', signupType);
                   },
                   elevation: 0,
                   shape: RoundedRectangleBorder(
