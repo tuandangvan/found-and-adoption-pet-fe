@@ -46,7 +46,8 @@ Future<void> signup(BuildContext context, String email, String password,
   }
 }
 
-Future<void> verifycode(BuildContext context, String email, String code) async {
+
+Future<bool> verifycode(String email, String code) async {
   try {
     final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/verify-code");
 
@@ -65,14 +66,17 @@ Future<void> verifycode(BuildContext context, String email, String code) async {
       final responseData = json.decode(response.body);
       print('Xác thực OTP thành công: $responseData');
 
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => RegistrationForm()));
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => RegistrationForm()));
+      return true;
     } else {
       print('Lỗi xác thực OTP, mã trạng thái: ${response.statusCode}');
       print(response.body);
+      return false;
     }
   } catch (e) {
     print(e);
+    return false;
   }
 }
 
