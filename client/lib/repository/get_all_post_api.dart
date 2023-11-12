@@ -1,51 +1,3 @@
-// import 'dart:convert';
-
-// import 'package:found_adoption_application/repository/auth_api.dart';
-// import 'package:found_adoption_application/models/user_post.dart';
-// import 'package:hive/hive.dart';
-// import 'package:http/http.dart' as http;
-
-// Future<void> getAllPost() async {
-//   var userBox = await Hive.openBox('userBox');
-//   var currentUser = userBox.get('currentUser');
-//   var accessToken = currentUser.accessToken;
-
-//   final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/post");
-
-//   var response = await http.post(apiUrl, headers: {
-//     'Authorization': 'Bearer ${accessToken}',
-//   });
-
-//   var responseData = json.decode(response.body);
-//   print('Response get ALL POST: $responseData');
-
-//   if (responseData['messages'] == 'jwt expired') {
-//     //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
-//     String newAccessToken = refreshAccessToken().toString();
-//     currentUser.accessToken = newAccessToken;
-//     userBox.put('currentUser', currentUser);
-
-//     response = await http.post(apiUrl, headers: {
-//       'Authorization': 'Bearer ${newAccessToken}',
-//     });
-
-//     responseData = json.decode(response.body);
-//   }
-
-//   var userPostBox = await Hive.openBox('userPostBox'); // Lấy Hive box đã mở
-//   var userpost = UserPost()
-//     ..id = responseData['data']['_id']
-//     ..userId = responseData['data']['accountId']
-//     ..createdAt = responseData['data']['email']
-//     ..content = responseData['data']['role']
-//     ..reaction = responseData['data']['isActive']
-//     ..images = responseData['data']['firstName']
-//     ..status = responseData['data']['lastName']
-//     ..comments = responseData['data']['phoneNumber'];
-
-//   await userPostBox.put('userPost', userpost);
-// }
-
 import 'dart:convert';
 
 import 'package:found_adoption_application/repository/auth_api.dart';
@@ -54,10 +6,22 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Post>> getAllPost() async {
+  //mở localstorage nếu currentClient là user
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
-  var accessToken = currentUser.accessToken;
-  print('Token cũ: ${accessToken}');
+
+  //mở localstorage nếu currentClient là center
+  var centerBox = await Hive.openBox('centerBox');
+  var currentCenter = centerBox.get('currentCenter');
+
+  // Sử dụng dữ liệu của người dùng hiện tại dựa trên tình huống cụ thể
+  var currentClient = currentUser != null && currentUser.role == 'USER'
+      ? currentUser
+      : currentCenter;
+
+  //bắt đầu từ đoạn này, cẩn phải thay đổi currentClient là currentUser hay currentCenter cho phù hợp
+  var accessToken = currentClient.accessToken;
+
   var responseData = {};
 
   try {
@@ -73,8 +37,12 @@ Future<List<Post>> getAllPost() async {
       //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
       var newAccessToken = refreshAccessToken().toString();
       print('Token mới: $newAccessToken');
-      currentUser.accessToken = newAccessToken;
-      userBox.put('currentUser', currentUser);
+      currentClient.accessToken = newAccessToken;
+      // userBox.put('currentUser', currentClient); //??????????
+
+      currentClient == currentUser
+          ? userBox.put('currentUser', currentClient)
+          : centerBox.put('currentCenter', currentClient);
 
       response = await http.post(apiUrl, headers: {
         'Authorization': 'Bearer $newAccessToken',
@@ -87,7 +55,7 @@ Future<List<Post>> getAllPost() async {
     print('Error in getAllPost: $e');
   }
 
-  print('Here: ${responseData['data']}');
+  print('All Post display here: ${responseData['data']}');
 
   var postList = responseData['data'] as List<dynamic>;
 

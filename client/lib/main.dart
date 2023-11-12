@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/custom_widget/time_countdown.dart';
+import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/current_user.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/register_form.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/animal_detail_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
@@ -22,6 +24,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(CenterAdapter());
 
   runApp(MyApp());
 }
@@ -39,7 +42,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: EditProfileScreen(),
+//       home: RegistrationCenterForm(),
 //     );
 //   }
 // }
@@ -78,18 +81,35 @@ class MyApp extends StatelessWidget {
 
 Future<bool> checkRefreshToken() async {
   try {
-    final userBox = await Hive.openBox('userBox');
-    final currentUser = userBox.get('currentUser');
-    final refreshTokenTimestamp = userBox.get('refreshTokenTimestamp');
+    var userBox = await Hive.openBox('userBox');
+    var currentUser = userBox.get('currentUser');
+
+    var centerBox = await Hive.openBox('centerBox');
+    var currentCenter = centerBox.get('currentCenter');
+
+    var currentClient = currentUser != null && currentUser.role == 'USER'
+        ? currentUser
+        : currentCenter;
+
+    var clientBox =
+        currentUser != null && currentUser.role == 'USER' ? userBox : centerBox;
+
+    var name = currentUser != null && currentUser.role == 'USER'
+        ? currentUser.firstName
+        : currentCenter.name;
+
+    final refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
     const refreshTokenValidityDays = 7;
     final DateTime now = DateTime.now();
 
-    if (currentUser != null) {
+    if (currentClient != null) {
       final expirationTime = refreshTokenTimestamp.add(
         Duration(days: refreshTokenValidityDays),
       );
-      print('The current user is Logged in at: ${refreshTokenTimestamp}');
+      print('The current client is Logged in at: ${refreshTokenTimestamp}');
       print('The RefreshToken is expired at: ${expirationTime}');
+      print('The currentClient is ${name} with role: ${currentClient.role}');
+
       if (now.isBefore(expirationTime)) {
         return true;
       }

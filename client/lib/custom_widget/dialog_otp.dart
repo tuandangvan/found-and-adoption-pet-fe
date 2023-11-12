@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/repository/signup_api.dart';
 import 'package:found_adoption_application/custom_widget/time_countdown.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/register_form.dart';
+import 'package:found_adoption_application/screens/user_screens/registration_form.dart';
 
 import 'package:hive/hive.dart';
 
 class ShowOTPInputDialog extends StatefulWidget {
-  const ShowOTPInputDialog({super.key, required this.storedEmail});
+  const ShowOTPInputDialog(
+      {super.key, required this.storedEmail, required this.signUpType});
 
   final String storedEmail;
+  final String signUpType;
 
   @override
   State<ShowOTPInputDialog> createState() => _ShowOTPInputDialogState();
@@ -163,15 +167,30 @@ class _ShowOTPInputDialogState extends State<ShowOTPInputDialog> {
                 ),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (filledCount == 6) {
                     String otp =
                         controllers.map((controller) => controller.text).join();
                     print("Entered OTP: $otp");
                     print(widget.storedEmail);
 
-                    verifycode(context, widget.storedEmail, otp);
-                    // Thực hiện xác nhận mã OTP
+                    bool verificationResult =
+                        await verifycode(widget.storedEmail, otp);
+
+                    if (verificationResult == true) {
+                      if (widget.signUpType == 'USER') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegistrationForm()));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    RegistrationCenterForm()));
+                      }
+                    }
                   }
                 },
                 child: const Text(
@@ -190,12 +209,14 @@ class _ShowOTPInputDialogState extends State<ShowOTPInputDialog> {
 void showOTPInputDialog(BuildContext context) async {
   final emailRegisterBox = await Hive.openBox('emailRegisterBox');
   final storedEmail = emailRegisterBox.get('email') as String;
+  final signUpType = emailRegisterBox.get('role') as String;
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return ShowOTPInputDialog(
         storedEmail: storedEmail,
+        signUpType: signUpType,
       );
     },
   );

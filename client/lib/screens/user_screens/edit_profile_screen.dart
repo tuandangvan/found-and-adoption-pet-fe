@@ -42,6 +42,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             size: 20,
             color: Colors.white,
           ),
+          // onPressed: () {
+          //   // Navigator.pop(context);
+          // },
+
         ),
       ),
       body: FutureBuilder<InfoUser>(

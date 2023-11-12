@@ -142,6 +142,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
                           var userBox = await Hive.openBox('userBox');
                           await userBox.put('currentUser', null);
+
+                          var centerBox = await Hive.openBox('centerBox');
+                          await centerBox.put('currentCenter', null);
                           //Close Hive
                           // await Hive.close();
                         },

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +24,11 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final clientPost = widget.snap!;
-    return Container(
+
+    return Card(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      elevation: 5,
+      margin: EdgeInsets.only(left: 0, top: 0, bottom: 1),
       child: Column(
         children: [
           Container(
@@ -32,26 +36,41 @@ class _PostCardState extends State<PostCard> {
                 .copyWith(right: 0),
             child: Row(
               children: [
+                const SizedBox(
+                  height: 5,
+                ),
                 CircleAvatar(
-                    radius: 16,
+                    radius: 24,
                     backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
                       clientPost.userId != null
                           ? '${clientPost.userId!.avatar}'
                           : '${clientPost.petCenterId.avatar}',
                     )),
+                const SizedBox(
+                  height: 8,
+                ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           clientPost.userId != null
                               ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
                               : clientPost.petCenterId.name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+
+                        //Thời gian đăng bài
+                        Text(
+                          'Posted on 10/10/2023',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
@@ -91,16 +110,11 @@ class _PostCardState extends State<PostCard> {
               ],
             ),
           ),
+          SizedBox(
+            height: 4,
+          ),
 
-          // IMAGE SECTION
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height * 0.35,
-          //   // width: double.infinity,
-          //   width: MediaQuery.of(context).size.width * 0.97,
-          //   child: Image.network(
-          //       'https://tinyjpg.com/images/social/website.jpg',
-          //       fit: BoxFit.cover),
-          // ),
+          //IMAGE SECTION
 
           clientPost.images != null && clientPost.images.isNotEmpty
               ? _slider(clientPost.images)
@@ -125,11 +139,11 @@ class _PostCardState extends State<PostCard> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '1,234 likes',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Container(
                   width: double.infinity,
@@ -158,15 +172,12 @@ class _PostCardState extends State<PostCard> {
                   child: Container(
                     child: Text(
                       'View all 200 comments',
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
                     ),
                   ),
                 ),
-                Container(
-                  child: Text(
-                    '11/05/2023',
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                  ),
+                const SizedBox(
+                  height: 5,
                 ),
               ],
             ),
@@ -177,65 +188,61 @@ class _PostCardState extends State<PostCard> {
   }
 
   Widget _slider(List imageList) {
-    return Column(children: [
-      Stack(
-        children: [
-          InkWell(
-            onTap: () {
-              print(currentIndex);
-            },
-            child: CarouselSlider(
-              items: imageList
-                  .map(
-                    (item) => Image.network(
-                      item,
-                      fit: BoxFit.cover,
-                      // width: MediaQuery.of(context).size.width * 0.35,
-                      // height: MediaQuery.of(context).size.height * 0.35,
-                    ),
-                  )
-                  .toList(),
-              carouselController: carouselController,
-              options: CarouselOptions(
-                scrollPhysics: const BouncingScrollPhysics(),
-                autoPlay: true,
-                aspectRatio: 2,
-                viewportFraction: 1,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 10,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: imageList.asMap().entries.map((entry) {
-                return GestureDetector(
-                  onTap: () => carouselController.animateToPage(entry.key),
-                  child: Container(
-                    width: currentIndex == entry.key ? 17 : 7,
-                    height: 7.0,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 3.0,
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: currentIndex == entry.key
-                            ? Colors.red
-                            : Colors.teal),
+    return Stack(
+      children: [
+        InkWell(
+          onTap: () {
+            print(currentIndex);
+          },
+          child: CarouselSlider(
+            items: imageList
+                .map(
+                  (item) => Image.network(
+                    item,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                   ),
-                );
-              }).toList(),
+                )
+                .toList(),
+            carouselController: carouselController,
+            options: CarouselOptions(
+              scrollPhysics: const BouncingScrollPhysics(),
+              autoPlay: true,
+              aspectRatio: 2,
+              viewportFraction: 1,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
             ),
           ),
-        ],
-      ),
-    ]);
+        ),
+        Positioned(
+          bottom: 10,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imageList.asMap().entries.map((entry) {
+              return GestureDetector(
+                onTap: () => carouselController.animateToPage(entry.key),
+                child: Container(
+                  width: currentIndex == entry.key ? 17 : 7,
+                  height: 7.0,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 3.0,
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color:
+                          currentIndex == entry.key ? Colors.red : Colors.teal),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
   }
 }
