@@ -3,28 +3,22 @@ import 'package:found_adoption_application/screens/pet_center_screens/menu_frame
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:hive/hive.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class EditProfileCenterScreen extends StatefulWidget {
+  const EditProfileCenterScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<EditProfileCenterScreen> createState() =>
+      _EditProfileCenterScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
   bool isObsecurePassword = true;
-  bool selectedRadio = true;
-
-  setSelectedRadio(bool val) {
-    setState(() {
-      selectedRadio = val;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Edit Profile UI'),
+        title: Text('Flutter Edit Profile CENTER'),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
@@ -122,46 +116,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               //Thực hiện các inputField
 
-              buildTextField('First Name', "My Lan", false),
-              buildTextField('Last Name', 'Do', false),
+              buildTextField('Name', "Trung tâm thú cưng Mỹ Lan", false),
 
               buildTextField("Phone Number", "0799353524", false),
               buildTextField("Password", "*******", true),
               buildTextField("Address", "Ben Tre", false),
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Experiences: ',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400),
-                ),
-              ),
-
-              //Radion button Experience
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Radio(
-                      value: true,
-                      groupValue: selectedRadio,
-                      onChanged: (val) {
-                        setSelectedRadio(val!);
-                      }),
-                  Text('Yes'),
-                  SizedBox(
-                    width: 50,
-                  ),
-                  Radio(
-                      value: false,
-                      groupValue: selectedRadio,
-                      onChanged: (val) {
-                        setSelectedRadio(val!);
-                      }),
-                  Text('No'),
-                ],
-              ),
 
               TextFormField(
                 decoration: InputDecoration(

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
 import 'package:found_adoption_application/screens/user_screens/registration_form.dart';
-import 'package:found_adoption_application/screens/user_screens/signUp_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:found_adoption_application/screens/signUp_screen.dart';
+import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
