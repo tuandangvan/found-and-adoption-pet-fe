@@ -23,11 +23,17 @@ Future<String> refreshAccessToken() async {
     'Content-Type': 'application/json',
   });
 
-
-
   if (response.statusCode == 200) {
     final responseData = json.decode(response.body);
     final newAccessToken = responseData['accessToken'];
+
+    if (currentClient.role == 'USER') {
+      currentUser.accessToken = newAccessToken;
+      userBox.put('currentUser', currentUser);
+    }else{
+      currentCenter.accessToken = newAccessToken;
+      centerBox.put('currentUser', currentCenter);
+    }
     return newAccessToken;
   } else {
     throw Exception('Lỗi làm mới AccessToken');
