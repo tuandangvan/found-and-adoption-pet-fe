@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/repository/center_api/center_form.dart';
 import 'package:found_adoption_application/repository/user_form_api.dart';
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:found_adoption_application/screens/welcome_screen.dart';
 
 class RegistrationCenterForm extends StatefulWidget {
   const RegistrationCenterForm({super.key});

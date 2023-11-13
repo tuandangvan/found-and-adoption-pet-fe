@@ -66,7 +66,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:hive/hive.dart';
 
 import 'package:http/http.dart' as http;
@@ -122,7 +123,7 @@ Future<void> login(
         print('Email: ${retrievedUser.email}');
 
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MenuFrame()));
+            context, MaterialPageRoute(builder: (context) => MenuFrameUser()));
       }
 
       //Nếu response trả về là Center
@@ -150,8 +151,8 @@ Future<void> login(
         print('Center ID: ${retrievedCenter.id}');
         print('Email: ${retrievedCenter.email}');
 
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MenuFrame()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MenuFrameCenter()));
       }
     } else {
       print('Lỗi khi đăng nhập, mã trạng thái: ${response.statusCode}');

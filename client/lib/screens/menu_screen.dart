@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:hive/hive.dart';
-import '../../main.dart';
+import '../main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuScreen extends StatefulWidget {
