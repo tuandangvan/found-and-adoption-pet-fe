@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 
 import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/repository/profile_api.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/screens/user_screens/upload_avatar_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -16,6 +16,11 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late Future<InfoUser> userFuture;
+  TextEditingController textFisrtName = TextEditingController();
+  TextEditingController textLastName = TextEditingController();
+  TextEditingController textPhoneNumber = TextEditingController();
+  TextEditingController textAddress = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   bool isObsecurePassword = true;
-  bool selectedRadio = true;
+  bool selectedRadio = false;
 
   setSelectedRadio(bool val) {
     setState(() {
@@ -69,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             }
           },
           // onPressed: () {
-          //   // Navigator.pop(context);
+          //   Navigator.pop(context);
           // },
         ),
       ),
@@ -85,6 +90,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             } else {
               // If data is successfully fetched, display the form
               InfoUser user = snapshot.data!;
+              selectedRadio = user.experience;
+
               return Container(
                 padding: EdgeInsets.only(left: 15, top: 20, right: 15),
                 child: GestureDetector(
@@ -117,23 +124,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   )),
                             ),
                             Positioned(
-                              // onPressed: (){},
-                              bottom: 0.0,
-                              right: 0.0,
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        width: 4, color: Colors.white),
-                                    color: Colors.blue),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
+                                bottom: 0.0,
+                                right: 0.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ImageUploadScreen()));
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 4, color: Colors.white),
+                                        color: Colors.blue),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ))
                           ],
                         ),
                       ),
@@ -167,7 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           Radio(
                               value: true,
-                              groupValue: user.experience,
+                              groupValue: selectedRadio,
                               onChanged: (val) {
                                 setSelectedRadio(val!);
                               }),
@@ -177,7 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           Radio(
                               value: false,
-                              groupValue: user.experience,
+                              groupValue: selectedRadio,
                               onChanged: (val) {
                                 setSelectedRadio(val!);
                               }),
@@ -218,7 +232,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                               await updateProfile(context, textFisrtName.text.toString(),
+                               textLastName.text.toString(), 
+                               textPhoneNumber.text.toString(), 
+                               textAddress.text.toString());
+                               print('update success');
+                            },
                             child: Text(
                               'SAVE',
                               style: TextStyle(
@@ -249,6 +269,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: EdgeInsets.only(bottom: 30),
       child: TextField(
         // obscureText: isReadOnly ? isObsecurePassword : false,
+        controller: labelText=="First Name"? textFisrtName:(
+          labelText=="Last Name"?textLastName:(
+          labelText=="Phone Number"?textPhoneNumber:(
+          labelText=="Address"?textAddress:null
+        ))),
         readOnly: isReadOnly,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 5),
