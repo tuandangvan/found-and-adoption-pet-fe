@@ -20,6 +20,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController textLastName = TextEditingController();
   TextEditingController textPhoneNumber = TextEditingController();
   TextEditingController textAddress = TextEditingController();
+  var count = 0;
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Edit Profile UI'),
+        title: Text('My profiles'),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -90,7 +91,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             } else {
               // If data is successfully fetched, display the form
               InfoUser user = snapshot.data!;
-              selectedRadio = user.experience;
+              if (count == 0) {
+                selectedRadio = user.experience;
+                count++;
+              }
 
               return Container(
                 padding: EdgeInsets.only(left: 15, top: 20, right: 15),
@@ -159,7 +163,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                       buildTextField('First Name', user.firstName, false),
                       buildTextField('Last Name', user.lastName, false),
-
                       buildTextField("Phone Number", user.phoneNumber, false),
                       buildTextField("Email", user.email, true),
                       buildTextField("Role", user.role, true),
@@ -216,7 +219,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              textFisrtName.text = "";
+                              textLastName.text = "";
+                              textPhoneNumber.text = "";
+                              textAddress.text = "";
+                              setSelectedRadio(user.experience);
+                            },
                             child: Text(
                               'CANCEL',
                               style: TextStyle(
@@ -233,11 +242,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                               await updateProfile(context, textFisrtName.text.toString(),
-                               textLastName.text.toString(), 
-                               textPhoneNumber.text.toString(), 
-                               textAddress.text.toString());
-                               print('update success');
+                              await updateProfile(
+                                  context,
+                                  textFisrtName.text.toString(),
+                                  textLastName.text.toString(),
+                                  textPhoneNumber.text.toString(),
+                                  textAddress.text.toString(),
+                                  selectedRadio);
+                                  Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditProfileScreen()));
                             },
                             child: Text(
                               'SAVE',
@@ -269,11 +285,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: EdgeInsets.only(bottom: 30),
       child: TextField(
         // obscureText: isReadOnly ? isObsecurePassword : false,
-        controller: labelText=="First Name"? textFisrtName:(
-          labelText=="Last Name"?textLastName:(
-          labelText=="Phone Number"?textPhoneNumber:(
-          labelText=="Address"?textAddress:null
-        ))),
+        controller: labelText == "First Name"
+            ? textFisrtName
+            : (labelText == "Last Name"
+                ? textLastName
+                : (labelText == "Phone Number"
+                    ? textPhoneNumber
+                    : (labelText == "Address" ? textAddress : null))),
         readOnly: isReadOnly,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 5),
