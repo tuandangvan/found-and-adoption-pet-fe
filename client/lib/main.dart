@@ -1,24 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:found_adoption_application/custom_widget/post_card.dart';
-import 'package:found_adoption_application/custom_widget/time_countdown.dart';
-import 'package:found_adoption_application/models/current_center.dart';
-import 'package:found_adoption_application/models/post.dart';
-import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/register_form.dart';
-import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/animal_detail_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/feed_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/login_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/test.dart';
 
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/models/current_center.dart';
+
+import 'package:found_adoption_application/models/current_user.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+
+import 'package:found_adoption_application/screens/welcome_screen.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -42,13 +32,12 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: RegistrationCenterForm(),
+//       home: EditProfileCenterScreen(),
 //     );
 //   }
 // }
 
 class MyApp extends StatelessWidget {
-  // Đặt biến hasValidRefreshToken là một Future<bool>
   Future<bool> hasValidRefreshToken = checkRefreshToken();
 
   @override
@@ -58,26 +47,106 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final refreshTokenIsValid = snapshot.data;
-          if (refreshTokenIsValid != null) {
+          print('Giá trị của refreshToken is Valid: ${refreshTokenIsValid}');
+          if (refreshTokenIsValid != false) {
+            //CHECK ROLE
+            return FutureBuilder<Box>(
+              future: Hive.openBox('userBox'),
+              builder: (context, userBoxSnapshot) {
+                if (userBoxSnapshot.connectionState == ConnectionState.done) {
+                  var userBox = userBoxSnapshot.data;
+                  return FutureBuilder<Box>(
+                    future: Hive.openBox('centerBox'),
+                    builder: (context, centerBoxSnapshot) {
+                      if (centerBoxSnapshot.connectionState ==
+                          ConnectionState.done) {
+                        var centerBox = centerBoxSnapshot.data;
+                        var currentUser = userBox!.get('currentUser');
+                        var currentCenter = centerBox!.get('currentCenter');
+
+                        var currentClient =
+                            currentUser != null && currentUser.role == 'USER'
+                                ? currentUser
+                                : currentCenter;
+
+                        if (currentClient != null) {
+                          if (currentClient.role == 'USER') {
+                            return MaterialApp(
+                              title: 'Flutter Demo',
+                              debugShowCheckedModeBanner: false,
+                              theme: ThemeData(
+                                primaryColor: mainColor,
+                              ),
+                              home: MenuFrameUser(),
+                            );
+                          } else if (currentClient.role == 'CENTER') {
+                            return MaterialApp(
+                              title: 'Flutter Demo',
+                              debugShowCheckedModeBanner: false,
+                              theme: ThemeData(
+                                primaryColor: mainColor,
+                              ),
+                              home: MenuFrameCenter(),
+                            );
+                          }
+                        }
+                      }
+                      return CircularProgressIndicator();
+                    },
+                  );
+                }
+                return CircularProgressIndicator();
+              },
+            );
+          } else {
             return MaterialApp(
               title: 'Flutter Demo',
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 primaryColor: mainColor,
               ),
-              home: refreshTokenIsValid ? MenuFrame() : WelcomeScreen(),
+              home: WelcomeScreen(),
             );
-          } else {
-            // Xử lý trường hợp biến là null
-            return CircularProgressIndicator();
           }
-        } else {
-          return CircularProgressIndicator();
         }
+        return CircularProgressIndicator();
       },
     );
   }
 }
+
+// class MyApp extends StatelessWidget {
+//   // Đặt biến hasValidRefreshToken là một Future<bool>
+//   Future<bool> hasValidRefreshToken = checkRefreshToken();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<bool>(
+//       future: hasValidRefreshToken,
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.done) {
+//           final refreshTokenIsValid = snapshot.data;
+//           if (refreshTokenIsValid != null) {
+
+//             return MaterialApp(
+//               title: 'Flutter Demo',
+//               debugShowCheckedModeBanner: false,
+//               theme: ThemeData(
+//                 primaryColor: mainColor,
+//               ),
+//               home: refreshTokenIsValid ? MenuFrame() : WelcomeScreen(),
+//             );
+//           } else {
+//             // Xử lý trường hợp biến là null
+//             return CircularProgressIndicator();
+//           }
+//         } else {
+//           return CircularProgressIndicator();
+//         }
+//       },
+//     );
+//   }
+// }
 
 Future<bool> checkRefreshToken() async {
   try {
