@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/repository/get_all_post_api.dart';
-import 'package:found_adoption_application/screens/user_screens/animal_detail_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
+import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 
 class Animal {
   final String name;
@@ -132,7 +132,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                   child: Icon(FontAwesomeIcons.bars),
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MenuFrame()));
+                        MaterialPageRoute(builder: (context) => MenuFrameUser()));
                   },
                 ),
                 Column(

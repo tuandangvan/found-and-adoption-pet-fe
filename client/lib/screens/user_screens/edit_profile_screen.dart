@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:hive/hive.dart';
+
 import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/repository/profile_api.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
 import 'package:found_adoption_application/screens/user_screens/upload_avatar_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -39,15 +42,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: Text('Flutter Edit Profile UI'),
         leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MenuFrame()));
-          },
           icon: Icon(
             Icons.arrow_back_ios,
             size: 20,
             color: Colors.white,
           ),
+          onPressed: () async {
+            var userBox = await Hive.openBox('userBox');
+            var centerBox = await Hive.openBox('centerBox');
+
+            var currentUser = userBox.get('currentUser');
+            var currentCenter = centerBox.get('currentCenter');
+
+            var currentClient =
+                currentUser != null && currentUser.role == 'USER'
+                    ? currentUser
+                    : currentCenter;
+
+            if (currentClient != null) {
+              if (currentClient.role == 'USER') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MenuFrameUser()),
+                );
+              } else if (currentClient.role == 'CENTER') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MenuFrameCenter()),
+                );
+              }
+            }
+          },
           // onPressed: () {
           //   Navigator.pop(context);
           // },
@@ -244,7 +269,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: EdgeInsets.only(bottom: 30),
       child: TextField(
         // obscureText: isReadOnly ? isObsecurePassword : false,
-        controller: labelText=="Fisrt Name"? textFisrtName:(
+        controller: labelText=="First Name"? textFisrtName:(
           labelText=="Last Name"?textLastName:(
           labelText=="Phone Number"?textPhoneNumber:(
           labelText=="Address"?textAddress:null

@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/center_api/login.dart';
+
 import 'package:found_adoption_application/repository/login_api.dart';
 import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame.dart';
-import 'package:found_adoption_application/screens/user_screens/signUp_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/screens/signUp_screen.dart';
+import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';
 import 'package:hive/hive.dart';
 
@@ -114,21 +114,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () async {
                           final emailRegisterBox =
                               await Hive.openBox('emailRegisterBox');
-                        
 
-                       
-
-                          
-                            // Kiểm tra giá trị của signUpType và thực hiện các hành động tương ứng
-                            login(
-                                context,
-                                emailController.text.toString(),
-                                passwordController.text.toString(),
-                                );
-                
-                    
-               
-                          
+                          // Kiểm tra giá trị của signUpType và thực hiện các hành động tương ứng
+                          login(
+                            context,
+                            emailController.text.toString(),
+                            passwordController.text.toString(),
+                          );
                         },
                         child: Text(
                           "Login",

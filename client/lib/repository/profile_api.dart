@@ -54,8 +54,6 @@ Future<void> updateProfile(
   var userId = currentUser.id;
   var accessToken = currentUser.accessToken;
   try {
-    print(accessToken);
-    print("$firstName $lastName $phoneNumber $address" );
     var responseData;
     final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/user/${userId}");
     var body = jsonEncode(<String, String>{
@@ -64,7 +62,6 @@ Future<void> updateProfile(
       if (phoneNumber != "") 'phoneNumber': phoneNumber,
       if (address != "") 'address': address
     });
-    print(body);
 
     var response = await http.put(apiUrl,
         headers: {
@@ -73,7 +70,6 @@ Future<void> updateProfile(
         },
         body: body);
     responseData = json.decode(response.body);
-    print("update $responseData");
 
     if (responseData['message'] == 'jwt expired') {
       responseData = await callBackApi(apiUrl, "put", body);

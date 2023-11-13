@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/feed_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_screen.dart';
+import 'package:found_adoption_application/screens/feed_screen.dart';
+import 'package:found_adoption_application/screens/menu_screen.dart';
 
-class MenuFrame extends StatefulWidget {
-  const MenuFrame({super.key});
+class MenuFrameCenter extends StatefulWidget {
+  const MenuFrameCenter({super.key});
 
   @override
-  State<MenuFrame> createState() => _MenuFrameState();
+  State<MenuFrameCenter> createState() => _MenuFrameCenterState();
 }
 
-class _MenuFrameState extends State<MenuFrame>
+class _MenuFrameCenterState extends State<MenuFrameCenter>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   Duration duration = Duration(microseconds: 200);
@@ -47,7 +48,7 @@ class _MenuFrameState extends State<MenuFrame>
   Map<int, Widget> screens = {
     0: AdoptionScreen(),
     1: FeedScreen(),
-    2: EditProfileScreen(),
+    2: EditProfileCenterScreen(),
   };
 
   late List<Widget> screenSnapshot;
