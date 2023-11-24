@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:hive/hive.dart';
 import 'package:found_adoption_application/repository/change_avatar_api.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 
@@ -28,7 +30,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Upload'),
+        title: Text('Change Avatar'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -65,12 +67,35 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                 ? ElevatedButton(
                     onPressed: () async {
                       await changeAvatar(context, _pickedImage);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditProfileScreen()));
+
+                      var userBox = await Hive.openBox('userBox');
+                      var centerBox = await Hive.openBox('centerBox');
+
+                      var currentUser = userBox.get('currentUser');
+                      var currentCenter = centerBox.get('currentCenter');
+
+                      var currentClient =
+                          currentUser != null && currentUser.role == 'USER'
+                              ? currentUser
+                              : currentCenter;
+
+                      if (currentClient != null) {
+                        if (currentClient.role == 'USER') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileScreen()),
+                          );
+                        } else if (currentClient.role == 'CENTER') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileCenterScreen()),
+                          );
+                        }
+                      }
                     },
-                    child: Text('Upload Image'),
+                    child: Text('Change Avatar'),
                   )
                 : Container(),
           ],

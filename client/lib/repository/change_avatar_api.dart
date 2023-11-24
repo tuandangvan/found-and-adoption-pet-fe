@@ -8,9 +8,16 @@ import 'package:http/http.dart' as http;
 
 Future<void> changeAvatar(BuildContext context, imageFile) async {
   var userBox = await Hive.openBox('userBox');
+  var centerBox = await Hive.openBox('centerBox');
+
   var currentUser = userBox.get('currentUser');
-  var userId = currentUser.id;
-  var accessToken = currentUser.accessToken;
+  var currentCenter = centerBox.get('currentCenter');
+
+  var currentClient = currentUser != null && currentUser.role == 'USER'
+      ? currentUser
+      : currentCenter;
+
+  var accessToken = currentClient.accessToken;
   try {
     var responseData;
     var url;
@@ -33,9 +40,6 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
     if (responseData['message'] == 'jwt expired') {
       //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
       var newAccessToken = refreshAccessToken().toString();
-      currentUser.accessToken = newAccessToken;
-      userBox.put('currentUser', currentUser);
-
       // Add headers to the reques
       request.headers.addAll({
         'Authorization': 'Bearer $newAccessToken',
@@ -50,7 +54,6 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
 
     if (response.statusCode == 200) {
       url = responseData['url'];
-      print(url);
     } else {
       // Handle error
       print('Error uploading image: ${response.statusCode}');
@@ -60,27 +63,30 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
     }
 
     //call api update avatar
-    if (url!=null) {
-      final apiUrl2 = Uri.parse("http://10.0.2.2:8050/api/v1/user/${userId}");
+    if (url != null) {
+      final apiUrl2;
+      if (currentClient.role == 'USER') {
+        apiUrl2 = Uri.parse("http://10.0.2.2:8050/api/v1/user/${currentClient.id}");
+      } else {
+        apiUrl2 = Uri.parse("http://10.0.2.2:8050/api/v1/center/${currentClient.id}");
+      }
       var body = jsonEncode(<String, String>{
-          'avatar': url,
-        });
+        'avatar': url,
+      });
 
-      final response2 = await http.put(
-        apiUrl2,
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
-        body: body
-      );
+      final response2 = await http.put(apiUrl2,
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          body: body);
 
       responseData = json.decode(response2.body);
 
       if (responseData['message'] == 'jwt expired') {
-          responseData = await callBackApi(apiUrl2, "put", body);
+        responseData = await callBackApi(apiUrl2, "put", body);
       }
-      if(responseData['success']){
+      if (responseData['success']) {
         print('upload image success');
       }
     }
