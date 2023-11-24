@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:found_adoption_application/repository/auth_api.dart';
-import 'package:found_adoption_application/models/post.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<Post>> getAllPost() async {
-  //mở localstorage nếu currentClient là user
+Future<bool> addPost(String content, List<dynamic> imagePaths) async {
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
 
@@ -27,14 +25,21 @@ Future<List<Post>> getAllPost() async {
   try {
     final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/post");
 
-    var response = await http.get(apiUrl, headers: {
-      'Authorization': 'Bearer $accessToken',
-    });
+    var response = await http.post(
+      apiUrl,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "content": content,
+        "images": imagePaths,
+      }),
+    );
+
     responseData = json.decode(response.body);
-    // print('Response get ALL POST: $responseData');
 
     if (responseData['message'] == 'jwt expired') {
-      //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
       var newAccessToken = refreshAccessToken().toString();
 
       currentClient.accessToken = newAccessToken;
@@ -44,24 +49,35 @@ Future<List<Post>> getAllPost() async {
           ? userBox.put('currentUser', currentClient)
           : centerBox.put('currentCenter', currentClient);
 
-      response = await http.post(apiUrl, headers: {
-        'Authorization': 'Bearer $newAccessToken',
-      });
+      response = await http.post(
+        apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "content": content,
+          "images": imagePaths,
+        }),
+      );
 
       responseData = json.decode(response.body);
       print(responseData);
     }
+
+    if (response.statusCode == 201) {
+      final responseData = json.decode(response.body);
+      print('Post bài viết thành công: $responseData');
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => RegistrationForm()));
+      return true;
+    } else {
+      print('Post fail: ${response.statusCode}');
+      print(response.body);
+      return false;
+    }
   } catch (e) {
-    print('Error in getAllPost: $e');
+    print(e);
+    return false;
   }
-
-  print('All Post display here: ${responseData['data']}');
-
-  print(responseData);
-
-  var postList = responseData['data'] as List<dynamic>;
-
-  List<Post> posts = postList.map((json) => Post.fromJson(json)).toList();
-
-  return posts;
 }

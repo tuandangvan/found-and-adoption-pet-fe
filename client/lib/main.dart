@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
+
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -10,6 +11,8 @@ import 'package:found_adoption_application/screens/user_screens/menu_frame_user.
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 void main() async {
   await Hive.initFlutter();
@@ -32,13 +35,15 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: EditProfileCenterScreen(),
+//       home: CommentScreen(),
 //     );
 //   }
 // }
 
 class MyApp extends StatelessWidget {
   Future<bool> hasValidRefreshToken = checkRefreshToken();
+  late io.Socket socket;
+  var serverUrl = 'http://10.0.2.2:8050';
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +75,16 @@ class MyApp extends StatelessWidget {
                                 : currentCenter;
 
                         if (currentClient != null) {
+                          //connect socket server
+                          socket = io.io(serverUrl, <String, dynamic>{
+                            'transports': ['websocket'],
+                            'autoConnect': true,
+                          });
+                          print(socket.io.toString());
+
                           if (currentClient.role == 'USER') {
+                            socket.emit(
+                                'addNewUser', {'userId': currentClient.id});
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,
@@ -80,6 +94,8 @@ class MyApp extends StatelessWidget {
                               home: MenuFrameUser(),
                             );
                           } else if (currentClient.role == 'CENTER') {
+                            socket.emit(
+                                'addNewUser', {'userId': currentClient.id});
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,

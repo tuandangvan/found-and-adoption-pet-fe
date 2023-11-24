@@ -18,12 +18,15 @@ class CurrentCenter extends HiveObject {
   late String name;
 
   @HiveField(6)
-  late String phoneNumber;
+  late String avatar;
+
   @HiveField(7)
-  late String address;
+  late String phoneNumber;
   @HiveField(8)
-  late String refreshToken;
+  late String address;
   @HiveField(9)
+  late String refreshToken;
+  @HiveField(10)
   late String accessToken;
 }
 
@@ -41,6 +44,7 @@ class CenterAdapter extends TypeAdapter<CurrentCenter> {
       ..role = reader.readString()
       ..isActive = reader.readBool()
       ..name = reader.readString()
+      ..avatar = reader.readString()
       ..phoneNumber = reader.readString()
       ..address = reader.readString()
       ..refreshToken = reader.readString()
@@ -57,7 +61,7 @@ class CenterAdapter extends TypeAdapter<CurrentCenter> {
     writer.writeString(obj.role);
     writer.writeBool(obj.isActive);
     writer.writeString(obj.name);
-
+    writer.writeString(obj.avatar);
     writer.writeString(obj.phoneNumber);
     writer.writeString(obj.address);
     writer.writeString(obj.refreshToken);

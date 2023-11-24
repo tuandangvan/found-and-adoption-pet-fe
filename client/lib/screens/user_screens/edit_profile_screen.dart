@@ -249,11 +249,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   textPhoneNumber.text.toString(),
                                   textAddress.text.toString(),
                                   selectedRadio);
-                                  Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditProfileScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditProfileScreen()));
                             },
                             child: Text(
                               'SAVE',
