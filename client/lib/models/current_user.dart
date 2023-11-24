@@ -21,10 +21,12 @@ class User extends HiveObject {
   @HiveField(7)
   late String phoneNumber;
   @HiveField(8)
-  late String address;
+  late String avatar;
   @HiveField(9)
-  late String refreshToken;
+  late String address;
   @HiveField(10)
+  late String refreshToken;
+  @HiveField(11)
   late String accessToken;
 }
 
@@ -44,6 +46,7 @@ class UserAdapter extends TypeAdapter<User> {
       ..firstName = reader.readString()
       ..lastName = reader.readString()
       ..phoneNumber = reader.readString()
+      ..avatar = reader.readString()
       ..address = reader.readString()
       ..refreshToken = reader.readString()
       ..accessToken = reader.readString();
@@ -61,6 +64,7 @@ class UserAdapter extends TypeAdapter<User> {
     writer.writeString(obj.firstName);
     writer.writeString(obj.lastName);
     writer.writeString(obj.phoneNumber);
+    writer.writeString(obj.avatar);
     writer.writeString(obj.address);
     writer.writeString(obj.refreshToken);
     writer.writeString(obj.accessToken);
