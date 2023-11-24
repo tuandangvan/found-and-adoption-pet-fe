@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:found_adoption_application/repository/auth_api.dart';
+import 'package:found_adoption_application/models/post.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
-Future<String> uploadImage(File image) async {
+Future<void> postComment(String postID, String content) async {
   //mở localstorage nếu currentClient là user
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
@@ -23,18 +25,24 @@ Future<String> uploadImage(File image) async {
   var accessToken = currentClient.accessToken;
 
   var responseData = {};
+  var response;
 
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/upload/single");
+    final apiUrl =
+        Uri.parse("http://10.0.2.2:8050/api/v1/post/$postID/comment");
 
-    var request = http.MultipartRequest('POST', apiUrl)
-      ..headers['Authorization'] = 'Bearer $accessToken'
-      ..files.add(await http.MultipartFile.fromPath('file', image.path));
+    response = await http.post(
+      apiUrl,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode({
+        'content': content,
+      }),
+    );
 
-    var response = await request.send();
-    var responseBody = await response.stream.bytesToString();
-    responseData = json.decode(responseBody);
-    print("ddddddd: ${responseData['url']}");
+    print('test response post_comment: $response');
 
     if (responseData['message'] == 'jwt expired') {
       //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
@@ -45,21 +53,23 @@ Future<String> uploadImage(File image) async {
           ? userBox.put('currentUser', currentClient)
           : centerBox.put('currentCenter', currentClient);
 
-      var request = http.MultipartRequest('POST', apiUrl)
-        ..headers['Authorization'] = 'Bearer $newAccessToken'
-        ..files.add(await http.MultipartFile.fromPath('file', image.path));
+      response = await http.post(
+        apiUrl,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'content': content,
+        }),
+      );
 
-      var response = await request.send();
-      responseBody = await response.stream.bytesToString();
-      responseData = json.decode(responseBody);
-      print('eeeeeeeee: $responseData');
-      return responseData['url'];
+      print('test response post_comment: $response');
     }
 
-    print("đường dẫn đến ảnh: ${responseData['url']}");
-    return responseData['url'];
+    print("test response post_comment external: $response");
+    // return responseData['images'];
   } catch (e) {
     print('Error in getAllPost: $e');
-    return '';
   }
 }

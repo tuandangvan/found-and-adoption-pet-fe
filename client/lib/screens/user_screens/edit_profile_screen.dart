@@ -233,11 +233,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                               await updateProfile(context, textFisrtName.text.toString(),
-                               textLastName.text.toString(), 
-                               textPhoneNumber.text.toString(), 
-                               textAddress.text.toString());
-                               print('update success');
+                              await updateProfile(
+                                  context,
+                                  textFisrtName.text.toString(),
+                                  textLastName.text.toString(),
+                                  textPhoneNumber.text.toString(),
+                                  textAddress.text.toString());
+                              print('update success');
                             },
                             child: Text(
                               'SAVE',
@@ -269,11 +271,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: EdgeInsets.only(bottom: 30),
       child: TextField(
         // obscureText: isReadOnly ? isObsecurePassword : false,
-        controller: labelText=="First Name"? textFisrtName:(
-          labelText=="Last Name"?textLastName:(
-          labelText=="Phone Number"?textPhoneNumber:(
-          labelText=="Address"?textAddress:null
-        ))),
+        controller: labelText == "First Name"
+            ? textFisrtName
+            : (labelText == "Last Name"
+                ? textLastName
+                : (labelText == "Phone Number"
+                    ? textPhoneNumber
+                    : (labelText == "Address" ? textAddress : null))),
         readOnly: isReadOnly,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 5),

@@ -1,14 +1,42 @@
+import 'package:found_adoption_application/models/pet_center.dart';
+import 'package:found_adoption_application/models/user.dart';
+
 class Comment {
   final String id;
-  final String name;
-  final String avatar;
+  User? userId;
+  PetCenter? centerId;
+  final String? commentId;
   final String content;
   final String createdAt;
 
-  const Comment(
+  Comment(
       {required this.id,
-      required this.name,
-      required this.avatar,
+      this.userId,
+      this.centerId,
+      this.commentId,
       required this.content,
       required this.createdAt});
+
+  factory Comment.fromJson(Map<String, dynamic> json) {
+    return Comment(
+        id: json['_id'],
+        userId: json['userId'] != null
+            ? User(
+                id: json['userId']['_id'] as String,
+                firstName: json['userId']['firstName'] as String,
+                lastName: json['userId']['lastName'] as String,
+                avatar: json['userId']['avatar'] as String,
+              )
+            : null,
+        centerId: json['centerId'] != null
+            ? PetCenter(
+                id: json['centerId']['_id'] as String,
+                name: json['centerId']['name'] as String,
+                avatar: json['centerId']['avatar'] as String,
+              )
+            : null,
+        commentId: json['commentId'] ?? null,
+        content: json['content'],
+        createdAt: json['createdAt']);
+  }
 }

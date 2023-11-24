@@ -39,7 +39,7 @@ Future<InfoUser> getProfile(BuildContext context) async {
 
       responseData = json.decode(response.body);
     }
-    var userData = responseData['user'] as dynamic;
+    var userData = responseData['user'];
     user = InfoUser.fromJson(userData);
   } catch (e) {
     print(e);

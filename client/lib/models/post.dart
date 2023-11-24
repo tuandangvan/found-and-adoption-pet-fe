@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/models/comments.dart';
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart';
+import 'package:intl/intl.dart';
 
 class Post {
   final String id;
   User? userId;
   PetCenter? petCenterId;
-
   final String content;
   List<dynamic>? images;
+  List<Comment>? comments;
+  DateTime createdAt;
 
   Post({
     required this.id,
@@ -16,9 +19,12 @@ class Post {
     this.petCenterId,
     required this.content,
     this.images,
+    this.comments,
+    required this.createdAt,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
+    var commentList = json['comments'] as List<dynamic>;
     return Post(
       id: json['_id'] as String,
       userId: json['userId'] != null
@@ -37,7 +43,10 @@ class Post {
             )
           : null,
       content: json['content'] as String,
-      images: json['images'] as List<dynamic> ?? [],
+      images: json['images'] as List<dynamic>,
+      comments: commentList.map((json) => Comment.fromJson(json)).toList(),
+      createdAt:
+          DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").parse(json['createdAt']),
     );
   }
 }

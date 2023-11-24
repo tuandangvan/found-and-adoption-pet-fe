@@ -108,6 +108,7 @@ Future<void> login(
           ..firstName = responseData['data']['firstName']
           ..lastName = responseData['data']['lastName']
           ..phoneNumber = responseData['data']['phoneNumber']
+          ..avatar = responseData['data']['avatar']
           ..address = responseData['data']['address']
           ..refreshToken = responseData['data']['refreshToken']
           ..accessToken = responseData['data']['accessToken'];
@@ -136,6 +137,7 @@ Future<void> login(
           ..role = responseData['data']['role']
           ..isActive = responseData['data']['isActive']
           ..name = responseData['data']['name']
+          ..avatar = responseData['data']['avatar']
           ..phoneNumber = responseData['data']['phoneNumber']
           ..address = responseData['data']['address']
           ..refreshToken = responseData['data']['refreshToken']

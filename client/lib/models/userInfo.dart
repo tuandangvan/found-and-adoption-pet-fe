@@ -28,17 +28,17 @@ class InfoUser {
   // Factory method để tạo đối tượng InfoUser từ JSON
   factory InfoUser.fromJson(Map<String, dynamic> json) {
     return InfoUser(
-      id: json['_id'] as String, 
-      accountId: json['accountId'] as String,  
+      id: json['_id'] as String,
+      accountId: json['accountId'] as String,
       email: json['email'] as String,
       role: json['role'] as String,
-      isActive: json['isActive']? json['isActive']:false,
+      isActive: json['isActive'] ? json['isActive'] : false,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       avatar: json['avatar'] as String,
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
-      experience: json['experience']? json['experience']:false,
+      experience: json['experience'] ? json['experience'] : false,
     );
   }
 }

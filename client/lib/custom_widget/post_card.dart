@@ -7,6 +7,7 @@ import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/user.dart';
 import 'package:found_adoption_application/repository/get_all_post_api.dart';
+import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:hive/hive.dart';
 
 class PostCard extends StatefulWidget {
@@ -66,7 +67,7 @@ class _PostCardState extends State<PostCard> {
 
                         //Thời gian đăng bài
                         Text(
-                          'Posted on 10/10/2023',
+                          clientPost.createdAt.toString(),
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
@@ -116,9 +117,16 @@ class _PostCardState extends State<PostCard> {
 
           //IMAGE SECTION
 
-          clientPost.images != null && clientPost.images.isNotEmpty
-              ? _slider(clientPost.images)
-              : const SizedBox(),
+          // clientPost.images != null && clientPost.images.isNotEmpty
+          //     ? _slider(clientPost.images)
+          //     : const SizedBox(),
+
+          if (clientPost.images != null && clientPost.images.isNotEmpty)
+            clientPost.images.length == 1
+                ? Image.network(clientPost.images.first)
+                : _slider(clientPost.images)
+          else
+            const SizedBox(),
 
           //LIKE+COMMENT SECTION
           Row(
@@ -130,7 +138,37 @@ class _PostCardState extends State<PostCard> {
                     color: Colors.red,
                   )),
               IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.comment_outlined)),
+                  onPressed: () async {
+                    // showModalBottomSheet(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return CommentScreen();
+
+                    //       // height:
+                    //       // MediaQuery.of(context).size.height * 0.75;
+                    //       // return CommentScreen();
+                    //     });
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => CommentScreen(
+                    //             commentsData: clientPost.comments)));
+
+                    print('Load comment? : ${await clientPost.comments}');
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CommentScreen(
+                                postId: clientPost.id)));
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => CommentScreen()));
+                  },
+                  icon: const Icon(Icons.comment_outlined)),
               IconButton(onPressed: () {}, icon: const Icon(Icons.send)),
             ],
           ),
@@ -162,7 +200,7 @@ class _PostCardState extends State<PostCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text: clientPost.content,
+                          text: '  ${clientPost.content}',
                           style: const TextStyle(fontWeight: FontWeight.normal),
                         )
                       ])),
@@ -190,34 +228,33 @@ class _PostCardState extends State<PostCard> {
   Widget _slider(List imageList) {
     return Stack(
       children: [
-        InkWell(
-          onTap: () {
-            print(currentIndex);
-          },
-          child: CarouselSlider(
-            items: imageList
-                .map(
-                  (item) => Image.network(
-                    item,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                )
-                .toList(),
-            carouselController: carouselController,
-            options: CarouselOptions(
-              scrollPhysics: const BouncingScrollPhysics(),
-              autoPlay: true,
-              aspectRatio: 2,
-              viewportFraction: 1,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
-            ),
+        CarouselSlider(
+          items: imageList
+              .map(
+                (item) => Image.network(
+                  item,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              )
+              .toList(),
+          carouselController: carouselController,
+          options: CarouselOptions(
+            scrollPhysics: const BouncingScrollPhysics(),
+            autoPlay: true,
+            //điều chỉnh tỉ lệ ảnh hiển thị
+            aspectRatio: 20 / 20,
+            viewportFraction: 1,
+
+            onPageChanged: (index, reason) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
           ),
         ),
+
+        //cấu hình nút chạy ảnh
         Positioned(
           bottom: 10,
           left: 0,
