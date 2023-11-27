@@ -56,6 +56,10 @@ Future<List<Comment>> getComment(String postId) async {
     print('Error in getAllPost: $e');
   }
 
+  // print('All Post display here: ${responseData['data']}');
+
+  // print(responseData);
+
   var commentList = responseData['data'] as List<dynamic>;
 
   List<Comment> comments =
