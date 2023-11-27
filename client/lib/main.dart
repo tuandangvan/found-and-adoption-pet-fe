@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 
@@ -35,7 +36,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: CommentScreen(),
+//       home: AddPetScreen(),
 //     );
 //   }
 // }
@@ -43,7 +44,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 class MyApp extends StatelessWidget {
   Future<bool> hasValidRefreshToken = checkRefreshToken();
   late io.Socket socket;
-  var serverUrl = 'http://10.0.2.2:8050';
+  var serverUrl = 'http://socket-found-adoption-dangvantuan.koyeb.app';
 
   @override
   Widget build(BuildContext context) {

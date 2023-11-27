@@ -12,7 +12,7 @@ Future<void> centerform(BuildContext context, String name, String phoneNumber,
   print(storedAccount);
   try {
     final apiUrl =
-        Uri.parse("http://10.0.2.2:8050/api/v1/center/${storedAccount}");
+        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${storedAccount}");
     print('đường dẫn là : ${apiUrl}');
 
     final response = await http.post(
