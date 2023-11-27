@@ -252,7 +252,7 @@ class _CommentScreenState extends State<CommentScreen> {
     super.initState();
 
     // Khởi tạo kết nối Socket.IO
-    socket = io.io('http://10.0.2.2:8050', <String, dynamic>{
+    socket = io.io('http://socket-found-adoption-dangvantuan.koyeb.app', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
     });

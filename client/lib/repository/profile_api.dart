@@ -14,7 +14,7 @@ Future<InfoUser> getProfile(BuildContext context) async {
   var user;
   try {
     var responseData;
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/user/${id}");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer ${accessToken}',
@@ -53,7 +53,7 @@ Future<void> updateProfile(
       return;
     }
 
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/user/${id}");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
 
     var response = await http.put(apiUrl,
         headers: {
@@ -81,7 +81,7 @@ Future<InfoCenter> getProfileCenter(BuildContext context) async {
   var center;
   try {
     var responseData;
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/center/${id}");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer ${accessToken}',
@@ -117,7 +117,7 @@ Future<void> updateProfileCenter(
       return;
     }
 
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/center/${id}");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
 
     var response = await http.put(apiUrl,
         headers: {

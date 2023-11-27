@@ -12,7 +12,7 @@ Future<void> userform(BuildContext context, String firstName, String lastName,
   print(storedAccount);
   try {
     final apiUrl =
-        Uri.parse("http://10.0.2.2:8050/api/v1/user/${storedAccount}");
+        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${storedAccount}");
     print('đường dẫn là : ${apiUrl}');
 
     final response = await http.post(

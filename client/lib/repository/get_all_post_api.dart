@@ -25,7 +25,7 @@ Future<List<Post>> getAllPost() async {
   var responseData = {};
 
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/post");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/post");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer $accessToken',
@@ -55,9 +55,9 @@ Future<List<Post>> getAllPost() async {
     print('Error in getAllPost: $e');
   }
 
-  print('All Post display here: ${responseData['data']}');
+  // print('All Post display here: ${responseData['data']}');
 
-  print(responseData);
+  // print(responseData);
 
   var postList = responseData['data'] as List<dynamic>;
 

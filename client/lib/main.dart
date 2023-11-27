@@ -43,7 +43,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 class MyApp extends StatelessWidget {
   Future<bool> hasValidRefreshToken = checkRefreshToken();
   late io.Socket socket;
-  var serverUrl = 'http://10.0.2.2:8050';
+  var serverUrl = 'http://socket-found-adoption-dangvantuan.koyeb.app';
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +80,14 @@ class MyApp extends StatelessWidget {
                             'transports': ['websocket'],
                             'autoConnect': true,
                           });
+                          
                           print(socket.io.toString());
 
                           if (currentClient.role == 'USER') {
+                            print("den day");
                             socket.emit(
                                 'addNewUser', {'userId': currentClient.id});
+                            print("shkfd");
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,

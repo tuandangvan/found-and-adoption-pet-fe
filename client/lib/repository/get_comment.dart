@@ -27,7 +27,7 @@ Future<List<Comment>> getComment(String postId) async {
 
   try {
     final apiUrl =
-        Uri.parse("http://10.0.2.2:8050/api/v1/post/$postId/comment");
+        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/$postId/comment");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer $accessToken',
@@ -57,9 +57,9 @@ Future<List<Comment>> getComment(String postId) async {
     print('Error in getAllPost: $e');
   }
 
-  print('All Post display here: ${responseData['data']}');
+  // print('All Post display here: ${responseData['data']}');
 
-  print(responseData);
+  // print(responseData);
 
   var commentList = responseData['data'] as List<dynamic>;
 
