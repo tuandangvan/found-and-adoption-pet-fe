@@ -25,7 +25,7 @@ Future<String> uploadImage(File image) async {
   var responseData = {};
 
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/upload/single");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/upload/single");
 
     var request = http.MultipartRequest('POST', apiUrl)
       ..headers['Authorization'] = 'Bearer $accessToken'

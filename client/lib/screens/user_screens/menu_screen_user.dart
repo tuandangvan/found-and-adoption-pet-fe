@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:hive/hive.dart';
-import '../main.dart';
+import '../../main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MenuScreen extends StatefulWidget {
+class MenuUserScreen extends StatefulWidget {
   final Function(int) menuCallBack;
-  MenuScreen({super.key, required this.menuCallBack});
+  MenuUserScreen({super.key, required this.menuCallBack});
 
   @override
-  State<MenuScreen> createState() => _MenuScreenState();
+  State<MenuUserScreen> createState() => _MenuUserScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> {
+class _MenuUserScreenState extends State<MenuUserScreen> {
   int selectedMenuIndex = 0;
 
   List<String> menuItems = [
@@ -21,7 +21,6 @@ class _MenuScreenState extends State<MenuScreen> {
     'Profile',
     'Favorite',
     'Messages',
-    'Add pet',
   ];
 
   List<IconData> icons = [
@@ -30,7 +29,6 @@ class _MenuScreenState extends State<MenuScreen> {
     FontAwesomeIcons.userAlt,
     FontAwesomeIcons.heart,
     FontAwesomeIcons.envelope,
-    FontAwesomeIcons.plus,
   ];
 
   Widget buildMenuRow(int index) {

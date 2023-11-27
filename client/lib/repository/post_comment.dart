@@ -29,7 +29,7 @@ Future<void> postComment(String postID, String content) async {
 
   try {
     final apiUrl =
-        Uri.parse("http://10.0.2.2:8050/api/v1/post/$postID/comment");
+        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/$postID/comment");
 
     response = await http.post(
       apiUrl,

@@ -155,13 +155,11 @@ class _PostCardState extends State<PostCard> {
                     //         builder: (context) => CommentScreen(
                     //             commentsData: clientPost.comments)));
 
-                    print('Load comment? : ${await clientPost.comments}');
-
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentScreen(
-                                postId: clientPost.id)));
+                            builder: (context) =>
+                                CommentScreen(postId: clientPost.id)));
 
                     // Navigator.push(
                     //     context,
