@@ -16,7 +16,7 @@ Future<String> refreshAccessToken() async {
 
   // final refreshToken = userBox.get('currentUser').refreshToken;
   final refreshToken = currentClient.refreshToken;
-  final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/refresh-token");
+  final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/refresh-token");
 
   final response = await http.post(apiUrl, headers: {
     'Authorization': 'Bearer ${refreshToken}',

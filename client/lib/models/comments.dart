@@ -39,4 +39,16 @@ class Comment {
         content: json['content'],
         createdAt: json['createdAt']);
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'userId': userId?.toMap(), // Đảm bảo cũng có hàm toMap trong class User
+      'centerId':
+          centerId?.toMap(), // Đảm bảo cũng có hàm toMap trong class PetCenter
+      'commentId': commentId,
+      'content': content,
+      'createdAt': createdAt,
+    };
+  }
 }

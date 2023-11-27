@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 Future<void> signup(BuildContext context, String email, String password,
     String signupType) async {
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/sign-up");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-up");
 
     final response = await http.post(
       apiUrl,
@@ -49,7 +49,7 @@ Future<void> signup(BuildContext context, String email, String password,
 
 Future<bool> verifycode(String email, String code) async {
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/verify-code");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/verify-code");
 
     final response = await http.post(
       apiUrl,
@@ -82,7 +82,7 @@ Future<bool> verifycode(String email, String code) async {
 
 Future<void> resendcode(String email) async {
   try {
-    final apiUrl = Uri.parse('http://10.0.2.2:8050/api/v1/auth/send-code');
+    final apiUrl = Uri.parse('https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/send-code');
 
     final response = await http.post(apiUrl,
         headers: {

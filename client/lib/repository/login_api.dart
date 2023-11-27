@@ -78,7 +78,7 @@ Future<void> login(
   String password,
 ) async {
   try {
-    final apiUrl = Uri.parse("http://10.0.2.2:8050/api/v1/auth/sign-in");
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-in");
 
     final response = await http.post(
       apiUrl,

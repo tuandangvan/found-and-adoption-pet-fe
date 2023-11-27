@@ -10,4 +10,13 @@ class User {
     required this.lastName,
     required this.avatar,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'avatar': avatar,
+    };
+  }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
-import 'package:found_adoption_application/screens/menu_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_screen_user.dart';
 
 class MenuFrameUser extends StatefulWidget {
   const MenuFrameUser({super.key});
@@ -48,7 +49,7 @@ class _MenuFrameUserState extends State<MenuFrameUser>
 
   List<Widget> finalStack() {
     List<Widget> stackToReturn = [];
-    stackToReturn.add(MenuScreen(
+    stackToReturn.add(MenuUserScreen(
       menuCallBack: (selectedIndex) {
         setState(() {
           screenSnapshot = screens.values.toList();

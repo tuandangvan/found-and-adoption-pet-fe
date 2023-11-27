@@ -9,4 +9,11 @@ class PetCenter {
     required this.name,
     required this.avatar,
   });
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'name': name,
+      'avatar': avatar,
+    };
+  }
 }
