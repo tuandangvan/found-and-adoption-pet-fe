@@ -81,11 +81,14 @@ class MyApp extends StatelessWidget {
                             'transports': ['websocket'],
                             'autoConnect': true,
                           });
+                          
                           print(socket.io.toString());
 
                           if (currentClient.role == 'USER') {
+                            print("den day");
                             socket.emit(
                                 'addNewUser', {'userId': currentClient.id});
+                            print("shkfd");
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,

@@ -23,15 +23,16 @@ class CommentScreen extends StatefulWidget {
 class _CommentScreenState extends State<CommentScreen> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-  // late Future<List<Comment>> commentsFuture;
+  late Future<List<Comment>> commentsFuture;
   late io.Socket socket;
   late String avatarURL = '';
-  List<Comment> comments = [];
+  // List<Comment> comments = [];
 
   @override
   void initState() {
     super.initState();
     _fetchAvatarURL();
+    commentsFuture = getComment(widget.postId);
 
     // Khởi tạo kết nối Socket.IO
     socket = io.io(
@@ -41,15 +42,10 @@ class _CommentScreenState extends State<CommentScreen> {
     });
 
     socket.on("comment", (data) {
-      print('data trả về cái chi rứa: $data');
-      print('listen');
-
       _handleComment(data);
-      print('chứa cái chi ở trỏng: $comments');
     });
 
     // Gọi hàm getComment trong initState để lấy dữ liệu khi widget được tạo
-    // commentsFuture = getComment(widget.postId);
   }
 
   Future<void> _fetchAvatarURL() async {
@@ -65,64 +61,62 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   void _handleComment(data) async {
+    late Comment newCommentRe;
+
+    // Extract userId data from the map
+    var userIdData = data['userId'];
+
+    // Create a User object from the userIdData
+    User? userId = userIdData['firstName'] != ''
+        ? User(
+            id: userIdData['_id'],
+            firstName: userIdData['firstName'],
+            lastName: userIdData['lastName'],
+            avatar: userIdData['avatar'],
+          )
+        : null;
+
+    // Extract centerId data from the map
+    var centerIdData = data['centerId'];
+
+    // Create a PetCenter object from the centerIdData
+    PetCenter? centerId = centerIdData['name'] != ''
+        ? PetCenter(
+            id: centerIdData['_id'],
+            name: centerIdData['name'],
+            avatar: centerIdData['avatar'],
+          )
+        : null;
+
+    newCommentRe = Comment(
+      id: data['_id'],
+      userId: userId,
+      centerId: centerId,
+      commentId: '',
+      content: data['content'],
+      createdAt: "20-11-2023",
+    );
+
+    // Thêm comment mới vào danh sách commentsFuture
+    // comments = [...comments, newCommentRe];
+
     setState(() {
-      print('123456 jellooo');
-      late Comment newCommentRe;
-
-      // Extract userId data from the map
-      var userIdData = data['userId'];
-
-      // Create a User object from the userIdData
-      User? userId = userIdData != null
-          ? User(
-              id: userIdData['_id'],
-              firstName: userIdData['firstName'],
-              lastName: userIdData['lastName'],
-              avatar: userIdData['avatar'],
-            )
-          : null;
-
-      // Extract centerId data from the map
-      var centerIdData = data['centerId'];
-
-      // Create a PetCenter object from the centerIdData
-      PetCenter? centerId = centerIdData != null
-          ? PetCenter(
-              id: centerIdData['_id'],
-              name: centerIdData['name'],
-              avatar: centerIdData['avatar'],
-            )
-          : null;
-
-      newCommentRe = Comment(
-        id: '',
-        userId: userId,
-        centerId: centerId,
-        commentId: '',
-        content: data['content'],
-        createdAt: "20-11-2023",
-      );
-
-      print('test thử xem: ${newCommentRe.userId}');
-
-      // Thêm comment mới vào danh sách commentsFuture
-
-      setState(() {
-        comments = [...comments, newCommentRe];
-        // commentsFuture = getComment(widget.postId);
+      commentsFuture.then((comments) {
+        comments.add(newCommentRe);
+        return comments;
       });
     });
   }
 
   // //comment
-  Widget commentChild(comments) {
-    if (comments.isEmpty) {
-      return Center(
-        child: Text('No comments yet.'),
-      );
-    }
+  Widget commentChild(List<Comment> comments) {
+    // if (comments.isEmpty) {
+    //   return Center(
+    //     child: Text('No comments yet.'),
+    //   );
+    // }
     return FutureBuilder(
-        future: getComment(widget.postId),
+        future: commentsFuture,
         builder: (context, snapshot) {
           print('FutureBuilder rebuilt');
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -148,7 +142,10 @@ class _CommentScreenState extends State<CommentScreen> {
                           contentPadding: EdgeInsets.zero,
                           leading: GestureDetector(
                             onTap: () async {
-                              print('testtttt: ${comments[index].content}');
+                              print(
+                                  'testtttt: ${comments[index].userId!.avatar}');
+                              print(
+                                  'testtttt: ${comments[index].centerId!.avatar}');
                               // Hiển thị hình ảnh ở kích thước lớn.
                               print("Comment Clicked");
                             },
@@ -166,7 +163,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   // imageURLorPath: data[i]['pic'],
                                   imageURLorPath: comments[index].userId != null
                                       ? '${comments[index].userId!.avatar}'
-                                      : comments[index].centerId!.avatar,
+                                      : '${comments[index].centerId!.avatar}',
                                 ),
                               ),
                             ),
@@ -180,7 +177,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   // data[i]['name'],
                                   comments[index].userId != null
                                       ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
-                                      : comments[index].centerId!.name,
+                                      : '${comments[index].centerId!.name}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -221,7 +218,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     user_comment.User userCmt =
-        user_comment.User(id: "", firstName: '', lastName: '', avatar: '');
+        user_comment.User(id: '', firstName: '', lastName: '', avatar: '');
     center_comment.PetCenter centerCmt =
         center_comment.PetCenter(id: '', name: '', avatar: '');
 
@@ -277,6 +274,7 @@ class _CommentScreenState extends State<CommentScreen> {
               child: CommentBox(
                 userImage:
                     CommentBox.commentImageParser(imageURLorPath: avatarURL),
+                child: commentChild([]),
                 labelText: 'Write a comment...',
                 errorText: 'Comment cannot be blank',
                 withBorder: false,
@@ -284,7 +282,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   if (formKey.currentState!.validate()) {
                     print(commentController.text);
 
-                    postComment(
+                    var id = await postComment(
                         widget.postId, commentController.text.toString());
 
                     var currentClient = await getCurrentClient();
@@ -303,7 +301,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     }
 
                     Comment newComment = Comment(
-                        id: "",
+                        id: id.toString(),
                         userId: userCmt,
                         centerId: centerCmt,
                         content: commentController.text,
@@ -325,25 +323,25 @@ class _CommentScreenState extends State<CommentScreen> {
                 sendWidget:
                     Icon(Icons.send_sharp, size: 30, color: Colors.white),
                 // child: commentChild(comments),
-                child: FutureBuilder<List<Comment>>(
-                  future: getComment(widget.postId),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else if (snapshot.hasData) {
-                      List<Comment> comments = snapshot.data!;
-                      return commentChild(comments);
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
+                // child: FutureBuilder<List<Comment>>(
+                //   future: getComment(widget.postId),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(),
+                //       );
+                //     } else if (snapshot.hasError) {
+                //       return Center(
+                //         child: Text('Error: ${snapshot.error}'),
+                //       );
+                //     } else if (snapshot.hasData) {
+                //       List<Comment> comments = snapshot.data!;
+                //       return commentChild(comments);
+                //     } else {
+                //       return SizedBox.shrink();
+                //     }
+                //   },
+                // ),
               ),
             ),
           ),
@@ -355,7 +353,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   void dispose() {
     // Đóng kết nối Socket.IO hoặc thực hiện các tác vụ khác trước khi widget bị hủy
-    socket.disconnect();
+    // socket.disconnect();
     super.dispose();
   }
 }

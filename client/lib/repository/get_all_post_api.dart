@@ -55,9 +55,9 @@ Future<List<Post>> getAllPost() async {
     print('Error in getAllPost: $e');
   }
 
-  print('All Post display here: ${responseData['data']}');
+  // print('All Post display here: ${responseData['data']}');
 
-  print(responseData);
+  // print(responseData);
 
   var postList = responseData['data'] as List<dynamic>;
 
