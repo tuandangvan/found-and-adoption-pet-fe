@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-Future<void> postComment(String postID, String content) async {
+Future<String> postComment(String postID, String content) async {
   //mở localstorage nếu currentClient là user
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
@@ -41,8 +41,7 @@ Future<void> postComment(String postID, String content) async {
         'content': content,
       }),
     );
-
-    print('test response post_comment: $response');
+    responseData = json.decode(response.body);
 
     if (responseData['message'] == 'jwt expired') {
       //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
@@ -63,13 +62,13 @@ Future<void> postComment(String postID, String content) async {
           'content': content,
         }),
       );
+      responseData = json.decode(response.body);
 
-      print('test response post_comment: $response');
     }
-
-    print("test response post_comment external: $response");
     // return responseData['images'];
   } catch (e) {
     print('Error in getAllPost: $e');
   }
+
+  return responseData['_id'];
 }

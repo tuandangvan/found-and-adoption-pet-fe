@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 
@@ -35,7 +36,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: CommentScreen(),
+//       home: AddPetScreen(),
 //     );
 //   }
 // }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_screen_center.dart';
 import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
+
 import 'package:found_adoption_application/screens/feed_screen.dart';
-import 'package:found_adoption_application/screens/menu_screen.dart';
 
 class MenuFrameCenter extends StatefulWidget {
   const MenuFrameCenter({super.key});
@@ -35,6 +36,7 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
       Tween<double>(begin: 1.0, end: 0.7).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
     ];
 
     //hoạt ảnh chạy từ begin -> end
@@ -49,13 +51,14 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
     0: AdoptionScreen(),
     1: FeedScreen(),
     2: EditProfileCenterScreen(),
+    3: AddPetScreen()
   };
 
   late List<Widget> screenSnapshot;
 
   List<Widget> finalStack() {
     List<Widget> stackToReturn = [];
-    stackToReturn.add(MenuScreen(
+    stackToReturn.add(MenuCenterScreen(
       menuCallBack: (selectedIndex) {
         setState(() {
           screenSnapshot = screens.values.toList();

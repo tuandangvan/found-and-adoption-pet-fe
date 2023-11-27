@@ -51,7 +51,6 @@ Future<List<Comment>> getComment(String postId) async {
       });
 
       responseData = json.decode(response.body);
-      print(responseData);
     }
   } catch (e) {
     print('Error in getAllPost: $e');
