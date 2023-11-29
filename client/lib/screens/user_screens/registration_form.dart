@@ -158,6 +158,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
 
               TextFormField(
+                
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Tell us about yourself',

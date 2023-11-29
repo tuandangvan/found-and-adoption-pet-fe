@@ -4,7 +4,17 @@ import 'package:found_adoption_application/repository/auth_api.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-Future<bool> addPet(String content, List<dynamic> imagePaths) async {
+Future<void> addPet(
+  String namePet,
+  String petType,
+  String breed,
+  double age,
+  String gender,
+  String color,
+  List<dynamic> imagePaths,
+  String description,
+  String level,
+) async {
   var userBox = await Hive.openBox('userBox');
   var currentUser = userBox.get('currentUser');
 
@@ -33,8 +43,15 @@ Future<bool> addPet(String content, List<dynamic> imagePaths) async {
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
-        "content": content,
+        "namePet": namePet,
+        "petType": petType,
+        "breed": breed,
+        "age": age,
+        "gender": gender,
+        "color": color,
         "images": imagePaths,
+        "description": description,
+        "level": level
       }),
     );
 
@@ -56,8 +73,15 @@ Future<bool> addPet(String content, List<dynamic> imagePaths) async {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          "content": content,
+          "namePet": namePet,
+          "petType": petType,
+          "breed": breed,
+          "age": age,
+          "gender": gender,
+          "color": color,
           "images": imagePaths,
+          "description": description,
+          "level": level
         }),
       );
 
@@ -68,17 +92,11 @@ Future<bool> addPet(String content, List<dynamic> imagePaths) async {
     if (response.statusCode == 201) {
       final responseData = json.decode(response.body);
       print('Post bài viết thành công: $responseData');
-
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => RegistrationForm()));
-      return true;
     } else {
       print('Post fail: ${response.statusCode}');
       print(response.body);
-      return false;
     }
   } catch (e) {
     print(e);
-    return false;
   }
 }

@@ -6,6 +6,7 @@ import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
 
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 
@@ -36,7 +37,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: AddPetScreen(),
+//       home: NotificationScreen(),
 //     );
 //   }
 // }
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
                             'transports': ['websocket'],
                             'autoConnect': true,
                           });
-                          
+
                           print(socket.io.toString());
 
                           if (currentClient.role == 'USER') {
