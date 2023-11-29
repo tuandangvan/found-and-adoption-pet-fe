@@ -113,7 +113,7 @@ class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(center!.avatar),
+                                    image: NetworkImage(center.avatar),
                                   )),
                             ),
                             Positioned(
@@ -199,6 +199,15 @@ class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
                                   textName.text.toString(),
                                   textPhoneNumber.text.toString(),
                                   textAddress.text.toString());
+                              //update Hive
+                              var centerBox = await Hive.openBox('centerBox');
+                              var currentCenter =
+                                  centerBox.get('currentCenter');
+                              currentCenter.firstName =
+                                  textName.text.toString() == ""
+                                      ? currentCenter.firstName
+                                      : textName.text.toString();
+                              centerBox.put('currentCenter', currentCenter);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

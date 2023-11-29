@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-Future<void> changeAvatar(BuildContext context, imageFile) async {
+Future<String> changeAvatar(BuildContext context, imageFile) async {
   var userBox = await Hive.openBox('userBox');
   var centerBox = await Hive.openBox('centerBox');
 
@@ -18,10 +18,12 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
       : currentCenter;
 
   var accessToken = currentClient.accessToken;
+  var url;
   try {
     var responseData;
-    var url;
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/upload/single");
+
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/upload/single");
 
     var request = http.MultipartRequest('POST', apiUrl)
       ..files.add(await http.MultipartFile.fromPath('file', imageFile!.path));
@@ -59,16 +61,17 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
       print('Error uploading image: ${response.statusCode}');
       var errorBody = await response.stream.bytesToString();
       print('Error response: $errorBody');
-      return;
     }
 
     //call api update avatar
     if (url != null) {
       final apiUrl2;
       if (currentClient.role == 'USER') {
-        apiUrl2 = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${currentClient.id}");
+        apiUrl2 = Uri.parse(
+            "https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${currentClient.id}");
       } else {
-        apiUrl2 = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${currentClient.id}");
+        apiUrl2 = Uri.parse(
+            "https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${currentClient.id}");
       }
       var body = jsonEncode(<String, String>{
         'avatar': url,
@@ -93,4 +96,5 @@ Future<void> changeAvatar(BuildContext context, imageFile) async {
   } catch (e) {
     print(e);
   }
+  return url;
 }
