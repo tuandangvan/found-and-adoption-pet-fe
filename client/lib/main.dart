@@ -35,7 +35,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: AddPetScreen(),
+//       home: NotificationScreen(),
 //     );
 //   }
 // }
@@ -128,40 +128,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   // Đặt biến hasValidRefreshToken là một Future<bool>
-//   Future<bool> hasValidRefreshToken = checkRefreshToken();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<bool>(
-//       future: hasValidRefreshToken,
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.done) {
-//           final refreshTokenIsValid = snapshot.data;
-//           if (refreshTokenIsValid != null) {
-
-//             return MaterialApp(
-//               title: 'Flutter Demo',
-//               debugShowCheckedModeBanner: false,
-//               theme: ThemeData(
-//                 primaryColor: mainColor,
-//               ),
-//               home: refreshTokenIsValid ? MenuFrame() : WelcomeScreen(),
-//             );
-//           } else {
-//             // Xử lý trường hợp biến là null
-//             return CircularProgressIndicator();
-//           }
-//         } else {
-//           return CircularProgressIndicator();
-//         }
-//       },
-//     );
-//   }
-// }
-
 Future<bool> checkRefreshToken() async {
   try {
     var userBox = await Hive.openBox('userBox');

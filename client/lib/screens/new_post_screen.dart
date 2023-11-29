@@ -165,21 +165,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
                 maxLines: 2,
                 style: TextStyle(fontSize: 18.0, color: Colors.black),
               ),
-              // imageFileList.isNotEmpty
-              //     ?
-              //     _slider(finalResult)
-              //     // ? Column()
-              //     : Container(
-              //         height: 350.0,
-              //         width: double.infinity,
-              //         color: Colors.grey.shade300,
-              //         child: Center(
-              //           child: IconButton(
-              //             icon: Icon(Icons.camera_alt),
-              //             onPressed: selectImage,
-              //           ),
-              //         ),
-              //       ),
 
               // Conditionally render the image widget
               if (imageFileList.isNotEmpty)
