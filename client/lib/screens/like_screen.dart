@@ -1,123 +1,30 @@
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/comments.dart';
-import 'package:found_adoption_application/models/pet_center.dart'
-    as center_comment;
-import 'package:found_adoption_application/models/pet_center.dart';
-import 'package:found_adoption_application/models/user.dart' as user_comment;
-import 'package:found_adoption_application/models/user.dart';
-import 'package:found_adoption_application/repository/get_comment.dart';
-import 'package:found_adoption_application/repository/post_comment.dart';
-import 'package:found_adoption_application/utils/getCurrentClient.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
 
-class CommentScreen extends StatefulWidget {
+class LikeScreen extends StatefulWidget {
   final postId;
-  CommentScreen({super.key, required this.postId});
+  LikeScreen({super.key, required this.postId});
 
   @override
-  _CommentScreenState createState() => _CommentScreenState();
+  _LikeScreenState createState() => _LikeScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class _LikeScreenState extends State<LikeScreen> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   late Future<List<Comment>> commentsFuture;
-  late io.Socket socket;
-  late String avatarURL = '';
-  // List<Comment> comments = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchAvatarURL();
-    commentsFuture = getComment(widget.postId);
-
-    // Khởi tạo kết nối Socket.IO
-    socket = io.io(
-        'http://socket-found-adoption-dangvantuan.koyeb.app', <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': true,
-    });
-
-    socket.on("comment", (data) {
-      _handleComment(data);
-    });
-
-    // Gọi hàm getComment trong initState để lấy dữ liệu khi widget được tạo
-  }
-
-  Future<void> _fetchAvatarURL() async {
-    // Sử dụng await ở đây để lấy giá trị từ HiveBox
-    var currentClient = await getCurrentClient();
-    avatarURL = currentClient.avatar;
-
-    if (currentClient != null) {
-      setState(() {
-        avatarURL = currentClient.avatar;
-      });
-    }
-  }
-
-  void _handleComment(data) async {
-    late Comment newCommentRe;
-
-    // Extract userId data from the map
-    var userIdData = data['userId'];
-
-    // Create a User object from the userIdData
-    User? userId = userIdData['firstName'] != ''
-        ? User(
-            id: userIdData['_id'],
-            firstName: userIdData['firstName'],
-            lastName: userIdData['lastName'],
-            avatar: userIdData['avatar'],
-          )
-        : null;
-
-    // Extract centerId data from the map
-    var centerIdData = data['centerId'];
-
-    // Create a PetCenter object from the centerIdData
-    PetCenter? centerId = centerIdData['name'] != ''
-        ? PetCenter(
-            id: centerIdData['_id'],
-            name: centerIdData['name'],
-            avatar: centerIdData['avatar'],
-          )
-        : null;
-
-    newCommentRe = Comment(
-      id: data['_id'],
-      userId: userId,
-      centerId: centerId,
-      commentId: '',
-      content: data['content'],
-      createdAt: "20-11-2023",
-    );
-
-    // Thêm comment mới vào danh sách commentsFuture
-    // comments = [...comments, newCommentRe];
-
-    setState(() {
-      commentsFuture.then((comments) {
-        comments.add(newCommentRe);
-        return comments;
-      });
-    });
   }
 
   // //comment
   Widget commentChild(List<Comment> comments) {
-    // if (comments.isEmpty) {
-    //   return Center(
-    //     child: Text('No comments yet.'),
-    //   );
-    // }
     return FutureBuilder(
         future: commentsFuture,
         builder: (context, snapshot) {
-          print('FutureBuilder rebuilt');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -127,10 +34,8 @@ class _CommentScreenState extends State<CommentScreen> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else if (snapshot.hasData) {
-            comments = snapshot.data as List<Comment>;
 
             return ListView.builder(
-                itemCount: comments.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0.0, 4.0, 2.0, 0.0),
@@ -153,10 +58,11 @@ class _CommentScreenState extends State<CommentScreen> {
                               child: CircleAvatar(
                                 radius: 50,
                                 backgroundImage: CommentBox.commentImageParser(
-                                  // imageURLorPath: data[i]['pic'],
-                                  imageURLorPath: comments[index].userId != null
-                                      ? '${comments[index].userId!.avatar}'
-                                      : '${comments[index].centerId!.avatar}',
+                                  
+                                  imageURLorPath: 'https://res.cloudinary.com/dfaea99ew/image/upload/v1698469989/a1rstfzd5ihov6sqhvck.jpg',
+                                  // imageURLorPath: comments[index].userId != null
+                                  //     ? '${comments[index].userId!.avatar}'
+                                  //     : '${comments[index].centerId!.avatar}',
                                 ),
                               ),
                             ),
@@ -166,11 +72,11 @@ class _CommentScreenState extends State<CommentScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                Text('Dang Van Tuan',
                                   // data[i]['name'],
-                                  comments[index].userId != null
-                                      ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
-                                      : '${comments[index].centerId!.name}',
+                                  // comments[index].userId != null
+                                  //     ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
+                                  //     : '${comments[index].centerId!.name}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -178,7 +84,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 ),
                                 Text(
                                   // data[i]['message'],
-                                  comments[index].content,
+                                  'abc',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -210,11 +116,6 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    user_comment.User userCmt =
-        user_comment.User(id: '', firstName: '', lastName: '', avatar: '');
-    center_comment.PetCenter centerCmt =
-        center_comment.PetCenter(id: '', name: '', avatar: '');
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -250,8 +151,6 @@ class _CommentScreenState extends State<CommentScreen> {
               color: Colors.black,
             ),
             onPressed: () {
-              // Xử lý khi nhấn nút gửi
-              print('test avatarUrl: $avatarURL');
             },
           ),
         ],
@@ -266,49 +165,11 @@ class _CommentScreenState extends State<CommentScreen> {
             child: Container(
               child: CommentBox(
                 userImage:
-                    CommentBox.commentImageParser(imageURLorPath: avatarURL),
+                    CommentBox.commentImageParser(imageURLorPath: 'https://res.cloudinary.com/dfaea99ew/image/upload/v1698469989/a1rstfzd5ihov6sqhvck.jpg'),
                 child: commentChild([]),
                 labelText: 'Write a comment...',
                 errorText: 'Comment cannot be blank',
                 withBorder: false,
-                sendButtonMethod: () async {
-                  if (formKey.currentState!.validate()) {
-                    print(commentController.text);
-
-                    var id = await postComment(
-                        widget.postId, commentController.text.toString());
-
-                    var currentClient = await getCurrentClient();
-
-                    if (currentClient.role == 'USER') {
-                      userCmt = user_comment.User(
-                          id: currentClient.id,
-                          firstName: currentClient.firstName,
-                          lastName: currentClient.lastName,
-                          avatar: currentClient.avatar);
-                    } else {
-                      centerCmt = center_comment.PetCenter(
-                          id: currentClient.id,
-                          name: currentClient.name,
-                          avatar: currentClient.avatar);
-                    }
-
-                    Comment newComment = Comment(
-                        id: id.toString(),
-                        userId: userCmt,
-                        centerId: centerCmt,
-                        content: commentController.text,
-                        createdAt: "");
-
-                    // Gửi comment thông qua Socket.IO
-                    socket.emit('comment', newComment.toMap());
-
-                    commentController.clear();
-                    FocusScope.of(context).unfocus();
-                  } else {
-                    print("Not validated");
-                  }
-                },
                 formKey: formKey,
                 commentController: commentController,
                 backgroundColor: Colors.pink,
@@ -325,8 +186,6 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   void dispose() {
-    // Đóng kết nối Socket.IO hoặc thực hiện các tác vụ khác trước khi widget bị hủy
-    // socket.disconnect();
     super.dispose();
   }
 }

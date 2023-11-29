@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/repository/login_api.dart';
-import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
-import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/signUp_screen.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';
-import 'package:hive/hive.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -112,8 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () async {
-                          final emailRegisterBox =
-                              await Hive.openBox('emailRegisterBox');
+                          // final emailRegisterBox =
+                          //     await Hive.openBox('emailRegisterBox');
 
                           // Kiểm tra giá trị của signUpType và thực hiện các hành động tương ứng
                           login(

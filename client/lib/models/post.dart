@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/comments.dart';
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart';
@@ -11,6 +10,7 @@ class Post {
   final String content;
   List<dynamic>? images;
   List<Comment>? comments;
+  List<dynamic>? reaction;
   DateTime createdAt;
 
   Post({
@@ -20,6 +20,7 @@ class Post {
     required this.content,
     this.images,
     this.comments,
+    this.reaction,
     required this.createdAt,
   });
 
@@ -44,6 +45,7 @@ class Post {
           : null,
       content: json['content'] as String,
       images: json['images'] as List<dynamic>,
+      reaction: json['reaction'] as List<dynamic>,
       comments: commentList.map((json) => Comment.fromJson(json)).toList(),
       createdAt:
           DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").parse(json['createdAt']),

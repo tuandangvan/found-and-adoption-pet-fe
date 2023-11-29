@@ -1,14 +1,9 @@
-import 'dart:ffi';
-
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/models/pet_center.dart';
-import 'package:found_adoption_application/models/post.dart';
-import 'package:found_adoption_application/models/user.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
+import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/screens/like_screen.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -21,10 +16,12 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+  var quantityLike;
 
   @override
   Widget build(BuildContext context) {
     final clientPost = widget.snap!;
+    quantityLike = clientPost.reaction.length;
 
     return Card(
       color: Colors.white,
@@ -79,8 +76,6 @@ class _PostCardState extends State<PostCard> {
                 ),
                 IconButton(
                     onPressed: () {
-                      print('test images: ${clientPost.images}');
-
                       showDialog(
                           context: context,
                           builder: (context) => Dialog(
@@ -132,7 +127,17 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await like(context, clientPost.id);
+                    setState(() async {
+                      quantityLike += 1;
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LikeScreen(postId: clientPost.id)));
+                  },
                   icon: const Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -178,7 +183,7 @@ class _PostCardState extends State<PostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '1,234 likes',
+                  '${quantityLike} likes',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Container(
@@ -204,10 +209,16 @@ class _PostCardState extends State<PostCard> {
                       ])),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CommentScreen(postId: clientPost.id)));
+                  },
                   child: Container(
                     child: Text(
-                      'View all 200 comments',
+                      'View all ${clientPost.comments.length} comments',
                       style: const TextStyle(fontSize: 15, color: Colors.black),
                     ),
                   ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 
@@ -53,7 +52,6 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final refreshTokenIsValid = snapshot.data;
-          print('Giá trị của refreshToken is Valid: ${refreshTokenIsValid}');
           if (refreshTokenIsValid != false) {
             //CHECK ROLE
             return FutureBuilder<Box>(
@@ -81,14 +79,10 @@ class MyApp extends StatelessWidget {
                             'transports': ['websocket'],
                             'autoConnect': true,
                           });
-                          
-                          print(socket.io.toString());
 
                           if (currentClient.role == 'USER') {
-                            print("den day");
                             socket.emit(
                                 'addNewUser', {'userId': currentClient.id});
-                            print("shkfd");
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,
