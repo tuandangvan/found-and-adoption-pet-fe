@@ -1,14 +1,10 @@
-import 'dart:ffi';
-
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/models/pet_center.dart';
-import 'package:found_adoption_application/models/post.dart';
-import 'package:found_adoption_application/models/user.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
+import 'package:found_adoption_application/models/like_model.dart';
+import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/screens/like_screen.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -19,13 +15,37 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  late var clientPost;
+  late int quantityLike = 0;
+  late bool liked = false;
+  @override
+  void initState() {
+    super.initState();
+    clientPost = widget.snap!;
+    getLiked();
+  }
+
+  Future<void> getLiked() async {
+    List<Like>? likes = await getLike(context, clientPost.id);
+    var currentClient = await getCurrentClient();
+    setState(() {
+      quantityLike = likes!.length;
+    });
+    likes.forEach((element) {
+      if (element.centerId?.id == currentClient.id ||
+          element.userId?.id == currentClient.id) {
+        setState(() {
+          liked = true;
+        });
+      }
+    });
+  }
+
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final clientPost = widget.snap!;
-
     return Card(
       color: Colors.white,
       elevation: 5,
@@ -79,8 +99,6 @@ class _PostCardState extends State<PostCard> {
                 ),
                 IconButton(
                     onPressed: () {
-                      print('test images: ${clientPost.images}');
-
                       showDialog(
                           context: context,
                           builder: (context) => Dialog(
@@ -115,12 +133,6 @@ class _PostCardState extends State<PostCard> {
             height: 4,
           ),
 
-          //IMAGE SECTION
-
-          // clientPost.images != null && clientPost.images.isNotEmpty
-          //     ? _slider(clientPost.images)
-          //     : const SizedBox(),
-
           if (clientPost.images != null && clientPost.images.isNotEmpty)
             clientPost.images.length == 1
                 ? Image.network(clientPost.images.first)
@@ -131,13 +143,36 @@ class _PostCardState extends State<PostCard> {
           //LIKE+COMMENT SECTION
           Row(
             children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )),
-              IconButton(
+              Expanded(
+                child: IconButton(
+                  onPressed: () async {
+                    await like(context, clientPost.id);
+                    if (!liked) {
+                      setState(() {
+                        quantityLike += 1;
+                        liked = true;
+                      });
+                    } else {
+                      setState(() {
+                        quantityLike -= 1;
+                        liked = false;
+                      });
+                    }
+                  },
+                  icon: liked == false
+                      ? Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        ),
+                  iconSize: 29.0,
+                ),
+              ),
+              Expanded(
+                child: IconButton(
                   onPressed: () async {
                     // showModalBottomSheet(
                     //     context: context,
@@ -166,8 +201,17 @@ class _PostCardState extends State<PostCard> {
                     //     MaterialPageRoute(
                     //         builder: (context) => CommentScreen()));
                   },
-                  icon: const Icon(Icons.comment_outlined)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.send)),
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  iconSize: 29.0,
+                ),
+              ),
+              Expanded(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.share_outlined),
+                  iconSize: 29.0,
+                ),
+              ),
             ],
           ),
 
@@ -177,10 +221,19 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '1,234 likes',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LikeScreen(postId: clientPost.id)));
+                    },
+                    child: Container(
+                        child: Text(
+                      '${quantityLike} likes',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ))),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
@@ -204,10 +257,16 @@ class _PostCardState extends State<PostCard> {
                       ])),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CommentScreen(postId: clientPost.id)));
+                  },
                   child: Container(
                     child: Text(
-                      'View all 200 comments',
+                      'View all ${clientPost.comments.length} comments',
                       style: const TextStyle(fontSize: 15, color: Colors.black),
                     ),
                   ),

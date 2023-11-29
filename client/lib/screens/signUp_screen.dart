@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/repository/signup_api.dart';
-import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';
 
 import 'package:found_adoption_application/screens/login_screen.dart';

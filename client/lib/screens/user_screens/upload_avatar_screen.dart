@@ -66,7 +66,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
             _pickedImage != null
                 ? ElevatedButton(
                     onPressed: () async {
-                      await changeAvatar(context, _pickedImage);
+                      var url = await changeAvatar(context, _pickedImage);
 
                       var userBox = await Hive.openBox('userBox');
                       var centerBox = await Hive.openBox('centerBox');
@@ -81,12 +81,17 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
 
                       if (currentClient != null) {
                         if (currentClient.role == 'USER') {
+                          currentUser.avatar = url.toString();
+                          userBox.put("currentUser", currentUser);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditProfileScreen()),
                           );
                         } else if (currentClient.role == 'CENTER') {
+                          currentCenter.avatar = url.toString();
+                          centerBox.put("currentCenter", currentCenter);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:found_adoption_application/repository/auth_api.dart';
-import 'package:found_adoption_application/models/post.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
