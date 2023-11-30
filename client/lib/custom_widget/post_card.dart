@@ -1,14 +1,8 @@
-import 'dart:ffi';
-
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/models/pet_center.dart';
-import 'package:found_adoption_application/models/post.dart';
-import 'package:found_adoption_application/models/user.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
+
 import 'package:found_adoption_application/screens/comment_screen.dart';
-import 'package:hive/hive.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
