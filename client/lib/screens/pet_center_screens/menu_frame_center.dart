@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_screen_center.dart';
-import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
+import 'package:found_adoption_application/screens/adoption_screen.dart';
 
 import 'package:found_adoption_application/screens/feed_screen.dart';
 

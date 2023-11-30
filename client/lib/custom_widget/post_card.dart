@@ -24,6 +24,13 @@ class _PostCardState extends State<PostCard> {
     clientPost = widget.snap!;
     getLiked();
   }
+  //code cũ nữa á...tui fix cái lúc nhấn dấu 3 gạch gòi
+  //cái device thật nó hông bị overflowed...Giao diện lạ lạ dạ
+  //chỗ tương tác favorite á
+  //ý là cái aadoption ddu
+  //đc gòi,
+   //ccacaiskia tui sua á
+   //nhin duco hong. tách ra nó kỳ kỳ
 
   Future<void> getLiked() async {
     List<Like>? likes = await getLike(context, clientPost.id);

@@ -4,7 +4,7 @@ import 'package:found_adoption_application/repository/center_api/add_pet_api.dar
 import 'package:found_adoption_application/repository/multi_image_api.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
-import 'package:found_adoption_application/screens/user_screens/adoption_screen.dart';
+import 'package:found_adoption_application/screens/adoption_screen.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
