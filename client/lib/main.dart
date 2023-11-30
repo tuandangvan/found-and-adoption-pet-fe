@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
 
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 
@@ -54,7 +52,6 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final refreshTokenIsValid = snapshot.data;
-          print('Giá trị của refreshToken is Valid: ${refreshTokenIsValid}');
           if (refreshTokenIsValid != false) {
             //CHECK ROLE
             return FutureBuilder<Box>(
@@ -83,13 +80,9 @@ class MyApp extends StatelessWidget {
                             'autoConnect': true,
                           });
 
-                          print(socket.io.toString());
-
                           if (currentClient.role == 'USER') {
-                            print("den day");
                             socket.emit(
                                 'addNewUser', {'userId': currentClient.id});
-                            print("shkfd");
                             return MaterialApp(
                               title: 'Flutter Demo',
                               debugShowCheckedModeBanner: false,
@@ -135,40 +128,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   // Đặt biến hasValidRefreshToken là một Future<bool>
-//   Future<bool> hasValidRefreshToken = checkRefreshToken();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<bool>(
-//       future: hasValidRefreshToken,
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.done) {
-//           final refreshTokenIsValid = snapshot.data;
-//           if (refreshTokenIsValid != null) {
-
-//             return MaterialApp(
-//               title: 'Flutter Demo',
-//               debugShowCheckedModeBanner: false,
-//               theme: ThemeData(
-//                 primaryColor: mainColor,
-//               ),
-//               home: refreshTokenIsValid ? MenuFrame() : WelcomeScreen(),
-//             );
-//           } else {
-//             // Xử lý trường hợp biến là null
-//             return CircularProgressIndicator();
-//           }
-//         } else {
-//           return CircularProgressIndicator();
-//         }
-//       },
-//     );
-//   }
-// }
-
 Future<bool> checkRefreshToken() async {
   try {
     var userBox = await Hive.openBox('userBox');

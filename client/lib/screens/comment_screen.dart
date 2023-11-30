@@ -9,7 +9,6 @@ import 'package:found_adoption_application/models/user.dart';
 import 'package:found_adoption_application/repository/get_comment.dart';
 import 'package:found_adoption_application/repository/post_comment.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
-import 'package:hive/hive.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CommentScreen extends StatefulWidget {
@@ -142,12 +141,6 @@ class _CommentScreenState extends State<CommentScreen> {
                           contentPadding: EdgeInsets.zero,
                           leading: GestureDetector(
                             onTap: () async {
-                              print(
-                                  'testtttt: ${comments[index].userId!.avatar}');
-                              print(
-                                  'testtttt: ${comments[index].centerId!.avatar}');
-                              // Hiển thị hình ảnh ở kích thước lớn.
-                              print("Comment Clicked");
                             },
                             child: Container(
                               height: 50.0,
@@ -322,26 +315,6 @@ class _CommentScreenState extends State<CommentScreen> {
                 textColor: Colors.white,
                 sendWidget:
                     Icon(Icons.send_sharp, size: 30, color: Colors.white),
-                // child: commentChild(comments),
-                // child: FutureBuilder<List<Comment>>(
-                //   future: getComment(widget.postId),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     } else if (snapshot.hasError) {
-                //       return Center(
-                //         child: Text('Error: ${snapshot.error}'),
-                //       );
-                //     } else if (snapshot.hasData) {
-                //       List<Comment> comments = snapshot.data!;
-                //       return commentChild(comments);
-                //     } else {
-                //       return SizedBox.shrink();
-                //     }
-                //   },
-                // ),
               ),
             ),
           ),

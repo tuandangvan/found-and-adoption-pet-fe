@@ -124,7 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(user!.avatar),
+                                    image: NetworkImage(user.avatar),
                                   )),
                             ),
                             Positioned(
@@ -249,6 +249,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   textPhoneNumber.text.toString(),
                                   textAddress.text.toString(),
                                   selectedRadio);
+
+                              //update Hive
+                              var userBox = await Hive.openBox('userBox');
+                              var currentUser = userBox.get('currentUser');
+                              currentUser.firstName =
+                                  textFisrtName.text.toString() == ''
+                                      ? currentUser.firstName
+                                      : textFisrtName.text.toString();
+                              currentUser.lastName =
+                                  textLastName.text.toString() == ''
+                                      ? currentUser.lastName
+                                      : textLastName.text.toString();
+                              userBox.put('currentUser', currentUser);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
