@@ -4,6 +4,7 @@ import 'package:found_adoption_application/models/like_model.dart';
 import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
+import 'package:found_adoption_application/screens/personal_page.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {
@@ -72,28 +73,37 @@ class _PostCardState extends State<PostCard> {
                   height: 8,
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          clientPost.userId != null
-                              ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
-                              : clientPost.petCenterId.name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-
-                        //Thời gian đăng bài
-                        Text(
-                          clientPost.createdAt.toString(),
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PersonalPage()));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            clientPost.userId != null
+                                ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
+                                : clientPost.petCenterId.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                        ),
-                      ],
+
+                          //Thời gian đăng bài
+                          Text(
+                            clientPost.createdAt.toString(),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -201,14 +211,14 @@ class _PostCardState extends State<PostCard> {
                     //     MaterialPageRoute(
                     //         builder: (context) => CommentScreen()));
                   },
-                  icon: const Icon(Icons.chat_bubble_outline),
+                  icon: const Icon(Icons.chat_bubble_outline, color: Colors.red),
                   iconSize: 29.0,
                 ),
               ),
               Expanded(
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.share_outlined),
+                  icon: const Icon(Icons.share_outlined, color: Colors.red,),
                   iconSize: 29.0,
                 ),
               ),
