@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/comments.dart';
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart';
