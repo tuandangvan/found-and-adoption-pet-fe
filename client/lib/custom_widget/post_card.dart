@@ -4,6 +4,8 @@ import 'package:found_adoption_application/models/like_model.dart';
 import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
+import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {
@@ -24,13 +26,6 @@ class _PostCardState extends State<PostCard> {
     clientPost = widget.snap!;
     getLiked();
   }
-  //code cũ nữa á...tui fix cái lúc nhấn dấu 3 gạch gòi
-  //cái device thật nó hông bị overflowed...Giao diện lạ lạ dạ
-  //chỗ tương tác favorite á
-  //ý là cái aadoption ddu
-  //đc gòi,
-   //ccacaiskia tui sua á
-   //nhin duco hong. tách ra nó kỳ kỳ
 
   Future<void> getLiked() async {
     List<Like>? likes = await getLike(context, clientPost.id);
@@ -67,14 +62,40 @@ class _PostCardState extends State<PostCard> {
                 const SizedBox(
                   height: 5,
                 ),
-                CircleAvatar(
+
+                //Chỉ thêm mỗi chỗ này thôi à
+                GestureDetector(
+                  onTap: () {
+                    if (clientPost.userId != null) {
+                      // Nếu là loại "center", chuyển đến ProfileCenterPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProfilePage(), // Thay thế bằng tên lớp tương ứng
+                        ),
+                      );
+                    } else {
+                      // Ngược lại, chuyển đến ProfilePage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileCenterPage(),
+                        ),
+                      );
+                    }
+                  },
+                  child: CircleAvatar(
                     radius: 24,
                     backgroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(
                       clientPost.userId != null
                           ? '${clientPost.userId!.avatar}'
                           : '${clientPost.petCenterId.avatar}',
-                    )),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(
                   height: 8,
                 ),
