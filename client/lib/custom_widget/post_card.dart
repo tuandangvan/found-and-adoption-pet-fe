@@ -1,11 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:found_adoption_application/models/like_model.dart';
+import 'package:found_adoption_application/repository/get_all_post_api.dart';
 import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
+
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
+
+import 'package:found_adoption_application/screens/personal_page.dart';
+
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {
@@ -20,6 +26,7 @@ class _PostCardState extends State<PostCard> {
   late var clientPost;
   late int quantityLike = 0;
   late bool liked = false;
+  late String selectedOption = '';
   @override
   void initState() {
     super.initState();
@@ -100,28 +107,36 @@ class _PostCardState extends State<PostCard> {
                   height: 8,
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          clientPost.userId != null
-                              ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
-                              : clientPost.petCenterId.name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-
-                        //Thời gian đăng bài
-                        Text(
-                          clientPost.createdAt.toString(),
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PersonalPage()));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            clientPost.userId != null
+                                ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
+                                : clientPost.petCenterId.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                        ),
-                      ],
+
+                          //Thời gian đăng bài
+                          Text(
+                            clientPost.createdAt.toString(),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -137,10 +152,16 @@ class _PostCardState extends State<PostCard> {
                                   //widget co lại dựa theo nội dung
                                   shrinkWrap: true,
                                   //sử dụng map để tạo ra ds các InkWell(hiệu ứng khi nhấp button)
-                                  children: ['Delete']
+                                  children: ['Delete', 'Change Status']
                                       .map(
                                         (e) => InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                              if (e.toString() ==
+                                                  'Change Status') {
+                                                _showBottomSheet(clientPost.id);
+                                                // InkWell.pop();
+                                              }
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -202,41 +223,24 @@ class _PostCardState extends State<PostCard> {
               Expanded(
                 child: IconButton(
                   onPressed: () async {
-                    // showModalBottomSheet(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return CommentScreen();
-
-                    //       // height:
-                    //       // MediaQuery.of(context).size.height * 0.75;
-                    //       // return CommentScreen();
-                    //     });
-
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => CommentScreen(
-                    //             commentsData: clientPost.comments)));
-
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 CommentScreen(postId: clientPost.id)));
-
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => CommentScreen()));
                   },
-                  icon: const Icon(Icons.chat_bubble_outline),
+                  icon:
+                      const Icon(Icons.chat_bubble_outline, color: Colors.red),
                   iconSize: 29.0,
                 ),
               ),
               Expanded(
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.share_outlined),
+                  icon: const Icon(
+                    Icons.share_outlined,
+                    color: Colors.red,
+                  ),
                   iconSize: 29.0,
                 ),
               ),
@@ -365,6 +369,62 @@ class _PostCardState extends State<PostCard> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showBottomSheet(String postId) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('ACTIVE'),
+                onTap: () {
+                  setState(() async {
+                    var message = await changeStatusPost(postId, 'ACTIVE');
+                    Fluttertoast.showToast(
+                      msg: message,
+                      toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+                      gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+                      timeInSecForIosWeb:
+                          1, // Thời gian hiển thị cho iOS và web
+                      backgroundColor: Colors.grey, // Màu nền của toast
+                      textColor: Colors.white, // Màu chữ của toast
+                      fontSize: 16.0, // Kích thước chữ của toast
+                    );
+                    Navigator.pop(context);
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('HIDDEN'),
+                onTap: () {
+                  setState(() async {
+                    var message = await changeStatusPost(postId, 'HIDDEN');
+                    Fluttertoast.showToast(
+                      msg: message,
+                      toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+                      gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+                      timeInSecForIosWeb:
+                          1, // Thời gian hiển thị cho iOS và web
+                      backgroundColor: Colors.grey, // Màu nền của toast
+                      textColor: Colors.white, // Màu chữ của toast
+                      fontSize: 16.0, // Kích thước chữ của toast
+                    );
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
