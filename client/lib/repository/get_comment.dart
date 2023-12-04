@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:found_adoption_application/models/comments.dart';
 import 'package:found_adoption_application/repository/auth_api.dart';
+import 'package:found_adoption_application/repository/call_back_api.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,8 +27,8 @@ Future<List<Comment>> getComment(String postId) async {
   var responseData = {};
 
   try {
-    final apiUrl =
-        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/$postId/comment");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/$postId/comment");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer $accessToken',
@@ -65,4 +67,31 @@ Future<List<Comment>> getComment(String postId) async {
       commentList.map((json) => Comment.fromJson(json)).toList();
 
   return comments;
+}
+
+Future<String> deleteComment(String postId, String commentId) async {
+  var currentClient = await getCurrentClient();
+  var accessToken = currentClient.accessToken;
+  var responseData;
+  var message = '';
+
+  try {
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/$postId/comment/$commentId");
+
+    var response = await http.delete(apiUrl, headers: {
+      'Authorization': 'Bearer $accessToken',
+    });
+    responseData = json.decode(response.body);
+    if (responseData['message'] == 'jwt expired') {
+      responseData = callBackApi(apiUrl, "delete", '');
+    }
+
+    if (responseData['error'] != null) {
+      message = responseData['error'];
+    } else {
+      message = responseData['message'];
+    }
+  } catch (err) {}
+  return message;
 }

@@ -10,6 +10,7 @@ import 'package:found_adoption_application/repository/get_comment.dart';
 import 'package:found_adoption_application/repository/post_comment.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CommentScreen extends StatefulWidget {
   final postId;
@@ -138,10 +139,13 @@ class _CommentScreenState extends State<CommentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ListTile(
+                          onLongPress: () {
+                            _showDeleteConfirmationDialog(
+                                widget.postId, comments[index].id);
+                          },
                           contentPadding: EdgeInsets.zero,
                           leading: GestureDetector(
-                            onTap: () async {
-                            },
+                            onTap: () async {},
                             child: Container(
                               height: 50.0,
                               width: 50.0,
@@ -328,5 +332,66 @@ class _CommentScreenState extends State<CommentScreen> {
     // Đóng kết nối Socket.IO hoặc thực hiện các tác vụ khác trước khi widget bị hủy
     // socket.disconnect();
     super.dispose();
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+      String postId, String commentId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete this comment?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Gọi hàm xóa comment khi người dùng xác nhận
+                var message = await deleteComment(postId, commentId);
+                Navigator.of(context).pop();
+                String commentId2 = extractCommentId(message);
+                if (commentId != '') {
+                  setState(() {
+                    commentsFuture.then((comments) {
+                      comments
+                          .removeWhere((comment) => comment.id == commentId2);
+                      return comments;
+                    });
+                  });
+                }
+
+                Fluttertoast.showToast(
+                  msg: message,
+                  toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+                  gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+                  timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
+                  backgroundColor: Colors.grey, // Màu nền của toast
+                  textColor: Colors.white, // Màu chữ của toast
+                  fontSize: 16.0, // Kích thước chữ của toast
+                );
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String extractCommentId(String commentText) {
+    RegExp regExp =
+        RegExp(r'Comment ([a-zA-Z0-9]+) has been successfully deleted!');
+    Match? match = regExp.firstMatch(commentText);
+
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1)!;
+    } else {
+      return ''; // Trả về giá trị mặc định hoặc thông báo lỗi nếu không tìm thấy ID
+    }
   }
 }
