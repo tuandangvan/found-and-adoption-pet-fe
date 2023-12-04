@@ -5,7 +5,6 @@ import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
-
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 
 import 'package:found_adoption_application/screens/welcome_screen.dart';
@@ -35,7 +34,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: NotificationScreen(),
+//       home: ProfilePage(),
 //     );
 //   }
 // }
@@ -128,6 +127,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 Future<bool> checkRefreshToken() async {
   try {
     var userBox = await Hive.openBox('userBox');
