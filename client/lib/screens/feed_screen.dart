@@ -5,7 +5,7 @@ import 'package:found_adoption_application/repository/get_all_post_api.dart';
 import 'package:found_adoption_application/screens/new_post_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -27,31 +27,27 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text('Back'),
         leading: IconButton(
           onPressed: () async {
-            var userBox = await Hive.openBox('userBox');
-            var centerBox = await Hive.openBox('centerBox');
-
-            var currentUser = userBox.get('currentUser');
-            var currentCenter = centerBox.get('currentCenter');
-
-            var currentClient =
-                currentUser != null && currentUser.role == 'USER'
-                    ? currentUser
-                    : currentCenter;
+            var currentClient = await getCurrentClient();
 
             if (currentClient != null) {
               if (currentClient.role == 'USER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameUser()),
+                  MaterialPageRoute(
+                      builder: (context) => MenuFrameUser(
+                            userId: currentClient.id,
+                          )),
                 );
               } else if (currentClient.role == 'CENTER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameCenter()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MenuFrameCenter(centerId: currentClient.id)),
                 );
               }
             }
@@ -80,14 +76,15 @@ class _FeedScreenState extends State<FeedScreen> {
         future: posts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
             List<Post>? postList = snapshot.data;
 
             if (postList != null) {
-              print('Test snapshot Data: ${postList.length}');
               return ListView.builder(
                 itemCount: postList.length,
                 itemBuilder: (context, index) =>

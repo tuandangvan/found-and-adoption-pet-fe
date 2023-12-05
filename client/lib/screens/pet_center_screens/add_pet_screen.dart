@@ -4,7 +4,7 @@ import 'package:found_adoption_application/repository/center_api/add_pet_api.dar
 import 'package:found_adoption_application/repository/multi_image_api.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
-import 'package:found_adoption_application/screens/adoption_screen.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -109,9 +109,13 @@ class _AddPetScreenState extends State<AddPetScreen> {
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MenuFrameCenter()));
+          onPressed: () async {
+            var currentClient = await getCurrentClient();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MenuFrameCenter(centerId: currentClient.id)));
           },
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -278,12 +282,13 @@ class _AddPetScreenState extends State<AddPetScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var currentClient = await getCurrentClient();
                       // Handle cancel button press
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MenuFrameCenter()));
+                              builder: (context) => MenuFrameCenter(centerId: currentClient.id)));
                     },
                     child: const Text('Cancel'),
                     style: ElevatedButton.styleFrom(

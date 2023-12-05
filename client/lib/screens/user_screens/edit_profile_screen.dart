@@ -25,7 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    userFuture = getProfile(context);
+    userFuture = getProfile(context, null);
   }
 
   bool isObsecurePassword = true;
@@ -64,12 +64,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               if (currentClient.role == 'USER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameUser()),
+                  MaterialPageRoute(builder: (context) => MenuFrameUser(userId: currentClient.id)),
                 );
               } else if (currentClient.role == 'CENTER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameCenter()),
+                  MaterialPageRoute(builder: (context) => MenuFrameCenter(centerId: currentClient.id)),
                 );
               }
             }
@@ -145,7 +145,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         shape: BoxShape.circle,
                                         border: Border.all(
                                             width: 4, color: Colors.white),
-                                        color: Colors.blue),
+                                        color: Theme.of(context).primaryColor),
                                     child: Icon(
                                       Icons.edit,
                                       color: Colors.white,
@@ -276,7 +276,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.blue,
+                              primary: Theme.of(context).primaryColor,
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),

@@ -5,9 +5,11 @@ import 'package:found_adoption_application/screens/pet_center_screens/menu_scree
 import 'package:found_adoption_application/screens/adoption_screen.dart';
 
 import 'package:found_adoption_application/screens/feed_screen.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 
 class MenuFrameCenter extends StatefulWidget {
-  const MenuFrameCenter({super.key});
+  final centerId;
+  const MenuFrameCenter({super.key, required this.centerId});
 
   @override
   State<MenuFrameCenter> createState() => _MenuFrameCenterState();
@@ -17,7 +19,6 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   Duration duration = Duration(microseconds: 200);
-  // late Animation<double> scaleAnimation, smallerScaleAnimation;
   bool menuOpen = true;
   late List<Animation<double>> scaleAnimations;
 
@@ -44,13 +45,16 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
 
     //sao chép danh sách screens vào screensnapshot
     screenSnapshot = screens.values.toList();
+    print(widget.centerId);
+    screens[2] = ProfileCenterPage(centerId: widget.centerId);
+    screens[0] = AdoptionScreen(centerId: widget.centerId);
   }
 
   //Map chứa cặp key-value (int - widget)
   Map<int, Widget> screens = {
-    0: AdoptionScreen(),
+    0: AdoptionScreen(centerId: null,),
     1: FeedScreen(),
-    2: EditProfileCenterScreen(),
+    2: ProfileCenterPage(centerId: null,),
     3: AddPetScreen()
   };
 

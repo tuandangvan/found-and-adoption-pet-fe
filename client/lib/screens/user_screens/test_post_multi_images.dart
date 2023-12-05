@@ -368,9 +368,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
-                    color: Colors.blue,
+                    color: Theme.of(context).primaryColor,
                     onPressed: () {
-                      print('test avatar from widget: $avatar');
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => FeedScreen()),

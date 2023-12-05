@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/screens/adoption_screen.dart';
-import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen_user.dart';
+import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 
 class MenuFrameUser extends StatefulWidget {
-  const MenuFrameUser({super.key});
+  final userId;
+  const MenuFrameUser({super.key, required this.userId});
 
   @override
   State<MenuFrameUser> createState() => _MenuFrameUserState();
@@ -36,13 +37,14 @@ class _MenuFrameUserState extends State<MenuFrameUser>
 
     //sao chép danh sách screens vào screensnapshot
     screenSnapshot = screens.values.toList();
+    screens[2] = ProfilePage(userId: widget.userId);
   }
 
   //Map chứa cặp key-value (int - widget)
   Map<int, Widget> screens = {
-    0: AdoptionScreen(),
+    0: AdoptionScreen(centerId: null,),
     1: FeedScreen(),
-    2: EditProfileScreen(),
+    2: ProfilePage(userId: null),
   };
 
   late List<Widget> screenSnapshot;

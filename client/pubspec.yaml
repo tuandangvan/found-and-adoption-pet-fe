@@ -52,6 +52,7 @@ dependencies:
   line_awesome_flutter: ^2.0.0
 
   fluttertoast: ^8.2.4
+  url_launcher: ^6.2.1
 
 
  

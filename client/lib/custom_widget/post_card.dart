@@ -9,9 +9,6 @@ import 'package:found_adoption_application/screens/like_screen.dart';
 
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
-
-import 'package:found_adoption_application/screens/personal_page.dart';
-
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {
@@ -37,15 +34,19 @@ class _PostCardState extends State<PostCard> {
   Future<void> getLiked() async {
     List<Like>? likes = await getLike(context, clientPost.id);
     var currentClient = await getCurrentClient();
-    setState(() {
-      quantityLike = likes!.length;
-    });
+    if (this.mounted) {
+      setState(() {
+        quantityLike = likes!.length;
+      });
+    }
     likes.forEach((element) {
       if (element.centerId?.id == currentClient.id ||
           element.userId?.id == currentClient.id) {
-        setState(() {
-          liked = true;
-        });
+        if (this.mounted) {
+          setState(() {
+            liked = true;
+          });
+        }
       }
     });
   }
@@ -76,18 +77,19 @@ class _PostCardState extends State<PostCard> {
                     if (clientPost.userId != null) {
                       // Nếu là loại "center", chuyển đến ProfileCenterPage
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProfilePage(), // Thay thế bằng tên lớp tương ứng
-                        ),
-                      );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage(
+                                  userId: clientPost.userId
+                                      .id) // Thay thế bằng tên lớp tương ứng
+                              ));
                     } else {
                       // Ngược lại, chuyển đến ProfilePage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProfileCenterPage(),
+                          builder: (context) => ProfileCenterPage(
+                              centerId: clientPost.petCenterId.id),
                         ),
                       );
                     }
@@ -109,10 +111,19 @@ class _PostCardState extends State<PostCard> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PersonalPage()));
+                      clientPost.userId != null
+                          ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage(
+                                      userId: clientPost.userId.id)))
+                          : Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileCenterPage(
+                                    centerId: clientPost.petCenterId.id),
+                              ),
+                            );
                     },
                     child: Padding(
                       padding: EdgeInsets.only(left: 8),

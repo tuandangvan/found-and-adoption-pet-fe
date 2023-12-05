@@ -194,7 +194,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
               MaterialButton(
                 minWidth: double.infinity,
                 height: 50,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
                 onPressed: () {
                   Navigator.push(
                     context,
