@@ -7,14 +7,15 @@ import 'package:found_adoption_application/repository/call_back_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:http/http.dart' as http;
 
-Future<InfoUser> getProfile(BuildContext context) async {
+Future<InfoUser> getProfile(BuildContext context, var userId) async {
   var currentClient = await getCurrentClient();
-  var id = currentClient.id;
+  var id = userId != null ? userId : currentClient.id;
   var accessToken = currentClient.accessToken;
   var user;
   try {
     var responseData;
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer ${accessToken}',
@@ -33,8 +34,8 @@ Future<InfoUser> getProfile(BuildContext context) async {
   return user;
 }
 
-Future<void> updateProfile(
-    BuildContext context, firstName, lastName, phoneNumber, address, experience) async {
+Future<void> updateProfile(BuildContext context, firstName, lastName,
+    phoneNumber, address, experience) async {
   var currentClient = await getCurrentClient();
   var id = currentClient.id;
   var accessToken = currentClient.accessToken;
@@ -53,7 +54,8 @@ Future<void> updateProfile(
       return;
     }
 
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${id}");
 
     var response = await http.put(apiUrl,
         headers: {
@@ -74,14 +76,15 @@ Future<void> updateProfile(
   }
 }
 
-Future<InfoCenter> getProfileCenter(BuildContext context) async {
+Future<InfoCenter> getProfileCenter(BuildContext context, var centerId) async {
   var currentClient = await getCurrentClient();
-  var id = currentClient.id;
+  var id = centerId != null ? centerId : currentClient.id;
   var accessToken = currentClient.accessToken;
   var center;
   try {
     var responseData;
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer ${accessToken}',
@@ -117,7 +120,8 @@ Future<void> updateProfileCenter(
       return;
     }
 
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${id}");
 
     var response = await http.put(apiUrl,
         headers: {

@@ -20,7 +20,7 @@ class UserProfilePage extends StatelessWidget {
         children: [
           // 1. Cover Photo
           Container(
-            color: Colors.blue,
+            color: Theme.of(context).primaryColor,
             height: 150,
             // You can add user's cover photo here
             // Add an Image or any other widget of your choice

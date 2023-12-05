@@ -8,6 +8,8 @@ import 'package:found_adoption_application/models/user.dart' as user_comment;
 import 'package:found_adoption_application/models/user.dart';
 import 'package:found_adoption_application/repository/get_comment.dart';
 import 'package:found_adoption_application/repository/post_comment.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
+import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -118,7 +120,6 @@ class _CommentScreenState extends State<CommentScreen> {
     return FutureBuilder(
         future: commentsFuture,
         builder: (context, snapshot) {
-          print('FutureBuilder rebuilt');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -145,12 +146,28 @@ class _CommentScreenState extends State<CommentScreen> {
                           },
                           contentPadding: EdgeInsets.zero,
                           leading: GestureDetector(
-                            onTap: () async {},
+                            onTap: () async {
+                              comments[index].userId != null
+                                  ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProfilePage(
+                                              userId:
+                                                  comments[index].userId!.id)))
+                                  : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileCenterPage(
+                                            centerId:
+                                                comments[index].centerId!.id),
+                                      ),
+                                    );
+                            },
                             child: Container(
                               height: 50.0,
                               width: 50.0,
                               decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Theme.of(context).primaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
                               ),
@@ -170,16 +187,41 @@ class _CommentScreenState extends State<CommentScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  // data[i]['name'],
-                                  comments[index].userId != null
-                                      ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
-                                      : '${comments[index].centerId!.name}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                InkWell(
+                                    onTap: () {
+                                      comments[index].userId != null
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePage(
+                                                          userId:
+                                                              comments[index]
+                                                                  .userId!
+                                                                  .id)))
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileCenterPage(
+                                                        centerId:
+                                                            comments[index]
+                                                                .centerId!
+                                                                .id),
+                                              ),
+                                            );
+                                    },
+                                    child: Container(
+                                        child: Text(
+                                      // data[i]['name'],
+                                      comments[index].userId != null
+                                          ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
+                                          : '${comments[index].centerId!.name}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ))),
                                 Text(
                                   // data[i]['message'],
                                   comments[index].content,
@@ -221,6 +263,13 @@ class _CommentScreenState extends State<CommentScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          color: Theme.of(context).primaryColor,
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -239,7 +288,7 @@ class _CommentScreenState extends State<CommentScreen> {
             Text(
               'Comment',
               style: TextStyle(
-                color: Colors.black,
+                color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -247,18 +296,16 @@ class _CommentScreenState extends State<CommentScreen> {
             SizedBox(height: 4),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.send_sharp,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              // Xử lý khi nhấn nút gửi
-              print('test avatarUrl: $avatarURL');
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(
+        //       Icons.send_sharp,
+        //       color: Colors.black,
+        //     ),
+        //     onPressed: () {
+        //     },
+        //   ),
+        // ],
       ),
       body: Column(
         children: [
@@ -315,7 +362,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 },
                 formKey: formKey,
                 commentController: commentController,
-                backgroundColor: Colors.pink,
+                backgroundColor: Theme.of(context).primaryColor,
                 textColor: Colors.white,
                 sendWidget:
                     Icon(Icons.send_sharp, size: 30, color: Colors.white),

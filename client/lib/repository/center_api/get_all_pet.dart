@@ -1,32 +1,24 @@
 import 'dart:convert';
 import 'package:found_adoption_application/models/pet.dart';
-import 'package:found_adoption_application/repository/auth_api.dart';
-
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/repository/call_back_api.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Pet>> getAllPet() async {
-  //mở localstorage nếu currentClient là user
-  var userBox = await Hive.openBox('userBox');
-  var currentUser = userBox.get('currentUser');
-
-  //mở localstorage nếu currentClient là center
-  var centerBox = await Hive.openBox('centerBox');
-  var currentCenter = centerBox.get('currentCenter');
-
-  // Sử dụng dữ liệu của người dùng hiện tại dựa trên tình huống cụ thể
-  var currentClient = currentUser != null && currentUser.role == 'USER'
-      ? currentUser
-      : currentCenter;
-
-  //bắt đầu từ đoạn này, cẩn phải thay đổi currentClient là currentUser hay currentCenter cho phù hợp
+  var currentClient = await getCurrentClient();
   var accessToken = currentClient.accessToken;
-
-  var responseData = {};
+  var responseData;
+  final apiUrl;
 
   try {
-    final apiUrl = Uri.parse(
-        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/pet");
+    if(currentClient.role=='USER'){
+     apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/pet/all/pets");
+    }
+    else{
+      apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/pet/${currentClient.id}");
+    }
 
     var response = await http.get(apiUrl, headers: {
       'Authorization': 'Bearer $accessToken',
@@ -35,32 +27,38 @@ Future<List<Pet>> getAllPet() async {
     // print('Response get ALL POST: $responseData');
 
     if (responseData['message'] == 'jwt expired') {
-      //Làm mới accessToken bằng Future<String> refreshAccessToken(), gòi tiếp tục gửi lại request cũ
-      var newAccessToken = refreshAccessToken().toString();
+      responseData = callBackApi(apiUrl, "get", '');
+    }
+  } catch (e) {
+    print('Error in getAllPost: $e');
+  }
+  var petList = responseData['data'] as List<dynamic>;
 
-      currentClient.accessToken = newAccessToken;
-      // userBox.put('currentUser', currentClient); //??????????
+  List<Pet> pets = petList.map((json) => Pet.fromJson(json)).toList();
+  return pets;
+}
 
-      currentClient == currentUser
-          ? userBox.put('currentUser', currentClient)
-          : centerBox.put('currentCenter', currentClient);
+Future<List<Pet>> getAllPetOfCenter(centerId) async {
+  var currentClient = await getCurrentClient();
+  var accessToken = currentClient.accessToken;
+  var responseData;
 
-      response = await http.post(apiUrl, headers: {
-        'Authorization': 'Bearer $newAccessToken',
-      });
+  try {
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/pet/${centerId}");
 
-      responseData = json.decode(response.body);
+    var response = await http.get(apiUrl, headers: {
+      'Authorization': 'Bearer $accessToken',
+    });
+    responseData = json.decode(response.body);
+    if (responseData['message'] == 'jwt expired') {
+      responseData = callBackApi(apiUrl, "get", '');
     }
   } catch (e) {
     print('Error in getAllPost: $e');
   }
 
-  print('All Pet display here: ${responseData['data']}');
-
   var petList = responseData['data'] as List<dynamic>;
-
   List<Pet> pets = petList.map((json) => Pet.fromJson(json)).toList();
-  print('testttt: $pets');
-
   return pets;
 }
