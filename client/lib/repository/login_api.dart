@@ -64,6 +64,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
@@ -77,8 +78,10 @@ Future<void> login(
   String email,
   String password,
 ) async {
+  var message = '';
   try {
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-in");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-in");
 
     final response = await http.post(
       apiUrl,
@@ -90,6 +93,7 @@ Future<void> login(
         'password': password,
       }),
     );
+    message = json.decode(response.body)['message'] ?? '';
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -119,12 +123,25 @@ Future<void> login(
         var retrievedUser =
             userBox.get('currentUser'); // Lấy thông tin User từ Hive
 
+        Fluttertoast.showToast(
+          msg: 'Login success',
+          toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+          gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+          timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
+          backgroundColor: Colors.grey, // Màu nền của toast
+          textColor: Colors.white, // Màu chữ của toast
+          fontSize: 16.0, // Kích thước chữ của toast
+        );
         // Sử dụng thông tin User
         print('User ID: ${retrievedUser.id}');
         print('Email: ${retrievedUser.email}');
 
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MenuFrameUser()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => MenuFrameUser(
+                      userId: retrievedUser.id,
+                    )));
       }
 
       //Nếu response trả về là Center
@@ -148,18 +165,47 @@ Future<void> login(
 
         var retrievedCenter =
             centerBox.get('currentCenter'); // Lấy thông tin User từ Hive
-
+        Fluttertoast.showToast(
+          msg: 'Login success',
+          toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+          gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+          timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
+          backgroundColor: Colors.grey, // Màu nền của toast
+          textColor: Colors.white, // Màu chữ của toast
+          fontSize: 16.0, // Kích thước chữ của toast
+        );
         // Sử dụng thông tin User
         print('Center ID: ${retrievedCenter.id}');
         print('Email: ${retrievedCenter.email}');
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MenuFrameCenter()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MenuFrameCenter(centerId: retrievedCenter.id)));
       }
     } else {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+        gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+        timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
+        backgroundColor: Colors.grey, // Màu nền của toast
+        textColor: Colors.white, // Màu chữ của toast
+        fontSize: 16.0, // Kích thước chữ của toast
+      );
       print('Lỗi khi đăng nhập, mã trạng thái: ${response.statusCode}');
     }
   } catch (e) {
     print(e);
+    Fluttertoast.showToast(
+      msg: e.toString(),
+      toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
+      gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+      timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
+      backgroundColor: Colors.grey, // Màu nền của toast
+      textColor: Colors.white, // Màu chữ của toast
+      fontSize: 16.0, // Kích thước chữ của toast
+    );
   }
 }

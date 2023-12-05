@@ -14,7 +14,7 @@ Widget countdownTimer(
         child: AnimatedContainer(
           duration: Duration(milliseconds: 500),
           decoration: BoxDecoration(
-            color: timeIsUp ? Colors.red : Colors.blue,
+            color: timeIsUp ? Colors.red : Theme.of(context).primaryColor,
             shape: BoxShape.circle,
           ),
           child: Icon(

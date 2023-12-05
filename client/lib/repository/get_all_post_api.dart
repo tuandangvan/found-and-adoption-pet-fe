@@ -101,3 +101,31 @@ Future<String> changeStatusPost(String postId, String status) async {
 
   return message;
 }
+
+Future<List<Post>> getAllPostPersonal(var id) async {
+  var currentClient = await getCurrentClient();
+  var accessToken = currentClient.accessToken;
+  var responseData;
+
+  try {
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/post/personal/${id}");
+
+    var response = await http.get(apiUrl, headers: {
+      'Authorization': 'Bearer $accessToken',
+    });
+    responseData = json.decode(response.body);
+    // print('Response get ALL POST: $responseData');
+
+    if (responseData['message'] == 'jwt expired') {
+      responseData = callBackApi(apiUrl, "get", '');
+    }
+  } catch (e) {
+    print('Error in getAllPost: $e');
+  }
+  var postList = responseData['data'] as List<dynamic>;
+
+  List<Post> posts = postList.map((json) => Post.fromJson(json)).toList();
+
+  return posts;
+}

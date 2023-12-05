@@ -88,7 +88,9 @@ class MyApp extends StatelessWidget {
                               theme: ThemeData(
                                 primaryColor: mainColor,
                               ),
-                              home: MenuFrameUser(),
+                              home: MenuFrameUser(
+                                userId: currentClient.id,
+                              ),
                             );
                           } else if (currentClient.role == 'CENTER') {
                             socket.emit(
@@ -99,16 +101,20 @@ class MyApp extends StatelessWidget {
                               theme: ThemeData(
                                 primaryColor: mainColor,
                               ),
-                              home: MenuFrameCenter(),
+                              home: MenuFrameCenter(centerId: currentClient.id),
                             );
                           }
                         }
                       }
-                      return CircularProgressIndicator();
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     },
                   );
                 }
-                return CircularProgressIndicator();
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               },
             );
           } else {
@@ -122,7 +128,9 @@ class MyApp extends StatelessWidget {
             );
           }
         }
-        return CircularProgressIndicator();
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

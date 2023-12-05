@@ -10,9 +10,8 @@ import 'package:found_adoption_application/screens/user_screens/menu_frame_user.
 import 'package:hive/hive.dart';
 
 class AdoptionScreen extends StatefulWidget {
-  const AdoptionScreen({
-    super.key,
-  });
+  final centerId;
+  const AdoptionScreen({super.key, required this.centerId});
 
   @override
   State<AdoptionScreen> createState() => _AdoptionScreenState();
@@ -24,6 +23,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   late List<Pet> animals = [];
 
   late Future<List<Pet>> petsFuture;
+  var centerId;
 
   List<String> animalTypes = [
     'Cats',
@@ -42,9 +42,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   ];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    petsFuture = getAllPet();
+    centerId = widget.centerId;
   }
 
   Widget buildAnimalIcon(int index) {
@@ -124,13 +123,16 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MenuFrameUser()),
+                              builder: (context) => MenuFrameUser(
+                                    userId: currentClient.id,
+                                  )),
                         );
                       } else if (currentClient.role == 'CENTER') {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MenuFrameCenter()),
+                              builder: (context) =>
+                                  MenuFrameCenter(centerId: currentClient.id)),
                         );
                       }
                     }
@@ -227,12 +229,14 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
                     //CHI TIẾT VỀ THÔNG TIN CÁC PET ĐƯỢC NHẬN NUÔI
                     Expanded(
-                      child: FutureBuilder<List<Pet>>(
-                          future: petsFuture,
+                      child: FutureBuilder<List<Pet>> (
+                          future: getAllPet(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else {
@@ -419,5 +423,4 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       ),
     );
   }
-  
 }
