@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/center_api/center_form.dart';
+import 'package:found_adoption_application/services/center/center_form.dart';
 
 class RegistrationCenterForm extends StatefulWidget {
   const RegistrationCenterForm({super.key});
@@ -12,6 +12,7 @@ class _RegistrationCenterFormState extends State<RegistrationCenterForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController aboutMeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,7 @@ class _RegistrationCenterFormState extends State<RegistrationCenterForm> {
               ),
 
               TextFormField(
+                controller: aboutMeController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Tell us about yourself',
@@ -121,7 +123,8 @@ class _RegistrationCenterFormState extends State<RegistrationCenterForm> {
                         context,
                         nameController.text.toString(),
                         phoneNumberController.text.toString(),
-                        addressController.text.toString());
+                        addressController.text.toString(),
+                        aboutMeController.text.toString());
                   },
                   child: Text(
                     "Continue",

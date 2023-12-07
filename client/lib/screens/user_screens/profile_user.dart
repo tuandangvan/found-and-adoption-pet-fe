@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userInfo.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
-import 'package:found_adoption_application/repository/profile_api.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/services/post/post.dart';
+import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,12 +23,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Future<List<Post>>? petStoriesPosts;
   late Future<InfoUser>? userFuture;
+  var currentClient;
 
   @override
   void initState() {
     super.initState();
     petStoriesPosts = getAllPostPersonal(widget.userId);
     userFuture = getProfile(context, widget.userId);
+    // currentClient = getCurrentClient();
   }
 
   @override
@@ -39,24 +42,24 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () async {
               var currentClient = await getCurrentClient();
 
-            if (currentClient != null) {
-              if (currentClient.role == 'USER') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MenuFrameUser(
-                            userId: currentClient.id,
-                          )),
-                );
-              } else if (currentClient.role == 'CENTER') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MenuFrameCenter(centerId: currentClient.id)),
-                );
+              if (currentClient != null) {
+                if (currentClient.role == 'USER') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MenuFrameUser(
+                              userId: currentClient.id,
+                            )),
+                  );
+                } else if (currentClient.role == 'CENTER') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MenuFrameCenter(centerId: currentClient.id)),
+                  );
+                }
               }
-            }
             },
             color: Theme.of(context).primaryColor,
           ),
@@ -100,19 +103,63 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Ảnh đại diện
-                          InkWell(
-                            onTap: () {
-                              // Hàm xử lý khi click vào ảnh avatar
-                              _showFullScreenImage(context, user.avatar);
-                            },
-                            child: Hero(
-                              tag: 'avatarTag',
-                              child: CircleAvatar(
-                                radius: 50.0,
-                                backgroundImage: NetworkImage(
-                                    '${user.avatar}'), // Thay đổi đường dẫn ảnh
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Avatar
+                              InkWell(
+                                onTap: () {
+                                  _showFullScreenImage(context, user.avatar);
+                                },
+                                child: Hero(
+                                  tag: 'avatarTag',
+                                  child: CircleAvatar(
+                                    radius: 50.0,
+                                    backgroundImage:
+                                        NetworkImage('${user.avatar}'),
+                                  ),
+                                ),
                               ),
-                            ),
+                              // Nút Follow và Edit Profile
+                              Row(
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      // Xử lý khi nhấn nút Follow
+                                    },
+                                    icon: Icon(Icons.person_add,
+                                        color: Colors.white),
+                                    label: Text('Follow'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context)
+                                          .primaryColor, // Đổi màu nền của nút
+                                      onPrimary: Colors
+                                          .white, // Đổi màu văn bản của nút
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  // currentClient.id == widget.userId
+                                       ElevatedButton.icon(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfileScreen()));
+                                          },
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.white),
+                                          label: Text('Edit profile'),
+                                          style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Theme.of(context).primaryColor,
+                                            onPrimary: Colors.white,
+                                          ),
+                                        )
+                                      // : SizedBox(width: 5.0),
+                                ],
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 16.0),
 
@@ -137,14 +184,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           // About me
                           buildSectionHeader('About me', Icons.info),
-                          buildInfo(
-                              'Mình là một lập trình viên đam mê Flutter và đang xây dựng ứng dụng tuyệt vời!'),
+                          buildInfo(user.aboutMe),
                           SizedBox(height: 16.0),
 
                           // Experience
                           buildSectionHeader('Experience', Icons.work),
-                          buildInfo(
-                              '3 năm kinh nghiệm trong lĩnh vực phát triển ứng dụng di động.'),
+                          buildInfo(user.experience
+                              ? "Has been Experience"
+                              : "No Experience"),
                           SizedBox(height: 16.0),
 
                           Container(
@@ -206,7 +253,15 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             } else {
               // Xử lý trường hợp postList là null
-              return Text('Post list is null');
+              return Scaffold(
+                body: Center(
+                  child: Icon(
+                    Icons.cloud_off, // Thay thế bằng icon bạn muốn sử dụng
+                    size: 48.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              );
             }
           }
         });

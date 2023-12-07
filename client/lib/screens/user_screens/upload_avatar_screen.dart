@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
+import 'package:found_adoption_application/services/image/change_avatar_api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hive/hive.dart';
-import 'package:found_adoption_application/repository/change_avatar_api.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 
 class ImageUploadScreen extends StatefulWidget {
@@ -66,6 +66,8 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
             _pickedImage != null
                 ? ElevatedButton(
                     onPressed: () async {
+                      
+
                       var url = await changeAvatar(context, _pickedImage);
 
                       var userBox = await Hive.openBox('userBox');
@@ -83,6 +85,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                         if (currentClient.role == 'USER') {
                           currentUser.avatar = url.toString();
                           userBox.put("currentUser", currentUser);
+                          
 
                           Navigator.push(
                             context,

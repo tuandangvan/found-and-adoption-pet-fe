@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/userCenter.dart';
-import 'package:found_adoption_application/repository/profile_api.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/upload_avatar_screen.dart';
+import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:hive/hive.dart';
 
 class EditProfileCenterScreen extends StatefulWidget {
@@ -53,12 +53,18 @@ class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
               if (currentClient.role == 'USER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameUser(userId: currentClient.id,)),
+                  MaterialPageRoute(
+                      builder: (context) => MenuFrameUser(
+                            userId: currentClient.id,
+                          )),
                 );
               } else if (currentClient.role == 'CENTER') {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuFrameCenter(centerId: currentClient.id,)),
+                  MaterialPageRoute(
+                      builder: (context) => MenuFrameCenter(
+                            centerId: currentClient.id,
+                          )),
                 );
               }
             }
@@ -78,7 +84,9 @@ class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // If the Future is still loading, show a loading indicator
-              return Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (snapshot.hasError) {
               // If there is an error fetching data, show an error message
               return Center(child: Text('Error: ${snapshot.error}'));

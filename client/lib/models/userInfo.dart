@@ -10,6 +10,7 @@ class InfoUser {
   final String phoneNumber;
   final String address;
   final bool experience;
+  final String aboutMe;
 
   const InfoUser({
     required this.id,
@@ -23,6 +24,7 @@ class InfoUser {
     required this.phoneNumber,
     required this.address,
     required this.experience,
+    required this.aboutMe,
   });
 
   // Factory method để tạo đối tượng InfoUser từ JSON
@@ -39,6 +41,7 @@ class InfoUser {
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
       experience: json['experience'] ? json['experience'] : false,
+      aboutMe: json['aboutMe'] as String,
     );
   }
 }

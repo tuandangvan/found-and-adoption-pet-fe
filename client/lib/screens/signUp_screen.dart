@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/signup_api.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';
 
 import 'package:found_adoption_application/screens/login_screen.dart';
+import 'package:found_adoption_application/services/auth/signup_api.dart';
 import 'package:hive/hive.dart';
 
 class SignUpScreen extends StatefulWidget {

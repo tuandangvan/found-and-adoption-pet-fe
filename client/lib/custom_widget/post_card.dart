@@ -6,9 +6,10 @@ import 'package:found_adoption_application/repository/get_all_post_api.dart';
 import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
-
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
+import 'package:found_adoption_application/services/post/like_post_api.dart';
+import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class PostCard extends StatefulWidget {

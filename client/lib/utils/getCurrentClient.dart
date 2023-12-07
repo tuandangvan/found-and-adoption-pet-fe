@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-Future getCurrentClient() async {
+Future<dynamic> getCurrentClient() async {
   var userBox = await Hive.openBox('userBox'); // Lấy Hive box đã mở
   var centerBox = await Hive.openBox('centerBox');
 

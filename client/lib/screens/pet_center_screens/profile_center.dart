@@ -6,12 +6,13 @@ import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userCenter.dart';
-import 'package:found_adoption_application/repository/center_api/get_all_pet.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
-import 'package:found_adoption_application/repository/profile_api.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/services/center/petApi.dart';
+import 'package:found_adoption_application/services/post/post.dart';
+import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -122,19 +123,59 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Ảnh đại diện
-                    InkWell(
-                      onTap: () {
-                        // Hàm xử lý khi click vào ảnh avatar
-                        _showFullScreenImage(context, center.avatar);
-                      },
-                      child: Hero(
-                        tag: 'avatarTag',
-                        child: CircleAvatar(
-                          radius: 50.0,
-                          backgroundImage: NetworkImage(
-                              '${center.avatar}'), // Thay đổi đường dẫn ảnh
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Avatar
+                        InkWell(
+                          onTap: () {
+                            _showFullScreenImage(context, center.avatar);
+                          },
+                          child: Hero(
+                            tag: 'avatarTag',
+                            child: CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: NetworkImage('${center.avatar}'),
+                            ),
+                          ),
                         ),
-                      ),
+                        // Nút Follow và Edit Profile
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                // Xử lý khi nhấn nút Follow
+                              },
+                              icon: Icon(Icons.person_add, color: Colors.white),
+                              label: Text('Follow'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context)
+                                    .primaryColor, // Đổi màu nền của nút
+                                onPrimary:
+                                    Colors.white, // Đổi màu văn bản của nút
+                              ),
+                            ),
+                            SizedBox(width: 8.0),
+                            // currentClient.id == widget.userId
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const EditProfileCenterScreen()));
+                              },
+                              icon: Icon(Icons.edit, color: Colors.white),
+                              label: Text('Edit profile'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).primaryColor,
+                                onPrimary: Colors.white,
+                              ),
+                            )
+                            // : SizedBox(width: 5.0),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(height: 16.0),
 
@@ -156,14 +197,13 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
 
                     // About me
                     buildSectionHeader('About center', Icons.info),
-                    buildInfo(
-                        'Trung tâm đã giúp đỡ rất nhiều thú cưng. Rất mong sự gắn kết của mọi người để tình yêu được lan tỏa.'),
+                    buildInfo(center.aboutMe),
                     SizedBox(height: 16.0),
 
                     // Experience
-                    buildSectionHeader('Experience', Icons.work),
-                    buildInfo(
-                        'Y tế rất nà xịn xò nhé. Khó khăn cứ alo trung tâm...hí hí'),
+                    // buildSectionHeader('Experience', Icons.work),
+                    // buildInfo(
+                    //     'Y tế rất nà xịn xò nhé. Khó khăn cứ alo trung tâm...hí hí'),
                     SizedBox(height: 16.0),
 
                     Container(
@@ -235,7 +275,17 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               );
             } else {
               // Xử lý trường hợp postList là null
-              return Text('Post list is null');
+              return Scaffold(
+                body: Center(
+                  child: Icon(
+                    Icons.cloud_off, // Thay thế bằng icon bạn muốn sử dụng
+                    size: 48.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              );
+
+              // Text('Post list is null');
             }
           }
         });

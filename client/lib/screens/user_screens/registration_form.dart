@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/user_form_api.dart';
+import 'package:found_adoption_application/services/user/user_form_api.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
@@ -14,6 +14,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController auboutMeController = TextEditingController();
 
   setSelectedRadio(bool val) {
     setState(() {
@@ -157,7 +158,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
 
               TextFormField(
-                
+                controller: auboutMeController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Tell us about yourself',
@@ -188,7 +189,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         lastNameController.text.toString(),
                         phoneNumberController.text.toString(),
                         addressController.text.toString(),
-                        selectedRadio);
+                        selectedRadio,
+                        auboutMeController.text.toString());
                   },
                   child: Text(
                     "Continue",
