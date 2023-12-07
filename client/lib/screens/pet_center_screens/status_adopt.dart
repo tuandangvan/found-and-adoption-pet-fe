@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class NotifyPage extends StatefulWidget {
+class StatusAdopt extends StatefulWidget {
   @override
-  _NotifyPageState createState() => _NotifyPageState();
+  _StatusAdoptState createState() => _StatusAdoptState();
 }
 
-class _NotifyPageState extends State<NotifyPage>
+class _StatusAdoptState extends State<StatusAdopt>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 

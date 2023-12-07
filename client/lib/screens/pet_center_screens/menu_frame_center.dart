@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/notify_page.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_screen_center.dart';
 import 'package:found_adoption_application/screens/adoption_screen.dart';
 
@@ -61,7 +61,7 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
       centerId: null,
     ),
     3: AddPetScreen(),
-    4: NotifyPage()
+    4: StatusAdopt()
   };
 
   late List<Widget> screenSnapshot;
