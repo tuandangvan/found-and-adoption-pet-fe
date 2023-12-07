@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 
 import 'package:found_adoption_application/models/current_user.dart';
-
+import 'package:found_adoption_application/screens/pet_center_screens/notify_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
-
-import 'package:found_adoption_application/screens/welcome_screen.dart';
+import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'package:hive_flutter/hive_flutter.dart';
-
-import 'package:socket_io_client/socket_io_client.dart' as io;
 
 void main() async {
   await Hive.initFlutter();
@@ -34,7 +32,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: ProfilePage(),
+//       home: AdoptionPage(),
 //     );
 //   }
 // }

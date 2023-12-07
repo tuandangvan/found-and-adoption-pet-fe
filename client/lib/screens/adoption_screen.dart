@@ -229,7 +229,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
                     //CHI TIẾT VỀ THÔNG TIN CÁC PET ĐƯỢC NHẬN NUÔI
                     Expanded(
-                      child: FutureBuilder<List<Pet>> (
+                      child: FutureBuilder<List<Pet>>(
                           future: getAllPet(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
@@ -371,21 +371,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                             Stack(
                                               alignment: Alignment.centerLeft,
                                               children: [
-                                                // ClipRRect(
-                                                //   borderRadius:
-                                                //       BorderRadius.circular(
-                                                //           20), // Bo góc 20 độ
-                                                //   child: Container(
-                                                //     decoration: BoxDecoration(
-                                                //         // color: animal
-                                                //         //     .backgroundColor,
-                                                //         color: const Color
-                                                //             .fromARGB(255, 233,
-                                                //             223, 133)),
-                                                //     height: 190,
-                                                //     width: deviceWidth * 0.4,
-                                                //   ),
-                                                // ),
                                                 ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(

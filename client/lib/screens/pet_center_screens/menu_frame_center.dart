@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/add_pet_screen.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/notify_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_screen_center.dart';
 import 'package:found_adoption_application/screens/adoption_screen.dart';
 
@@ -37,6 +38,7 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.3).animate(_animationController),
     ];
 
     //hoạt ảnh chạy từ begin -> end
@@ -51,10 +53,15 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
 
   //Map chứa cặp key-value (int - widget)
   Map<int, Widget> screens = {
-    0: AdoptionScreen(centerId: null,),
+    0: AdoptionScreen(
+      centerId: null,
+    ),
     1: FeedScreen(),
-    2: ProfileCenterPage(centerId: null,),
-    3: AddPetScreen()
+    2: ProfileCenterPage(
+      centerId: null,
+    ),
+    3: AddPetScreen(),
+    4: NotifyPage()
   };
 
   late List<Widget> screenSnapshot;
@@ -93,7 +100,7 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
     return AnimatedPositioned(
         duration: duration,
         top: 0,
-        left: menuOpen ? deviceWidth * 0.55 - (position * 50) : 0.0,
+        left: menuOpen ? deviceWidth * 0.65 - (position * 50) : 0.0,
         right: menuOpen ? deviceWidth * -0.45 + (position * 50) : 0.0,
         bottom: 0,
         child: ScaleTransition(
