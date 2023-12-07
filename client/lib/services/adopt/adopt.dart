@@ -1,19 +1,19 @@
 import 'dart:convert';
+import 'package:found_adoption_application/models/adopt.dart';
 import 'package:found_adoption_application/services/api.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 Future<String> createAdopt(String petId, String descriptionAdoption) async {
   try {
-    var body =
-        jsonEncode({'petId': petId, 'descriptionAdoption': descriptionAdoption});
+    var body = jsonEncode(
+        {'petId': petId, 'descriptionAdoption': descriptionAdoption});
     var responseData = await api('/adopt', 'POST', body);
     print(responseData);
 
     if (responseData['success'] as bool) {
-     notification(responseData['message'], false);
+      notification(responseData['message'], false);
       return responseData['id'];
-    }
-    else{
+    } else {
       notification(responseData['message'], true);
     }
   } catch (e) {
@@ -22,6 +22,43 @@ Future<String> createAdopt(String petId, String descriptionAdoption) async {
   }
   return '';
 }
+
+Future<List<Adopt>> getStatusAdoptCenter(String status) async {
+  var responseData;
+  try {
+    responseData = await api('/adopt/center?status=${status}', 'GET', '');
+
+    if (responseData['success']) {
+      var adoptList = responseData['data'] as List<dynamic>;
+      print(responseData['data']);
+      List<Adopt> adopts =
+          adoptList.map((json) => Adopt.fromJson(json)).toList();
+      print(adopts);
+      return adopts;
+    }
+  } catch (e) {
+    print(e);
+    notification(e.toString(), true);
+  }
+  // ignore: cast_from_null_always_fails
+  return null as List<Adopt>;
+}
+
+Future<void> changeStatusAdoptCenter(String adoptId, String statusAdopt) async {
+  var responseData;
+   var body = jsonEncode(
+        {'statusAdopt': statusAdopt});
+  try {
+    responseData = await api('/adopt/${adoptId}/status', 'PUT', body);
+    if (responseData['success']) {
+      notification(responseData['message'], false);
+    }
+  } catch (e) {
+    print(e);
+    notification(e.toString(), true);
+  }
+}
+
 
 // Future<dynamic> createAdopt(String content) async {
 //   try {
