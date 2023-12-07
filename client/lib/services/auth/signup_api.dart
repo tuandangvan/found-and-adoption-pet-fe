@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,21 +26,17 @@ Future<void> signup(BuildContext context, String email, String password,
     if (response.statusCode == 201) {
       // Xử lý thành công
       final responseData = json.decode(response.body);
-      print('Indentify Account after register :${responseData['account']}');
-
       final accountRegisterBox = await Hive.openBox('accountRegisterBox');
       accountRegisterBox.put('account', responseData['account']);
-
-      print('Đăng ký thành công: $responseData');
-
+      notification("Resgister successfully!", false);
       showOTPInputDialog(context);
     } else {
-      // Xử lý lỗi
-      print('Lỗi khi đăng ký, mã trạng thái: ${response.statusCode}');
-      print(response.body);
+      final responseData = json.decode(response.body);
+      notification(responseData['message'], true);
     }
   } catch (e) {
     print(e);
+  //  notification(e.toString(), true);
   }
 }
 
@@ -61,18 +58,16 @@ Future<bool> verifycode(String email, String code) async {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      print('Xác thực OTP thành công: $responseData');
-
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => RegistrationForm()));
+      notification(responseData['message'], false);
       return true;
     } else {
-      print('Lỗi xác thực OTP, mã trạng thái: ${response.statusCode}');
-      print(response.body);
+     final responseData = json.decode(response.body);
+      notification(responseData['message'], true);
       return false;
     }
   } catch (e) {
     print(e);
+  //  notification(e.toString(), true);
     return false;
   }
 }

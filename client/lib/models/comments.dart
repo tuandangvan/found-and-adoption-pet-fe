@@ -36,7 +36,7 @@ class Comment {
               )
             : null,
         commentId: json['commentId'] ?? null,
-        content: json['content'],
+        content: json['content'] ?? '',
         createdAt: json['createdAt']);
   }
 

@@ -16,8 +16,7 @@ Future<String> refreshAccessToken() async {
 
   // final refreshToken = userBox.get('currentUser').refreshToken;
   final refreshToken = currentClient.refreshToken;
-  final apiUrl = Uri.parse(
-      "https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/refresh-token");
+  final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/refresh-token");
 
   final response = await http.post(apiUrl, headers: {
     'Authorization': 'Bearer ${refreshToken}',
@@ -31,7 +30,7 @@ Future<String> refreshAccessToken() async {
     if (currentClient.role == 'USER') {
       currentUser.accessToken = newAccessToken;
       userBox.put('currentUser', currentUser);
-    } else {
+    }else{
       currentCenter.accessToken = newAccessToken;
       centerBox.put('curentCenter', currentCenter);
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:found_adoption_application/repository/login_api.dart';
+import 'package:found_adoption_application/services/auth/loginApi.dart';
 import 'package:found_adoption_application/screens/signUp_screen.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';

@@ -1,10 +1,10 @@
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/like_model.dart';
-import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
+import 'package:found_adoption_application/services/post/like_post_api.dart';
 
 class LikeScreen extends StatefulWidget {
   final postId;
