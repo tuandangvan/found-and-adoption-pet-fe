@@ -74,7 +74,8 @@ class _CommentScreenState extends State<CommentScreen> {
             firstName: userIdData['firstName'],
             lastName: userIdData['lastName'],
             avatar: userIdData['avatar'],
-          )
+            address: userIdData['address'],
+            phoneNumber: userIdData['phoneNumber'])
         : null;
 
     // Extract centerId data from the map
@@ -86,7 +87,8 @@ class _CommentScreenState extends State<CommentScreen> {
             id: centerIdData['_id'],
             name: centerIdData['name'],
             avatar: centerIdData['avatar'],
-          )
+            address: centerIdData['address'],
+            phoneNumber: centerIdData['phoneNumber'])
         : null;
 
     newCommentRe = Comment(
@@ -256,9 +258,9 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     user_comment.User userCmt =
-        user_comment.User(id: '', firstName: '', lastName: '', avatar: '');
-    center_comment.PetCenter centerCmt =
-        center_comment.PetCenter(id: '', name: '', avatar: '');
+        user_comment.User(id: '', firstName: '', lastName: '', avatar: '', address: '', phoneNumber: '');
+    center_comment.PetCenter centerCmt = center_comment.PetCenter(
+        id: '', name: '', avatar: '', address: '', phoneNumber: '');
 
     return Scaffold(
       appBar: AppBar(
@@ -335,12 +337,16 @@ class _CommentScreenState extends State<CommentScreen> {
                           id: currentClient.id,
                           firstName: currentClient.firstName,
                           lastName: currentClient.lastName,
-                          avatar: currentClient.avatar);
+                          avatar: currentClient.avatar,
+                          address: '',
+                          phoneNumber: '');
                     } else {
                       centerCmt = center_comment.PetCenter(
                           id: currentClient.id,
                           name: currentClient.name,
-                          avatar: currentClient.avatar);
+                          avatar: currentClient.avatar,
+                          address: '',
+                          phoneNumber: '');
                     }
 
                     Comment newComment = Comment(
