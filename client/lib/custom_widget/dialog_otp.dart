@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/signup_api.dart';
 import 'package:found_adoption_application/custom_widget/time_countdown.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/register_form.dart';
 import 'package:found_adoption_application/screens/user_screens/registration_form.dart';
+import 'package:found_adoption_application/services/auth/signup_api.dart';
 
 import 'package:hive/hive.dart';
 

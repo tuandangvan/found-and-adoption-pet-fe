@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/services/auth_api.dart';
+import 'package:found_adoption_application/services/callBackApi.dart';
 import 'package:hive/hive.dart';
-import 'package:found_adoption_application/repository/auth_api.dart';
-import 'package:found_adoption_application/repository/call_back_api.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -87,14 +87,11 @@ Future<String> changeAvatar(BuildContext context, imageFile) async {
       responseData = json.decode(response2.body);
 
       if (responseData['message'] == 'jwt expired') {
-        responseData = await callBackApi(apiUrl2, "put", body);
-      }
-      if (responseData['success']) {
-        print('upload image success');
+        responseData = await callBackApi(apiUrl2, "PUT", body);
       }
     }
   } catch (e) {
-    print(e);
+    // notification(e.toString(), true);
   }
   return url;
 }

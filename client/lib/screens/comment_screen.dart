@@ -6,10 +6,9 @@ import 'package:found_adoption_application/models/pet_center.dart'
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart' as user_comment;
 import 'package:found_adoption_application/models/user.dart';
-import 'package:found_adoption_application/repository/get_comment.dart';
-import 'package:found_adoption_application/repository/post_comment.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
+import 'package:found_adoption_application/services/post/comment.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:fluttertoast/fluttertoast.dart';

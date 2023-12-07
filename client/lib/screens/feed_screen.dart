@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/post.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
 import 'package:found_adoption_application/screens/new_post_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -92,7 +92,15 @@ class _FeedScreenState extends State<FeedScreen> {
               );
             } else {
               // Xử lý trường hợp postList là null
-              return Text('Post list is null');
+              return Scaffold(
+                body: Center(
+                  child: Icon(
+                    Icons.cloud_off , // Thay thế bằng icon bạn muốn sử dụng
+                    size: 48.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              );
             }
           }
         },

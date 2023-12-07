@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
 class StatusAdopt extends StatefulWidget {
   @override
@@ -20,6 +22,31 @@ class _StatusAdoptState extends State<StatusAdopt>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () async {
+            var currentClient = await getCurrentClient();
+
+              if (currentClient != null) {
+                if (currentClient.role == 'USER') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MenuFrameUser(
+                              userId: currentClient.id,
+                            )),
+                  );
+                } else if (currentClient.role == 'CENTER') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MenuFrameCenter(centerId: currentClient.id)),
+                  );
+                }
+              }
+          },
+        ),
         title: Text(
           'Adoption Page',
           style: TextStyle(

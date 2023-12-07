@@ -8,6 +8,7 @@ class InfoCenter {
   final String avatar;
   final String phoneNumber;
   final String address;
+  final String aboutMe;
 
   const InfoCenter({
     required this.id,
@@ -19,6 +20,7 @@ class InfoCenter {
     required this.avatar,
     required this.phoneNumber,
     required this.address,
+    required this.aboutMe
   });
 
   // Factory method để tạo đối tượng InfoUser từ JSON
@@ -33,6 +35,7 @@ class InfoCenter {
       avatar: json['avatar'] as String,
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
+      aboutMe: json['aboutMe'] as String,
     );
   }
 }

@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:found_adoption_application/repository/add_post_api.dart';
-import 'package:found_adoption_application/repository/multi_image_api.dart';
-
 import 'package:found_adoption_application/screens/feed_screen.dart';
+import 'package:found_adoption_application/services/image/multi_image_api.dart';
+import 'package:found_adoption_application/services/post/post.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 

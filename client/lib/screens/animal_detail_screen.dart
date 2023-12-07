@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
+import 'package:found_adoption_application/services/adopt/adopt.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
   final Pet animal;
@@ -164,6 +165,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                         width: 24,
                       ),
                       Expanded(
+                          child: GestureDetector(
+                        onTap: () async {
+                          await createAdopt(widget.animal.id, "I love pet");
+                        },
                         child: Material(
                           borderRadius: BorderRadius.circular(20),
                           elevation: 4,
@@ -180,7 +185,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                             ),
                           ),
                         ),
-                      )
+                      ))
                     ],
                   ),
                 ),
