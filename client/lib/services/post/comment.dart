@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:found_adoption_application/models/comments.dart';
 import 'package:found_adoption_application/services/api.dart';
-import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 Future<List<Comment>> getComment(String postId) async {
   var responseData = {};
