@@ -384,28 +384,10 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                               Stack(
                                                 alignment: Alignment.centerLeft,
                                                 children: [
-                                                  // ClipRRect(
-                                                  //   borderRadius:
-                                                  //       BorderRadius.circular(
-                                                  //           20), // Bo góc 20 độ
-                                                  //   child: Container(
-                                                  //     decoration: BoxDecoration(
-                                                  //         // color: animal
-                                                  //         //     .backgroundColor,
-                                                  //         color: const Color
-                                                  //             .fromARGB(255, 233,
-                                                  //             223, 133)),
-                                                  //     height: 190,
-                                                  //     width: deviceWidth * 0.4,
-                                                  //   ),
-                                                  // ),
                                                   ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20), // Bo góc 20 độ
-
-                                                    /*sử dụng tag để xác định hiệu ứng chuyển tiếp child(Image) 
-                                                  ở widget này đến widget khác*/
                                                     child: Hero(
                                                       tag: animal.namePet,
                                                       child: Image(

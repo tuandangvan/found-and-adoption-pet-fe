@@ -2,8 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:found_adoption_application/models/like_model.dart';
-import 'package:found_adoption_application/repository/get_all_post_api.dart';
-import 'package:found_adoption_application/repository/like_post_api.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';

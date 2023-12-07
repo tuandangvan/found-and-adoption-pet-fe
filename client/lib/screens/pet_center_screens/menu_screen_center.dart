@@ -18,11 +18,11 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
 
   List<String> menuItems = [
     'Adoption',
-    'Pet Stories',
+    'Pet Story',
     'Profile',
     'Add pet',
-    'Favorite',
-    'Messages',
+    'Notify',
+    // 'Messages',
   ];
 
   List<IconData> icons = [
@@ -30,8 +30,8 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
     FontAwesomeIcons.newspaper,
     FontAwesomeIcons.userAlt,
     FontAwesomeIcons.plus,
-    FontAwesomeIcons.heart,
-    FontAwesomeIcons.envelope,
+    FontAwesomeIcons.solidBell,
+    // FontAwesomeIcons.envelope,
   ];
 
   Widget buildMenuRow(int index) {
@@ -52,14 +52,14 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
                   ? Colors.white
                   : Colors.white.withOpacity(0.5),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: 10),
             Text(
               menuItems[index],
               style: TextStyle(
                   color: selectedMenuIndex == index
                       ? Colors.white
                       : Colors.white.withOpacity(0.5),
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600),
             ),
           ],
