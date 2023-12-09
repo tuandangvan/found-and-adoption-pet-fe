@@ -17,6 +17,8 @@ class Pet {
   final User? foundOwner;
   final String? foundOwner_id;
   final String statusAdopt;
+  final String? createdAt;
+  final String? updatedAt;
 
   Pet({
     required this.id,
@@ -34,39 +36,55 @@ class Pet {
     this.foundOwner,
     this.foundOwner_id,
     required this.statusAdopt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) {
     return Pet(
-        id: json['_id'],
-        centerId: json['centerId'] != null
-            ? PetCenter(
-                id: json['centerId']['_id'] as String,
-                name: json['centerId']['name'] as String,
-                avatar: json['centerId']['avatar'] as String,
-                address: json['centerId']['address'] as String,
-                phoneNumber: json['centerId']['phoneNumber'] as String,)
-            : null,
-        namePet: json['namePet'],
-        petType: json['petType'],
-        breed: json['breed'],
-        gender: json['gender'],
-        age: json['age'] as int,
-        color: json['color'],
-        description: json['description'],
-        images: json['images'] as List<dynamic>,
-        level: json['level'],
-        foundOwner: json['foundOwner'] != null
-            ? User(
-                id: json['foundOwner']['_id'] as String,
-                firstName: json['foundOwner']['firstName'] as String,
-                lastName: json['foundOwner']['lastName'] as String,
-                avatar: json['foundOwner']['avatar'] as String,
-                address: json['foundOwner']['address'] as String,
-                phoneNumber: json['foundOwner']['phoneNumber'] as String,)
-            : null,
-        statusAdopt: json['statusAdopt'],
-        centerId_id: json['centerId']['_id']);
+      id: json['_id'],
+      centerId: json['centerId'] != null
+          ? PetCenter(
+              id: json['centerId']['_id'] as String,
+              name: json['centerId']['name'] as String,
+              avatar: json['centerId']['avatar'] as String,
+              address: json['centerId']['address'] as String,
+              phoneNumber: json['centerId']['phoneNumber'] as String,
+              aboutMe: json['centerId']['aboutMe'] as String,
+              createdAt: json['centerId']['createdAt'] as String,
+              updatedAt: json['centerId']['updatedAt'] as String,
+            )
+          : null,
+      namePet: json['namePet'],
+      petType: json['petType'],
+      breed: json['breed'],
+      gender: json['gender'],
+      age: json['age'] as int,
+      color: json['color'],
+      description: json['description'],
+      images: json['images'] as List<dynamic>,
+      level: json['level'],
+      foundOwner: json['foundOwner'] != null
+          ? User(
+              id: json['foundOwner']['_id'] as String,
+              firstName: json['foundOwner']['firstName'] as String,
+              lastName: json['foundOwner']['lastName'] as String,
+              avatar: json['foundOwner']['avatar'] as String,
+              address: json['foundOwner']['address'] as String,
+              phoneNumber: json['foundOwner']['phoneNumber'] as String,
+              aboutMe: json['centerId']['aboutMe'] as String,
+              createdAt: json['centerId']['createdAt'] as String,
+              updatedAt: json['centerId']['updatedAt'] as String,
+            )
+          : null,
+      statusAdopt: json['statusAdopt'],
+      centerId_id: json['centerId']['_id'],
+      foundOwner_id: json['statusAdopt'] == 'HAS_ONE_OWNER'
+          ? json['foundOwner']['_id']
+          : null,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -84,7 +102,9 @@ class Pet {
       'images': images,
       'level': level,
       'foundOwner': foundOwner,
-      'statusAdopt': statusAdopt
+      'statusAdopt': statusAdopt,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
     };
   }
 }

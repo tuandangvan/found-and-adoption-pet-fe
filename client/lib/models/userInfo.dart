@@ -11,6 +11,8 @@ class InfoUser {
   final String address;
   final bool experience;
   final String aboutMe;
+  final String? createdAt;
+  final String? updatedAt;
 
   const InfoUser({
     required this.id,
@@ -25,6 +27,8 @@ class InfoUser {
     required this.address,
     required this.experience,
     required this.aboutMe,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   // Factory method để tạo đối tượng InfoUser từ JSON
@@ -42,6 +46,8 @@ class InfoUser {
       address: json['address'] as String,
       experience: json['experience'] ? json['experience'] : false,
       aboutMe: json['aboutMe'] as String,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
     );
   }
 }
