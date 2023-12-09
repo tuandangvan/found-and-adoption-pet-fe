@@ -136,7 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   ElevatedButton.icon(
                                     onPressed: () {
-                                      notification("Feature under development", false);
+                                      notification(
+                                          "Feature under development", false);
                                     },
                                     icon: Icon(Icons.person_add,
                                         color: Colors.white),
@@ -311,7 +312,10 @@ class _ProfilePageState extends State<ProfilePage> {
           makePhoneCall('tel:${info}');
         } else if (type == 'address') {
           //xử lý bản đồ
-          MapPage();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MapPage()),
+          );
         }
       },
       child: Row(

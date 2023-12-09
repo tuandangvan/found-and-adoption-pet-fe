@@ -7,6 +7,7 @@ import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userCenter.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/map_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -58,7 +59,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
     getClient();
   }
 
-    Future<void> getClient() async {
+  Future<void> getClient() async {
     var temp = await getCurrentClient();
     setState(() {
       currentClient = temp;
@@ -156,7 +157,8 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                notification("Feature under development", false);
+                                notification(
+                                    "Feature under development", false);
                               },
                               icon: Icon(Icons.person_add, color: Colors.white),
                               label: Text('Follow'),
@@ -168,23 +170,23 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                               ),
                             ),
                             SizedBox(width: 8.0),
-                            currentClient.id == widget.centerId?
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditProfileCenterScreen()));
-                              },
-                              icon: Icon(Icons.edit, color: Colors.white),
-                              label: Text('Edit profile'),
-                              style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).primaryColor,
-                                onPrimary: Colors.white,
-                              ),
-                            )
-                            : const SizedBox(width: 5.0),
+                            currentClient.id == widget.centerId
+                                ? ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EditProfileCenterScreen()));
+                                    },
+                                    icon: Icon(Icons.edit, color: Colors.white),
+                                    label: Text('Edit profile'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      onPrimary: Colors.white,
+                                    ),
+                                  )
+                                : const SizedBox(width: 5.0),
                           ],
                         ),
                       ],
@@ -203,8 +205,10 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     buildSectionHeader('Contact center', Icons.mail),
                     buildContactInfo(center.phoneNumber, Icons.phone, 'phone'),
                     buildContactInfo(center.email, Icons.email, 'email'),
-                    buildContactInfo(center.address,
-                        IconData(0xe3ab, fontFamily: 'MaterialIcons'), ''),
+                    buildContactInfo(
+                        center.address,
+                        IconData(0xe3ab, fontFamily: 'MaterialIcons'),
+                        'address'),
                     SizedBox(height: 16.0),
 
                     // About me
@@ -386,7 +390,10 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                 onTap: () {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return AnimalDetailScreen(animal: animal, currentId: currentClient,);
+                                    return AnimalDetailScreen(
+                                      animal: animal,
+                                      currentId: currentClient,
+                                    );
                                   }));
                                 },
                                 child: Padding(
@@ -553,6 +560,12 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
           launchEmail(info);
         } else if (type == 'phone') {
           makePhoneCall('tel:${info}');
+        } else if (type == 'address') {
+          //địa chỉ map
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MapPage()),
+          );
         }
       },
       child: Row(
