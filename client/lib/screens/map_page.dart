@@ -11,7 +11,8 @@ import 'package:location/location.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  final LatLng pDestination;
+  const MapPage({super.key, required this.pDestination});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -23,12 +24,12 @@ class _MapPageState extends State<MapPage> {
   Location _locationController = Location();
   Set<Marker> markers = {}; // Add this line to declare the markers set
 
-  static const LatLng _pSchool = LatLng(10.8506377, 106.7693382);
+  // static const LatLng _pSchool = LatLng(10.8506377, 106.7693382);
 
   late LatLng _currentP = LatLng(0.0, 0.0);
 
   Map<PolylineId, Polyline> polylines = {};
-  late double distance;
+  late double distance = 0.0;
 
   @override
   void initState() {
@@ -127,7 +128,7 @@ class _MapPageState extends State<MapPage> {
                   Marker(
                     markerId: MarkerId("_sourceLocation"),
                     icon: BitmapDescriptor.defaultMarker,
-                    position: _pSchool,
+                    position: widget.pDestination,
                   ),
                 },
                 polylines: Set<Polyline>.of(polylines.values),
@@ -194,7 +195,8 @@ class _MapPageState extends State<MapPage> {
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
           GOOGLE_MAPS_API_KEY,
           PointLatLng(_currentP.latitude, _currentP.longitude),
-          PointLatLng(_pSchool.latitude, _pSchool.longitude),
+          PointLatLng(
+              widget.pDestination.latitude, widget.pDestination.longitude),
           travelMode: TravelMode.driving);
 
       if (result.points.isNotEmpty) {
@@ -229,13 +231,12 @@ class _MapPageState extends State<MapPage> {
     double distance = await Geolocator.distanceBetween(
       _currentP.latitude,
       _currentP.longitude,
-      _pSchool.latitude,
-      _pSchool.longitude,
+      widget.pDestination.latitude,
+      widget.pDestination.longitude,
     );
 
     return distance / 1000;
   }
-
 
   //CHUYỂN ĐỔI PLACE_DETAIL THÀNH 1 TỌA ĐỘ
 }
