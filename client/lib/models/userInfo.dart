@@ -3,7 +3,7 @@ class InfoUser {
   final String accountId;
   final String email;
   final String role;
-  final bool isActive;
+  final String status;
   final String firstName;
   final String lastName;
   final String avatar;
@@ -17,7 +17,7 @@ class InfoUser {
     required this.accountId,
     required this.email,
     required this.role,
-    required this.isActive,
+    required this.status,
     required this.firstName,
     required this.lastName,
     required this.avatar,
@@ -34,7 +34,7 @@ class InfoUser {
       accountId: json['accountId'] as String,
       email: json['email'] as String,
       role: json['role'] as String,
-      isActive: json['isActive'] ? json['isActive'] : false,
+      status: json['status'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       avatar: json['avatar'] as String,

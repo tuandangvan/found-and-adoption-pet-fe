@@ -100,50 +100,48 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: MaterialButton(
                       minWidth: double.infinity,
                       height: 60,
-                      onPressed: () {},
+                      onPressed: () async {
+                        // final emailRegisterBox =
+                        //     await Hive.openBox('emailRegisterBox');
+
+                        // Kiểm tra giá trị của signUpType và thực hiện các hành động tương ứng
+                        if (emailController.text.toString() == '') {
+                          Fluttertoast.showToast(
+                            msg: "Email not empty!",
+                            toastLength:
+                                Toast.LENGTH_SHORT, // Thời gian hiển thị
+                            gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+                            timeInSecForIosWeb:
+                                1, // Thời gian hiển thị cho iOS và web
+                            backgroundColor: Colors.grey, // Màu nền của toast
+                            textColor: Colors.white, // Màu chữ của toast
+                            fontSize: 16.0, // Kích thước chữ của toast
+                          );
+                        } else if (passwordController.text.toString() == '') {
+                          Fluttertoast.showToast(
+                            msg: "Password not empty!",
+                            toastLength:
+                                Toast.LENGTH_SHORT, // Thời gian hiển thị
+                            gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
+                            timeInSecForIosWeb:
+                                1, // Thời gian hiển thị cho iOS và web
+                            backgroundColor: Colors.grey, // Màu nền của toast
+                            textColor: Colors.white, // Màu chữ của toast
+                            fontSize: 16.0, // Kích thước chữ của toast
+                          );
+                        } else {
+                          await login(
+                            context,
+                            emailController.text.toString(),
+                            passwordController.text.toString(),
+                          );
+                        }
+                      },
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      child: GestureDetector(
-                        onTap: () async {
-                          // final emailRegisterBox =
-                          //     await Hive.openBox('emailRegisterBox');
-
-                          // Kiểm tra giá trị của signUpType và thực hiện các hành động tương ứng
-                          if (emailController.text.toString() == '') {
-                            Fluttertoast.showToast(
-                              msg: "Email not empty!",
-                              toastLength:
-                                  Toast.LENGTH_SHORT, // Thời gian hiển thị
-                              gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-                              timeInSecForIosWeb:
-                                  1, // Thời gian hiển thị cho iOS và web
-                              backgroundColor: Colors.grey, // Màu nền của toast
-                              textColor: Colors.white, // Màu chữ của toast
-                              fontSize: 16.0, // Kích thước chữ của toast
-                            );
-                          } else if (passwordController.text.toString() == '') {
-                            Fluttertoast.showToast(
-                              msg: "Password not empty!",
-                              toastLength:
-                                  Toast.LENGTH_SHORT, // Thời gian hiển thị
-                              gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-                              timeInSecForIosWeb:
-                                  1, // Thời gian hiển thị cho iOS và web
-                              backgroundColor: Colors.grey, // Màu nền của toast
-                              textColor: Colors.white, // Màu chữ của toast
-                              fontSize: 16.0, // Kích thước chữ của toast
-                            );
-                          } else {
-                            login(
-                              context,
-                              emailController.text.toString(),
-                              passwordController.text.toString(),
-                            );
-                          }
-                        },
-                        child: Text(
+                      child: Text(
                           "Login",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -154,7 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

@@ -264,7 +264,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return AnimalDetailScreen(
-                                                animal: animal);
+                                                animal: animal, currentId: currentClient);
                                           }));
                                         },
                                         child: Padding(

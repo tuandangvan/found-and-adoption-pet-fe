@@ -11,18 +11,19 @@ class Post {
   List<dynamic>? images;
   List<Comment>? comments;
   List<dynamic>? reaction;
+  String? status;
   DateTime createdAt;
 
-  Post({
-    required this.id,
-    this.userId,
-    this.petCenterId,
-    required this.content,
-    this.images,
-    this.comments,
-    this.reaction,
-    required this.createdAt,
-  });
+  Post(
+      {required this.id,
+      this.userId,
+      this.petCenterId,
+      required this.content,
+      this.images,
+      this.comments,
+      this.reaction,
+      required this.createdAt,
+      required this.status});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     var commentList = json['comments'] as List<dynamic>;
@@ -35,7 +36,8 @@ class Post {
               lastName: json['userId']['lastName'] as String,
               avatar: json['userId']['avatar'] as String,
               address: json['userId']['address'] as String,
-              phoneNumber: json['userId']['phoneNumber'] as String)
+              phoneNumber: json['userId']['phoneNumber'] as String,
+            )
           : null,
       petCenterId: json['centerId'] != null
           ? PetCenter(
@@ -43,7 +45,7 @@ class Post {
               name: json['centerId']['name'] as String,
               avatar: json['centerId']['avatar'] as String,
               address: json['centerId']['address'] as String,
-              phoneNumber: json['centerId']['phoneNumber'] as String)
+              phoneNumber: json['centerId']['phoneNumber'] as String,)
           : null,
       content: json['content'] as String,
       images: json['images'] as List<dynamic>,
@@ -51,6 +53,7 @@ class Post {
       comments: commentList.map((json) => Comment.fromJson(json)).toList(),
       createdAt:
           DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").parse(json['createdAt']),
+      status: json['status'],
     );
   }
 }

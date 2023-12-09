@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/notify.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
@@ -152,48 +150,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// Future<bool> checkRefreshToken() async {
-//   try {
-//     var userBox = await Hive.openBox('userBox');
-//     var currentUser = userBox.get('currentUser');
-
-//     var centerBox = await Hive.openBox('centerBox');
-//     var currentCenter = centerBox.get('currentCenter');
-
-//     var currentClient = currentUser != null && currentUser.role == 'USER'
-//         ? currentUser
-//         : currentCenter;
-
-//     var clientBox =
-//         currentUser != null && currentUser.role == 'USER' ? userBox : centerBox;
-
-//     var name = currentUser != null && currentUser.role == 'USER'
-//         ? currentUser!.firstName
-//         : currentCenter!.name;
-
-//     final refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
-//     const refreshTokenValidityDays = 7;
-//     final DateTime now = DateTime.now();
-
-//     if (currentClient != null) {
-//       final expirationTime = refreshTokenTimestamp.add(
-//         Duration(days: refreshTokenValidityDays),
-//       );
-//       print('The current client is Logged in at: ${refreshTokenTimestamp}');
-//       print('The RefreshToken is expired at: ${expirationTime}');
-//       print('The currentClient is $name with role: ${currentClient!.role}');
-
-//       if (now.isBefore(expirationTime)) {
-//         return true;
-//       }
-//     }
-//     return false;
-//   } catch (e) {
-//     print(e);
-//     return false;
-//   }
-// }
-
 Future<bool> checkRefreshToken() async {
   try {
     var userBox = await Hive.openBox('userBox');
@@ -202,36 +158,30 @@ Future<bool> checkRefreshToken() async {
     var centerBox = await Hive.openBox('centerBox');
     var currentCenter = centerBox.get('currentCenter');
 
-    var currentClient;
-    var clientBox;
-    var name;
+    var currentClient = currentUser != null && currentUser.role == 'USER'
+        ? currentUser
+        : currentCenter;
 
-    if (currentUser != null && currentUser.role == 'USER') {
-      currentClient = currentUser;
-      clientBox = userBox;
-      name = currentUser.firstName;
-    } else if (currentCenter != null) {
-      currentClient = currentCenter;
-      clientBox = centerBox;
-      name = currentCenter.name;
-    } else {
-      // Handle the case where both currentUser and currentCenter are null.
-      return false;
-    }
+    var clientBox =
+        currentUser != null && currentUser.role == 'USER' ? userBox : centerBox;
 
-    var refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
+    var name = currentUser != null && currentUser.role == 'USER'
+        ? currentUser!.firstName
+        : currentCenter!.name;
+
+    final refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
     const refreshTokenValidityDays = 7;
-    var now = DateTime.now();
+    final DateTime now = DateTime.now();
 
     if (currentClient != null) {
-      var expirationTime = refreshTokenTimestamp?.add(
+      final expirationTime = refreshTokenTimestamp.add(
         Duration(days: refreshTokenValidityDays),
       );
       print('The current client is Logged in at: ${refreshTokenTimestamp}');
       print('The RefreshToken is expired at: ${expirationTime}');
-      print('The currentClient is $name with role: ${currentClient.role}');
+      print('The currentClient is $name with role: ${currentClient!.role}');
 
-      if (expirationTime != null && now.isBefore(expirationTime)) {
+      if (now.isBefore(expirationTime)) {
         return true;
       }
     }

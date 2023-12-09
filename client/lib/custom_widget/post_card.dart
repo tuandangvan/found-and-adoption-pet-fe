@@ -394,9 +394,9 @@ class _PostCardState extends State<PostCard> {
             children: [
               ListTile(
                 title: Text('ACTIVE'),
-                onTap: () {
-                  setState(() async {
-                    var message = await changeStatusPost(postId, 'ACTIVE');
+                onTap: () async {
+                  var message = await changeStatusPost(postId, 'ACTIVE');
+                  setState(() {
                     Fluttertoast.showToast(
                       msg: message,
                       toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
@@ -414,9 +414,9 @@ class _PostCardState extends State<PostCard> {
               ),
               ListTile(
                 title: Text('HIDDEN'),
-                onTap: () {
-                  setState(() async {
-                    var message = await changeStatusPost(postId, 'HIDDEN');
+                onTap: () async {
+                  var message = await changeStatusPost(postId, 'HIDDEN');
+                  setState(() {
                     Fluttertoast.showToast(
                       msg: message,
                       toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
@@ -429,6 +429,7 @@ class _PostCardState extends State<PostCard> {
                     );
                     Navigator.pop(context);
                   });
+                  Navigator.pop(context);
                 },
               ),
             ],

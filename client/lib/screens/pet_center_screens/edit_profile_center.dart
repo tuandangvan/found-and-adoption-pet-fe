@@ -31,11 +31,12 @@ class _EditProfileCenterScreenState extends State<EditProfileCenterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Central Profile'),
+        backgroundColor: Colors.white,
+        title: Text('My Profile', style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0), fontSize: 23,),),
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
           onPressed: () async {
             var userBox = await Hive.openBox('userBox');
