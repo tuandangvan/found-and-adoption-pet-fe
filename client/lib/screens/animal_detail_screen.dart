@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
-import 'package:found_adoption_application/models/user.dart';
 import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:found_adoption_application/services/user/profile_api.dart';
@@ -22,7 +21,7 @@ class AnimalDetailScreen extends StatefulWidget {
 class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int currentIndex = 0;
   dynamic currentClient;
-  late InfoUser? owner;
+  late InfoUser? ownerUser;
 
   final CarouselController carouselController = CarouselController();
 
@@ -30,9 +29,25 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void initState() {
     super.initState();
     currentClient = widget.currentId;
-    if(widget.animal.statusAdopt=='HAS_ONE_OWNER'){
-      owner = getProfile(context, widget.animal.foundOwner_id) as InfoUser?;
-      print(owner);
+    ownerUser = InfoUser(
+        id: '',
+        accountId: '',
+        email: '',
+        role: '',
+        status: '',
+        firstName: '',
+        lastName: '',
+        avatar: '',
+        phoneNumber: '',
+        address: '',
+        experience: true,
+        aboutMe: '',
+        createdAt: '',
+        updatedAt: '');
+
+    if (widget.animal.statusAdopt == 'HAS_ONE_OWNER') {
+      ownerUser =
+          getProfile(context, widget.animal.foundOwner!.id) as InfoUser?;
     }
   }
 
@@ -103,10 +118,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          const CircleAvatar(
-                              radius: 20,
-                              backgroundImage:
-                                  AssetImage('assets/images/Lan.jpg')),
+                          CircleAvatar(
+                            radius: 30.0,
+                            backgroundImage: NetworkImage(
+                                '${ownerUser != null ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
+                          ),
                           const SizedBox(
                             width: 8,
                           ),
@@ -119,7 +135,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Maya Berkovskaya',
+                                      ownerUser != null
+                                          ? ownerUser!.address
+                                          : widget.animal.centerId!.address,
                                       style: TextStyle(
                                           color: Theme.of(context).primaryColor,
                                           fontSize: 16,
@@ -136,8 +154,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                const Text(
-                                  "sfdhsgfk",
+                                Text(
+                                  widget.animal!.description.toString(),
                                   style: TextStyle(
                                       color: Colors.grey,
                                       fontWeight: FontWeight.w600),
@@ -150,8 +168,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "My job requires the opportunity to take the cat with mehgdfhsdhgfhsdfhbdfhhdsbkjdhjkjkghjkdfhgjkdfkg;afsfdf  . I am looking for good people who will shelter my Sola",
+                      Text(
+                        widget.animal.description.toString(),
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,

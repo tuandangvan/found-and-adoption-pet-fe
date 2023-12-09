@@ -7,6 +7,9 @@ class User {
   final String? phoneNumber;
   final String? email;
   final String? status;
+  final String? aboutMe;
+  final String? createdAt;
+  final String? updatedAt;
 
   User({
     required this.id,
@@ -17,6 +20,9 @@ class User {
     required this.phoneNumber,
     this.email,
     this.status,
+    this.aboutMe,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,7 +34,10 @@ class User {
       'address': address,
       'phoneNumber': phoneNumber,
       'email': email,
-      'status': status
+      'status': status,
+      'aboutMe': aboutMe,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
     };
   }
 }

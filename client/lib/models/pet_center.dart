@@ -6,6 +6,10 @@ class PetCenter {
   final String phoneNumber;
   final String? email;
   final String? status;
+  final String? aboutMe;
+  final String? createdAt; 
+  final String? updatedAt;
+  
 
   PetCenter({
     required this.id,
@@ -15,6 +19,9 @@ class PetCenter {
     required this.phoneNumber,
     this.email,
     this.status,
+    this.aboutMe,
+    this.createdAt,
+    this.updatedAt,
   });
   Map<String, dynamic> toMap() {
     return {
@@ -24,7 +31,10 @@ class PetCenter {
       'address': address,
       'phoneNumber': phoneNumber,
       'email': email,
-      'status': status
+      'status': status,
+      'aboutMe': aboutMe,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
     };
   }
 }
