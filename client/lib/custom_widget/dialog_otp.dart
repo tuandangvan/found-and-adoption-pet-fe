@@ -106,9 +106,7 @@ class _ShowOTPInputDialogState extends State<ShowOTPInputDialog> {
                               .error_outline, // Sử dụng biểu tượng dấu chấm than (!) khi chưa điền đủ 6 ô
                           color: Colors.red,
                         ),
-                  const SizedBox(
-                    width: 42,
-                  ),
+                  Spacer(),
                   TextButton(
                     onPressed: () {
                       // Xử lý khi bấm nút "Resend OTP"
@@ -146,17 +144,14 @@ class _ShowOTPInputDialogState extends State<ShowOTPInputDialog> {
                   );
                 }),
               ),
+              countdownTimer(context, remainingTime, timer, timeIsUp),
             ],
           ),
         ),
         actions: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              countdownTimer(context, remainingTime, timer, timeIsUp),
-              const SizedBox(
-                width: 30,
-              ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
