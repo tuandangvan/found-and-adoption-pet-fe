@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
-import 'package:found_adoption_application/screens/notify.dart';
-import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
@@ -14,9 +14,19 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(CenterAdapter());
+  // HttpOverrides.global = MyHttpOverrides();
 
   runApp(MyApp());
 }
+
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context) {
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback =
+//           (X509Certificate cert, String host, int port) => true;
+//   }
+// }
 
 Color mainColor = const Color.fromRGBO(48, 96, 96, 1.0);
 Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
@@ -36,9 +46,16 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //   }
 // }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   Future<bool> hasValidRefreshToken = checkRefreshToken();
+
   late io.Socket socket;
+
   var serverUrl = 'http://socket-found-adoption-dangvantuan.koyeb.app';
 
   @override
@@ -149,8 +166,8 @@ Future<bool> checkRefreshToken() async {
         currentUser != null && currentUser.role == 'USER' ? userBox : centerBox;
 
     var name = currentUser != null && currentUser.role == 'USER'
-        ? currentUser.firstName
-        : currentCenter.name;
+        ? currentUser!.firstName
+        : currentCenter!.name;
 
     final refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
     const refreshTokenValidityDays = 7;
@@ -162,7 +179,7 @@ Future<bool> checkRefreshToken() async {
       );
       print('The current client is Logged in at: ${refreshTokenTimestamp}');
       print('The RefreshToken is expired at: ${expirationTime}');
-      print('The currentClient is ${name} with role: ${currentClient.role}');
+      print('The currentClient is $name with role: ${currentClient!.role}');
 
       if (now.isBefore(expirationTime)) {
         return true;

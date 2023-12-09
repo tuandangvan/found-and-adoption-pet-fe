@@ -104,7 +104,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 10,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Row(
                                 children: [
@@ -119,9 +120,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                   const Text("User"),
                                 ],
-                              ),
-                              const SizedBox(
-                                width: 50,
                               ),
                               Row(
                                 children: [
