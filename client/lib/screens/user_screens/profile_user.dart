@@ -6,12 +6,14 @@ import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/screens/map_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -109,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // If data is successfully fetched, display the form
                 InfoUser user = snapshot.data!;
                 return SingleChildScrollView(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -125,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Hero(
                                   tag: 'avatarTag',
                                   child: CircleAvatar(
-                                    radius: 50.0,
+                                    radius: 40.0,
                                     backgroundImage:
                                         NetworkImage('${user.avatar}'),
                                   ),
@@ -297,38 +299,47 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildContactInfo(String info, IconData icon, String type) {
     return InkWell(
-      onLongPress: () {
-        _copyToClipboard(info);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Copied to Clipboard: $info'),
-          ),
-        );
-      },
-      onTap: () {
-        if (type == 'email') {
-          launchEmail(info);
-        } else if (type == 'phone') {
-          makePhoneCall('tel:${info}');
-        } else if (type == 'address') {
-          //xử lý bản đồ
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MapPage()),
+        onLongPress: () {
+          _copyToClipboard(info);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Copied to Clipboard: $info'),
+            ),
           );
-        }
-      },
-      child: Row(
-        children: [
-          Icon(icon, size: 16.0),
-          SizedBox(width: 8.0),
-          Text(
-            info,
-            style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
-          ),
-        ],
-      ),
-    );
+        },
+        onTap: () async {
+          if (type == 'email') {
+            launchEmail(info);
+          } else if (type == 'phone') {
+            makePhoneCall('tel:${info}');
+          } else if (type == 'address') {
+            LatLng coordinate = await convertAddressToLatLng(info);
+            //xử lý bản đồ
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MapPage(pDestination: coordinate)),
+            );
+          }
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Icon(icon, size: 16.0),
+            ),
+            SizedBox(width: 8.0),
+            Flexible(
+              child: Text(
+                info,
+                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
+                softWrap: true,
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget buildInfo(String info) {
