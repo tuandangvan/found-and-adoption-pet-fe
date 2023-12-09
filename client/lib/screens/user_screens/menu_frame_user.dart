@@ -4,6 +4,7 @@ import 'package:found_adoption_application/screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen_user.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
+import 'package:found_adoption_application/screens/user_screens/status_adopt.dart';
 
 class MenuFrameUser extends StatefulWidget {
   final userId;
@@ -30,6 +31,7 @@ class _MenuFrameUserState extends State<MenuFrameUser>
       Tween<double>(begin: 1.0, end: 0.7).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
     ];
 
     //hoạt ảnh chạy từ begin -> end
@@ -45,6 +47,7 @@ class _MenuFrameUserState extends State<MenuFrameUser>
     0: AdoptionScreen(centerId: null,),
     1: FeedScreen(),
     2: ProfilePage(userId: null),
+    3: StatusAdoptUser()
   };
 
   late List<Widget> screenSnapshot;
@@ -83,8 +86,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
     return AnimatedPositioned(
         duration: duration,
         top: 0,
-        left: menuOpen ? deviceWidth * 0.55 - (position * 50) : 0.0,
-        right: menuOpen ? deviceWidth * -0.45 + (position * 50) : 0.0,
+        left: menuOpen ? deviceWidth * 0.3 - (position * 50) : 0.0,
+        right: menuOpen ? deviceWidth * -1.2 + (position * 50) : 0.0,
         bottom: 0,
         child: ScaleTransition(
             scale: scaleAnimations[position],

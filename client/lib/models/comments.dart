@@ -27,7 +27,7 @@ class Comment {
                 lastName: json['userId']['lastName'] as String,
                 avatar: json['userId']['avatar'] as String,
                 address: json['userId']['address'] as String,
-                phoneNumber: json['userId']['phoneNumber'] as String
+                phoneNumber: json['userId']['phoneNumber'] as String,
               )
             : null,
         centerId: json['centerId'] != null
@@ -36,7 +36,7 @@ class Comment {
                 name: json['centerId']['name'] as String,
                 avatar: json['centerId']['avatar'] as String,
                 address: json['centerId']['address'] as String,
-                phoneNumber: json['centerId']['phoneNumber'] as String
+                phoneNumber: json['centerId']['phoneNumber'] as String,
               )
             : null,
         commentId: json['commentId'] ?? null,

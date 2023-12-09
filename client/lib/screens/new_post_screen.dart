@@ -139,13 +139,16 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     onPressed: () async {
                       await _post();
                     },
-                    child: const Text(
-                      'Post',
-                      style: TextStyle(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromRGBO(48, 96, 96, 1.0), // Điều chỉnh màu nền của nút
+                      onPrimary: Colors
+                          .white, // Điều chỉnh màu văn bản của nút khi được nhấn
+                      textStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    child: const Text('Post'),
                   ),
                 ],
               ),

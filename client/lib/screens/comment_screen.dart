@@ -75,7 +75,9 @@ class _CommentScreenState extends State<CommentScreen> {
             lastName: userIdData['lastName'],
             avatar: userIdData['avatar'],
             address: userIdData['address'],
-            phoneNumber: userIdData['phoneNumber'])
+            phoneNumber: userIdData['phoneNumber'],
+            email: userIdData['email'],
+            status: userIdData['status'])
         : null;
 
     // Extract centerId data from the map
@@ -88,7 +90,9 @@ class _CommentScreenState extends State<CommentScreen> {
             name: centerIdData['name'],
             avatar: centerIdData['avatar'],
             address: centerIdData['address'],
-            phoneNumber: centerIdData['phoneNumber'])
+            phoneNumber: centerIdData['phoneNumber'],
+            email: userIdData['email'],
+            status: userIdData['status'])
         : null;
 
     newCommentRe = Comment(
@@ -212,21 +216,20 @@ class _CommentScreenState extends State<CommentScreen> {
                                               ),
                                             );
                                     },
-                                    child: Container(
-                                        child: Text(
+                                    child: Text(
                                       // data[i]['name'],
                                       comments[index].userId != null
-                                          ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
-                                          : '${comments[index].centerId!.name}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                      ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
+                                      : '${comments[index].centerId!.name}',
+                                      style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                       ),
-                                    ))),
+                                    )),
                                 Text(
                                   // data[i]['message'],
                                   comments[index].content,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -257,10 +260,17 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    user_comment.User userCmt =
-        user_comment.User(id: '', firstName: '', lastName: '', avatar: '', address: '', phoneNumber: '');
+    user_comment.User userCmt = user_comment.User(
+        id: '',
+        firstName: '',
+        lastName: '',
+        avatar: '',
+        address: '',
+        phoneNumber: '',
+        email: '',
+        status: '');
     center_comment.PetCenter centerCmt = center_comment.PetCenter(
-        id: '', name: '', avatar: '', address: '', phoneNumber: '');
+        id: '', name: '', avatar: '', address: '', phoneNumber: '', email: '', status: '');
 
     return Scaffold(
       appBar: AppBar(
@@ -339,14 +349,19 @@ class _CommentScreenState extends State<CommentScreen> {
                           lastName: currentClient.lastName,
                           avatar: currentClient.avatar,
                           address: '',
-                          phoneNumber: '');
+                          phoneNumber: '',
+                          email: '',
+                          status: '');
                     } else {
                       centerCmt = center_comment.PetCenter(
-                          id: currentClient.id,
-                          name: currentClient.name,
-                          avatar: currentClient.avatar,
-                          address: '',
-                          phoneNumber: '');
+                        id: currentClient.id,
+                        name: currentClient.name,
+                        avatar: currentClient.avatar,
+                        address: '',
+                        phoneNumber: '',
+                        email: '',
+                        status: ''
+                      );
                     }
 
                     Comment newComment = Comment(

@@ -105,7 +105,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a New Pet'),
+        backgroundColor: Colors.white,
+        title: const Text('Add a New Pet', style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0))),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(

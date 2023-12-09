@@ -14,6 +14,7 @@ import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileCenterPage extends StatefulWidget {
@@ -30,6 +31,8 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
   late Future<InfoCenter> centerFuture;
   late Future<List<Pet>> petsFuture;
   late List<Pet> animals = [];
+  var currentClient;
+  late bool isLoading = true;
   List<String> animalTypes = [
     'Cats',
     'Dogs',
@@ -52,6 +55,15 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
     petStoriesPosts = getAllPostPersonal(widget.centerId);
     centerFuture = getProfileCenter(context, widget.centerId);
     petsFuture = getAllPetOfCenter(widget.centerId);
+    getClient();
+  }
+
+    Future<void> getClient() async {
+    var temp = await getCurrentClient();
+    setState(() {
+      currentClient = temp;
+      isLoading = false;
+    });
   }
 
   @override
@@ -144,7 +156,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                // Xử lý khi nhấn nút Follow
+                                notification("Feature under development", false);
                               },
                               icon: Icon(Icons.person_add, color: Colors.white),
                               label: Text('Follow'),
@@ -156,7 +168,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                               ),
                             ),
                             SizedBox(width: 8.0),
-                            // currentClient.id == widget.userId
+                            currentClient.id == widget.centerId?
                             ElevatedButton.icon(
                               onPressed: () {
                                 Navigator.push(
@@ -172,7 +184,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                 onPrimary: Colors.white,
                               ),
                             )
-                            // : SizedBox(width: 5.0),
+                            : const SizedBox(width: 5.0),
                           ],
                         ),
                       ],
@@ -374,7 +386,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                 onTap: () {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return AnimalDetailScreen(animal: animal);
+                                    return AnimalDetailScreen(animal: animal, currentId: currentClient,);
                                   }));
                                 },
                                 child: Padding(

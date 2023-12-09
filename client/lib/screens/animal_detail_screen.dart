@@ -3,12 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
+import 'package:found_adoption_application/models/user.dart';
+import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
+import 'package:found_adoption_application/services/user/profile_api.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
   final Pet animal;
+  final dynamic currentId;
 
-  AnimalDetailScreen({super.key, required this.animal});
+  const AnimalDetailScreen(
+      {super.key, required this.animal, required this.currentId});
 
   @override
   State<AnimalDetailScreen> createState() => _AnimalDetailScreenState();
@@ -16,8 +21,20 @@ class AnimalDetailScreen extends StatefulWidget {
 
 class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int currentIndex = 0;
+  dynamic currentClient;
+  late InfoUser? owner;
 
   final CarouselController carouselController = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    currentClient = widget.currentId;
+    if(widget.animal.statusAdopt=='HAS_ONE_OWNER'){
+      owner = getProfile(context, widget.animal.foundOwner_id) as InfoUser?;
+      print(owner);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +46,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         children: [
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Stack(
@@ -76,7 +93,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                   child: Container(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +103,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          CircleAvatar(
+                          const CircleAvatar(
                               radius: 20,
                               backgroundImage:
                                   AssetImage('assets/images/Lan.jpg')),
@@ -118,8 +136,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  'Owner',
+                                const Text(
+                                  "sfdhsgfk",
                                   style: TextStyle(
                                       color: Colors.grey,
                                       fontWeight: FontWeight.w600),
@@ -132,7 +150,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
+                      const Text(
                         "My job requires the opportunity to take the cat with mehgdfhsdhgfhsdfhbdfhhdsbkjdhjkjkghjkdfhgjkdfkg;afsfdf  . I am looking for good people who will shelter my Sola",
                         style: TextStyle(
                             color: Colors.grey,
@@ -143,73 +161,84 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                   ),
                 ),
               )),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Material(
-                        borderRadius: BorderRadius.circular(20),
-                        elevation: 4,
-                        color: Theme.of(context).primaryColor,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Icon(
-                            FontAwesomeIcons.heart,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 24,
-                      ),
-                      Expanded(
-                          child: GestureDetector(
-                        onTap: () async {
-                          await createAdopt(widget.animal.id, "I love pet");
-                        },
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20),
-                          elevation: 4,
-                          color: Theme.of(context).primaryColor,
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Text(
-                              'Adoption',
-                              style: TextStyle(
+              currentClient.role == "USER"
+                  ? Container(
+                      height: 90,
+                      decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.06),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30),
+                          )),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Material(
+                              borderRadius: BorderRadius.circular(20),
+                              elevation: 4,
+                              color: Theme.of(context).primaryColor,
+                              child: const Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Icon(
+                                  FontAwesomeIcons.heart,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                              textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            widget.animal.statusAdopt != 'HAS_ONE_OWNER'
+                                ? Expanded(
+                                    child: GestureDetector(
+                                    onTap: () {
+                                      showInfoInputDialog(
+                                          context, widget.animal.id);
+                                    },
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(20),
+                                      elevation: 4,
+                                      color: Theme.of(context).primaryColor,
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Text(
+                                          'Adoption',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                                : const SizedBox(),
+                          ],
                         ),
-                      ))
-                    ],
-                  ),
-                ),
-                height: 90,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.06),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30),
-                    )),
-              )
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           ),
 
           //THÔNG TIN PET
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Material(
               elevation: 8,
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 width: MediaQuery.of(context).size.width * 0.7,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                height: 118,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -250,13 +279,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                     Row(
                       children: [
                         Icon(
+                          // ignore: deprecated_member_use
                           FontAwesomeIcons.mapMarkerAlt,
                           color: Theme.of(context).primaryColor,
                           size: 16.0,
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Address',
+                          widget.animal.centerId!.address,
                           style: TextStyle(
                               fontSize: 15,
                               color: Theme.of(context).primaryColor,
@@ -266,15 +296,45 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                     ),
                   ],
                 ),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                height: 118,
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void showInfoInputDialog(BuildContext context, String id) {
+    TextEditingController infoController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Description'),
+          content: TextField(
+            controller: infoController,
+            decoration: const InputDecoration(hintText: 'Description'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await createAdopt(
+                    widget.animal.id, infoController.text.toString());
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text('Adopt'),
+            ),
+          ],
+        );
+      },
     );
   }
 
