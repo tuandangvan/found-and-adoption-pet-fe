@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/services/user/user_form_api.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -104,19 +105,22 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
 
               //ĐỊA CHỈ
-              TextFormField(
-                controller: addressController,
-                keyboardType: TextInputType.streetAddress,
-                decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    filled: true,
-                    icon: Icon(
-                      Icons.location_on,
-                      color: const Color.fromRGBO(48, 96, 96, 1.0),
-                    ),
-                    hintText: 'Your Address',
-                    labelText: 'Address'),
-              ),
+              // TextFormField(
+              //   controller: addressController,
+              //   keyboardType: TextInputType.streetAddress,
+              //   decoration: InputDecoration(
+              //       border: UnderlineInputBorder(),
+              //       filled: true,
+              //       icon: Icon(
+              //         Icons.location_on,
+              //         color: const Color.fromRGBO(48, 96, 96, 1.0),
+              //       ),
+              //       hintText: 'Your Address',
+              //       labelText: 'Address'),
+              // ),
+
+              //ĐỊA CHỈ
+              placesAutoCompleteTextField(addressController),
 
               SizedBox(
                 height: 24,

@@ -25,7 +25,7 @@ Future<void> login(
         },
         body: body);
 
-        responseData = json.decode(response.body);
+    responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       if (responseData['data']['role'] == 'USER') {
         var userBox = await Hive.openBox('userBox'); // Lấy Hive box đã mở
