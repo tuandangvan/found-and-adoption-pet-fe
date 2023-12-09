@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userInfo.dart';
+import 'package:found_adoption_application/screens/map_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/edit_profile_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -139,24 +140,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   SizedBox(width: 8.0),
                                   // currentClient.id == widget.userId
-                                       ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditProfileScreen()));
-                                          },
-                                          icon: Icon(Icons.edit,
-                                              color: Colors.white),
-                                          label: Text('Edit profile'),
-                                          style: ElevatedButton.styleFrom(
-                                            primary:
-                                                Theme.of(context).primaryColor,
-                                            onPrimary: Colors.white,
-                                          ),
-                                        )
-                                      // : SizedBox(width: 5.0),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfileScreen()));
+                                    },
+                                    icon: Icon(Icons.edit, color: Colors.white),
+                                    label: Text('Edit profile'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      onPrimary: Colors.white,
+                                    ),
+                                  )
+                                  // : SizedBox(width: 5.0),
                                 ],
                               ),
                             ],
@@ -179,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           buildContactInfo(
                               user.address,
                               IconData(0xe3ab, fontFamily: 'MaterialIcons'),
-                              ''),
+                              'address'),
                           SizedBox(height: 16.0),
 
                           // About me
@@ -298,6 +297,9 @@ class _ProfilePageState extends State<ProfilePage> {
           launchEmail(info);
         } else if (type == 'phone') {
           makePhoneCall('tel:${info}');
+        } else if (type == 'address') {
+          //xử lý bản đồ
+          MapPage();
         }
       },
       child: Row(
