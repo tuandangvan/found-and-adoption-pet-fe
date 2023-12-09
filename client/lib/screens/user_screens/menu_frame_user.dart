@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
+import 'package:found_adoption_application/screens/notify.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_screen_user.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/screens/user_screens/status_adopt.dart';
@@ -32,6 +33,7 @@ class _MenuFrameUserState extends State<MenuFrameUser>
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.3).animate(_animationController),
     ];
 
     //hoạt ảnh chạy từ begin -> end
@@ -47,7 +49,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
     0: AdoptionScreen(centerId: null,),
     1: FeedScreen(),
     2: ProfilePage(userId: null),
-    3: StatusAdoptUser()
+    3: StatusAdoptUser(),
+    4: NotificationPage()
   };
 
   late List<Widget> screenSnapshot;

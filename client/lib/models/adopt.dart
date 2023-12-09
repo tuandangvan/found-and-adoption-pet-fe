@@ -90,7 +90,9 @@ class Adopt {
       'descriptionAdoption': descriptionAdoption,
       'cancelledReasonCenter': cancelledReasonCenter,
       'cancelledReasonUser': cancelledReasonUser,
-      'statusAdopt': statusAdopt
+      'statusAdopt': statusAdopt,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
     };
   }
 }
