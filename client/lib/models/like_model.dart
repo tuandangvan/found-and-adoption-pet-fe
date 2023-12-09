@@ -20,7 +20,10 @@ class Like {
               lastName: json['userId']['lastName'] as String,
               avatar: json['userId']['avatar'] as String,
               address: json['userId']['address'] as String,
-              phoneNumber: json['userId']['phoneNumber'] as String,)
+              phoneNumber: json['userId']['phoneNumber'] as String,
+                aboutMe: json['userId']['aboutMe'] as String,
+                createdAt: json['userId']['createdAt'] as String,
+                updatedAt: json['userId']['updatedAt'] as String,)
           : null,
       centerId: json['centerId'] != null
           ? PetCenter(
@@ -28,7 +31,10 @@ class Like {
               name: json['centerId']['name'] as String,
               avatar: json['centerId']['avatar'] as String,
               address: json['centerId']['address'] as String,
-              phoneNumber: json['centerId']['phoneNumber'] as String,)
+              phoneNumber: json['centerId']['phoneNumber'] as String,
+                aboutMe: json['centerId']['aboutMe'] as String,
+                createdAt: json['centerId']['createdAt'] as String,
+                updatedAt: json['centerId']['updatedAt'] as String,)
           : null,
     );
   }

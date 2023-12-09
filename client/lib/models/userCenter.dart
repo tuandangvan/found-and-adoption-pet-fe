@@ -9,6 +9,8 @@ class InfoCenter {
   final String phoneNumber;
   final String address;
   final String aboutMe;
+  final String? createdAt;
+  final String? updatedAt;
 
   const InfoCenter({
     required this.id,
@@ -20,14 +22,16 @@ class InfoCenter {
     required this.avatar,
     required this.phoneNumber,
     required this.address,
-    required this.aboutMe
+    required this.aboutMe,
+    this.createdAt,
+    this.updatedAt,
   });
 
   // Factory method để tạo đối tượng InfoUser từ JSON
   factory InfoCenter.fromJson(Map<String, dynamic> json) {
     return InfoCenter(
-      id: json['_id'] as String, 
-      accountId: json['accountId'] as String,  
+      id: json['_id'] as String,
+      accountId: json['accountId'] as String,
       email: json['email'] as String,
       role: json['role'] as String,
       status: json['status'] as String,
@@ -36,6 +40,8 @@ class InfoCenter {
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
       aboutMe: json['aboutMe'] as String,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
     );
   }
 }
