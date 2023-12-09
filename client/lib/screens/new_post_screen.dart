@@ -25,7 +25,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final TextEditingController _captionController = TextEditingController();
   var avatar = '';
 
-  Future<List<dynamic>> selectImage() async {
+  Future<void> selectImage() async {
     List<dynamic> finalResult2 = [];
 
     final List<XFile> selectedImages = await imagePicker.pickMultiImage();
@@ -46,15 +46,12 @@ class _NewPostScreenState extends State<NewPostScreen> {
         finalResult = finalResult2;
       });
     }
-
-    return finalResult2;
   }
 
   Future<void> _post() async {
     // Example: Print the caption and reset the state
     print('Caption: ${_captionController.text}');
-    var finalResult =
-        await selectImage(); // Sử dụng await để đợi giá trị trả về từ Future
+    // Sử dụng await để đợi giá trị trả về từ Future
     print('test images here: $finalResult');
 
     // Kiểm tra trạng thái mounted trước khi gọi setState
@@ -64,6 +61,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
       setState(() {
         _captionController.clear();
+        imageFileList.clear();
       });
     }
   }
@@ -140,7 +138,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       await _post();
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color.fromRGBO(48, 96, 96, 1.0), // Điều chỉnh màu nền của nút
+                      primary: Color.fromRGBO(
+                          48, 96, 96, 1.0), // Điều chỉnh màu nền của nút
                       onPrimary: Colors
                           .white, // Điều chỉnh màu văn bản của nút khi được nhấn
                       textStyle: TextStyle(
@@ -169,6 +168,28 @@ class _NewPostScreenState extends State<NewPostScreen> {
               ),
 
               // Conditionally render the image widget
+              // if (imageFileList.isNotEmpty)
+              //   if (imageFileList.length == 1)
+              //     Image.file(
+              //       File(imageFileList[0].path),
+              //       height: 350.0,
+              //       width: double.infinity,
+              //       fit: BoxFit.cover,
+              //     )
+              //   else
+              //     _slider(finalResult)
+              // else
+              //   Container(
+              //     height: 350.0,
+              //     width: double.infinity,
+              //     color: Colors.grey.shade300,
+              //     child: Center(
+              //       child: IconButton(
+              //         icon: Icon(Icons.camera_alt),
+              //         onPressed: selectImage,
+              //       ),
+              //     ),
+              //   ),
               if (imageFileList.isNotEmpty)
                 if (imageFileList.length == 1)
                   Image.file(
@@ -181,16 +202,20 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   _slider(finalResult)
               else
                 Container(
-                  height: 350.0,
-                  width: double.infinity,
-                  color: Colors.grey.shade300,
-                  child: Center(
+                    width: double.infinity,
+                    height: 200,
+                    color: Colors.grey[200],
+                    // child: Icon(Icons.add_a_photo,
+                    //     size: 50, color: Colors.grey[400],),
+
                     child: IconButton(
-                      icon: Icon(Icons.camera_alt),
                       onPressed: selectImage,
-                    ),
-                  ),
-                ),
+                      icon: Icon(
+                        Icons.add_a_photo,
+                        size: 50,
+                        color: Colors.grey[400],
+                      ),
+                    )),
 
               const SizedBox(height: 50),
               MaterialButton(

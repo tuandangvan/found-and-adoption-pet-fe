@@ -7,14 +7,17 @@ import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userCenter.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/map_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_profile_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileCenterPage extends StatefulWidget {
@@ -58,7 +61,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
     getClient();
   }
 
-    Future<void> getClient() async {
+  Future<void> getClient() async {
     var temp = await getCurrentClient();
     setState(() {
       currentClient = temp;
@@ -156,7 +159,8 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                notification("Feature under development", false);
+                                notification(
+                                    "Feature under development", false);
                               },
                               icon: Icon(Icons.person_add, color: Colors.white),
                               label: Text('Follow'),
@@ -168,23 +172,23 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                               ),
                             ),
                             SizedBox(width: 8.0),
-                            currentClient.id == widget.centerId?
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditProfileCenterScreen()));
-                              },
-                              icon: Icon(Icons.edit, color: Colors.white),
-                              label: Text('Edit profile'),
-                              style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).primaryColor,
-                                onPrimary: Colors.white,
-                              ),
-                            )
-                            : const SizedBox(width: 5.0),
+                            currentClient.id == widget.centerId
+                                ? ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EditProfileCenterScreen()));
+                                    },
+                                    icon: Icon(Icons.edit, color: Colors.white),
+                                    label: Text('Edit profile'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      onPrimary: Colors.white,
+                                    ),
+                                  )
+                                : const SizedBox(width: 5.0),
                           ],
                         ),
                       ],
@@ -203,8 +207,10 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     buildSectionHeader('Contact center', Icons.mail),
                     buildContactInfo(center.phoneNumber, Icons.phone, 'phone'),
                     buildContactInfo(center.email, Icons.email, 'email'),
-                    buildContactInfo(center.address,
-                        IconData(0xe3ab, fontFamily: 'MaterialIcons'), ''),
+                    buildContactInfo(
+                        center.address,
+                        IconData(0xe3ab, fontFamily: 'MaterialIcons'),
+                        'address'),
                     SizedBox(height: 16.0),
 
                     // About me
@@ -386,7 +392,10 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                 onTap: () {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return AnimalDetailScreen(animal: animal, currentId: currentClient,);
+                                    return AnimalDetailScreen(
+                                      animal: animal,
+                                      currentId: currentClient,
+                                    );
                                   }));
                                 },
                                 child: Padding(
@@ -540,32 +549,48 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
 
   Widget buildContactInfo(String info, IconData icon, String type) {
     return InkWell(
-      onLongPress: () {
-        _copyToClipboard(info);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Copied to Clipboard: $info'),
-          ),
-        );
-      },
-      onTap: () {
-        if (type == 'email') {
-          launchEmail(info);
-        } else if (type == 'phone') {
-          makePhoneCall('tel:${info}');
-        }
-      },
-      child: Row(
-        children: [
-          Icon(icon, size: 16.0),
-          SizedBox(width: 8.0),
-          Text(
-            info,
-            style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
-          ),
-        ],
-      ),
-    );
+        onLongPress: () {
+          _copyToClipboard(info);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Copied to Clipboard: $info'),
+            ),
+          );
+        },
+        onTap: () async {
+          if (type == 'email') {
+            launchEmail(info);
+          } else if (type == 'phone') {
+            makePhoneCall('tel:${info}');
+          } else if (type == 'address') {
+            //địa chỉ map
+            LatLng coordinate = await convertAddressToLatLng(info);
+            //xử lý bản đồ
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MapPage(pDestination: coordinate)),
+            );
+          }
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Icon(icon, size: 16.0),
+            ),
+            SizedBox(width: 8.0),
+            Flexible(
+              child: Text(
+                info,
+                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
+                softWrap: true,
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget buildInfo(String info) {
