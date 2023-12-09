@@ -34,7 +34,7 @@ Future<void> login(
           ..accountId = responseData['data']['accountId']
           ..email = responseData['data']['email']
           ..role = responseData['data']['role']
-          ..isActive = responseData['data']['isActive']
+          ..status = responseData['data']['status']
           ..firstName = responseData['data']['firstName']
           ..lastName = responseData['data']['lastName']
           ..phoneNumber = responseData['data']['phoneNumber']
@@ -62,7 +62,7 @@ Future<void> login(
           ..accountId = responseData['data']['accountId']
           ..email = responseData['data']['email']
           ..role = responseData['data']['role']
-          ..isActive = responseData['data']['isActive']
+          ..status = responseData['data']['status']
           ..name = responseData['data']['name']
           ..avatar = responseData['data']['avatar']
           ..phoneNumber = responseData['data']['phoneNumber']
@@ -82,12 +82,15 @@ Future<void> login(
                 builder: (context) =>
                     MenuFrameCenter(centerId: retrievedCenter.id)));
       }
+      else if(responseData['data']['role'] == 'ADMIN'){
+        notification('You is ADMIN!', true);
+      }
     } else {
       notification(responseData['message'], true);
       print(responseData);
     }
   } catch (e) {
     print(e);
-    // notification(e.toString(), true);
+    notification(e.toString(), true);
   }
 }

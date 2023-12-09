@@ -5,7 +5,7 @@ import 'package:found_adoption_application/models/user.dart';
 class Adopt {
   final String id;
   final User? userId;
-  final PetCenter? petCenterId;
+  final PetCenter? centerId;
   final Pet? petId;
   final String? descriptionAdoption;
   final String? cancelledReasonCenter;
@@ -15,7 +15,7 @@ class Adopt {
   Adopt(
       {required this.id,
       required this.userId,
-      required this.petCenterId,
+      required this.centerId,
       required this.petId,
       required this.descriptionAdoption,
       required this.cancelledReasonCenter,
@@ -32,20 +32,20 @@ class Adopt {
                 lastName: json['userId']['lastName'] as String,
                 avatar: json['userId']['avatar'] as String,
                 address: json['userId']['address'] as String,
-                phoneNumber: json['userId']['phoneNumber'] as String)
+                phoneNumber: json['userId']['phoneNumber'] as String,)
             : null,
-        petCenterId: json['centerId'] != null
+        centerId: json['centerId'] != null
             ? PetCenter(
                 id: json['centerId']['_id'] as String,
                 name: json['centerId']['name'] as String,
                 avatar: json['centerId']['avatar'] as String,
                 address: json['centerId']['address'] as String,
-                phoneNumber: json['centerId']['phoneNumber'] as String)
+                phoneNumber: json['centerId']['phoneNumber'] as String,)
             : null,
         petId: json['petId'] != null
             ? Pet(
                 id: json['_id'],
-                centerId: json['petId']['centerId'],
+                centerId_id: json['petId']['centerId'],
                 namePet: json['petId']['namePet'],
                 petType: json['petId']['petType'],
                 breed: json['petId']['breed'],
@@ -55,7 +55,8 @@ class Adopt {
                 description: json['petId']['description'],
                 images: json['petId']['images'] as List<dynamic>,
                 level: json['petId']['level'],
-              )
+                foundOwner_id: json['petId']['foundOwner'],
+                statusAdopt: json['petId']['statusAdopt'])
             : null,
         descriptionAdoption: json['descriptionAdoption'] as String,
         cancelledReasonCenter: json['cancelledReasonCenter'] as String,
@@ -65,10 +66,9 @@ class Adopt {
   Map<String, dynamic> toMap() {
     return {
       '_id': id,
-      'userId': userId?.toMap(), // Đảm bảo cũng có hàm toMap trong class User
-      'centerId': petCenterId
-          ?.toMap(), // Đảm bảo cũng có hàm toMap trong class PetCenter
-      // 'petId': petId?.toMap(),
+      'userId': userId?.toMap(),
+      'centerId': centerId?.toMap(),
+      'petId': petId?.toMap(),
       'descriptionAdoption': descriptionAdoption,
       'cancelledReasonCenter': cancelledReasonCenter,
       'cancelledReasonUser': cancelledReasonUser,

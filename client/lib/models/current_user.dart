@@ -13,7 +13,7 @@ class User extends HiveObject {
   @HiveField(3)
   late String role;
   @HiveField(4)
-  late bool isActive;
+  late String status;
   @HiveField(5)
   late String firstName;
   @HiveField(6)
@@ -42,7 +42,7 @@ class UserAdapter extends TypeAdapter<User> {
       ..accountId = reader.readString()
       ..email = reader.readString()
       ..role = reader.readString()
-      ..isActive = reader.readBool()
+      ..status = reader.readString()
       ..firstName = reader.readString()
       ..lastName = reader.readString()
       ..phoneNumber = reader.readString()
@@ -60,7 +60,7 @@ class UserAdapter extends TypeAdapter<User> {
     writer.writeString(obj.accountId);
     writer.writeString(obj.email);
     writer.writeString(obj.role);
-    writer.writeBool(obj.isActive);
+    writer.writeString(obj.status);
     writer.writeString(obj.firstName);
     writer.writeString(obj.lastName);
     writer.writeString(obj.phoneNumber);

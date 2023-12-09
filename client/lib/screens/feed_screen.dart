@@ -27,14 +27,15 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Back'),
+        backgroundColor: Colors.white,
+        title: const Text('Pet stories', style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0),fontSize: 23),),
         leading: IconButton(
           onPressed: () async {
             var currentClient = await getCurrentClient();
 
             if (currentClient != null) {
               if (currentClient.role == 'USER') {
+                // ignore: use_build_context_synchronously
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -43,6 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
                           )),
                 );
               } else if (currentClient.role == 'CENTER') {
+                // ignore: use_build_context_synchronously
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -52,10 +54,10 @@ class _FeedScreenState extends State<FeedScreen> {
               }
             }
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
-            color: Colors.white,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
         ),
         actions: [
@@ -64,10 +66,10 @@ class _FeedScreenState extends State<FeedScreen> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => NewPostScreen()));
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.add_circle,
               size: 30,
-              color: Colors.white,
+              color: Color.fromRGBO(48, 96, 96, 1.0),
             ),
           ),
         ],
@@ -92,7 +94,7 @@ class _FeedScreenState extends State<FeedScreen> {
               );
             } else {
               // Xử lý trường hợp postList là null
-              return Scaffold(
+              return const Scaffold(
                 body: Center(
                   child: Icon(
                     Icons.cloud_off , // Thay thế bằng icon bạn muốn sử dụng

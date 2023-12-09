@@ -30,10 +30,27 @@ Future<List<Adopt>> getStatusAdoptCenter(String status) async {
 
     if (responseData['success']) {
       var adoptList = responseData['data'] as List<dynamic>;
-      print(responseData['data']);
       List<Adopt> adopts =
           adoptList.map((json) => Adopt.fromJson(json)).toList();
-      print(adopts);
+      return adopts;
+    }
+  } catch (e) {
+    print(e);
+    notification(e.toString(), true);
+  }
+  // ignore: cast_from_null_always_fails
+  return null as List<Adopt>;
+}
+
+Future<List<Adopt>> getStatusAdoptUser(String status) async {
+  var responseData;
+  try {
+    responseData = await api('/adopt/user?status=${status}', 'GET', '');
+
+    if (responseData['success']) {
+      var adoptList = responseData['data'] as List<dynamic>;
+      List<Adopt> adopts =
+          adoptList.map((json) => Adopt.fromJson(json)).toList();
       return adopts;
     }
   } catch (e) {
@@ -59,6 +76,20 @@ Future<void> changeStatusAdoptCenter(String adoptId, String statusAdopt) async {
   }
 }
 
+Future<void> changeStatusAdoptUser(String adoptId, String statusAdopt) async {
+  var responseData;
+   var body = jsonEncode(
+        {'statusAdopt': statusAdopt});
+  try {
+    responseData = await api('/adopt/${adoptId}/status', 'PUT', body);
+    if (responseData['success']) {
+      notification(responseData['message'], false);
+    }
+  } catch (e) {
+    print(e);
+    notification(e.toString(), true);
+  }
+}
 
 // Future<dynamic> createAdopt(String content) async {
 //   try {

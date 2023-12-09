@@ -3,7 +3,7 @@ class InfoCenter {
   final String accountId;
   final String email;
   final String role;
-  final bool isActive;
+  final String status;
   final String name;
   final String avatar;
   final String phoneNumber;
@@ -15,7 +15,7 @@ class InfoCenter {
     required this.accountId,
     required this.email,
     required this.role,
-    required this.isActive,
+    required this.status,
     required this.name,
     required this.avatar,
     required this.phoneNumber,
@@ -30,7 +30,7 @@ class InfoCenter {
       accountId: json['accountId'] as String,  
       email: json['email'] as String,
       role: json['role'] as String,
-      isActive: json['isActive']? json['isActive']:false,
+      status: json['status'] as String,
       name: json['name'] as String,
       avatar: json['avatar'] as String,
       phoneNumber: json['phoneNumber'] as String,

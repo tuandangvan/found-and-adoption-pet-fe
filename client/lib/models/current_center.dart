@@ -13,7 +13,7 @@ class CurrentCenter extends HiveObject {
   @HiveField(3)
   late String role;
   @HiveField(4)
-  late bool isActive;
+  late String status;
   @HiveField(5)
   late String name;
 
@@ -42,7 +42,7 @@ class CenterAdapter extends TypeAdapter<CurrentCenter> {
       ..accountId = reader.readString()
       ..email = reader.readString()
       ..role = reader.readString()
-      ..isActive = reader.readBool()
+      ..status = reader.readString()
       ..name = reader.readString()
       ..avatar = reader.readString()
       ..phoneNumber = reader.readString()
@@ -59,7 +59,7 @@ class CenterAdapter extends TypeAdapter<CurrentCenter> {
     writer.writeString(obj.accountId);
     writer.writeString(obj.email);
     writer.writeString(obj.role);
-    writer.writeBool(obj.isActive);
+    writer.writeString(obj.status);
     writer.writeString(obj.name);
     writer.writeString(obj.avatar);
     writer.writeString(obj.phoneNumber);

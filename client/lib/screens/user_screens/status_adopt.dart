@@ -6,12 +6,15 @@ import 'package:found_adoption_application/screens/user_screens/profile_user.dar
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 
-class StatusAdopt extends StatefulWidget {
+class StatusAdoptUser extends StatefulWidget {
+  const StatusAdoptUser({super.key});
+
   @override
-  _StatusAdoptState createState() => _StatusAdoptState();
+  // ignore: library_private_types_in_public_api
+  _StatusAdoptUserState createState() => _StatusAdoptUserState();
 }
 
-class _StatusAdoptState extends State<StatusAdopt>
+class _StatusAdoptUserState extends State<StatusAdoptUser>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Future<List<Adopt>>? adoptsPENFuture;
@@ -22,9 +25,9 @@ class _StatusAdoptState extends State<StatusAdopt>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    adoptsPENFuture = getStatusAdoptCenter("PENDING");
-    adoptsACCFuture = getStatusAdoptCenter("ACCEPTED");
-    adoptsCANFuture = getStatusAdoptCenter("CANCELLED");
+    adoptsPENFuture = getStatusAdoptUser("PENDING");
+    adoptsACCFuture = getStatusAdoptUser("ACCEPTED");
+    adoptsCANFuture = getStatusAdoptUser("CANCELLED");
   }
 
   @override
@@ -33,7 +36,10 @@ class _StatusAdoptState extends State<StatusAdopt>
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color.fromRGBO(48, 96, 96, 1.0),),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
           onPressed: () async {
             var currentClient = await getCurrentClient();
 
@@ -59,15 +65,18 @@ class _StatusAdoptState extends State<StatusAdopt>
             }
           },
         ),
-        title: const Text(
-          'Adoption Status',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w800,
-            color: Color.fromRGBO(48, 96, 96, 1.0),
-          ),
-        ),
-        bottom: TabBar(
+        title: 
+            const Text(
+              'Adoption Status',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w800,
+                color: Color.fromRGBO(48, 96, 96, 1.0),
+              ),
+            ),
+        bottom: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),  // Điều chỉnh chiều cao mong muốn
+        child: TabBar(
           controller: _tabController,
           labelColor: Color.fromRGBO(48, 96, 96, 1.0),
           tabs: const [
@@ -77,6 +86,7 @@ class _StatusAdoptState extends State<StatusAdopt>
           ],
         ),
       ),
+    ),
       body: TabBarView(
         controller: _tabController,
         children: [
@@ -102,7 +112,8 @@ class AdoptionTabView extends StatelessWidget {
   final String status;
   final Future<List<Adopt>>? adoptFuture;
 
-  AdoptionTabView({required this.status, required this.adoptFuture});
+  const AdoptionTabView(
+      {super.key, required this.status, required this.adoptFuture});
 
   Widget _buildAdoptionRequestCard(BuildContext context, Adopt adopt) {
     return Card(
@@ -294,10 +305,10 @@ class AdoptionTabView extends StatelessWidget {
                       'Express Adoption Interest:',
                       style: TextStyle(
                         fontSize: 15.0,
-                        fontStyle: FontStyle.italic , // Đặt chữ nghiêng
+                        fontStyle: FontStyle.italic, // Đặt chữ nghiêng
                         decoration: TextDecoration.underline, // Thêm gạch đít
                         decorationColor: Colors.black, // Màu của gạch đít
-                        color: Color.fromRGBO(48, 96, 96, 1.0),
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 3.0),
@@ -311,16 +322,17 @@ class AdoptionTabView extends StatelessWidget {
                   ],
                 ),
               ),
-            ),const SizedBox(height: 3.0),
-            adopt.cancelledReasonCenter != 'Nothing' ||
-                    adopt.cancelledReasonUser != 'Nothing'
+            ),
+            (adopt.cancelledReasonCenter != 'Nothing' ||
+                    adopt.cancelledReasonUser != 'Nothing')
                 ? Container(
                     width: 500,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                       border: Border.all(
-                        color: const Color.fromRGBO(48, 96, 96, 1.0), // Màu viền
+                        color:
+                            const Color.fromRGBO(48, 96, 96, 1.0), // Màu viền
                         width: 2.0, // Độ dày viền
                       ),
                       boxShadow: [
@@ -392,40 +404,13 @@ class AdoptionTabView extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () async {
-                      await changeStatusAdoptCenter(adopt.id, "ACCEPTED");
+                      await changeStatusAdoptUser(adopt.id, "CANCELLED");
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  StatusAdopt() // Thay thế bằng tên lớp tương ứng
-                              ));
-                    },
-                    icon: const Icon(Icons.check, color: Colors.white),
-                    label: const Text('Accept', style: TextStyle(fontSize: 17)),
-                    style: ElevatedButton.styleFrom(
-                      // ignore: deprecated_member_use
-                      primary: const Color.fromRGBO(48, 96, 96, 1.0),
-                      // ignore: deprecated_member_use
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8.0), // Điều này sẽ bo góc
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await changeStatusAdoptCenter(adopt.id, "CANCELLED");
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  StatusAdopt() // Thay thế bằng tên lớp tương ứng
+                                  const StatusAdoptUser() // Thay thế bằng tên lớp tương ứng
                               ));
                     },
                     icon: const Icon(Icons.cancel, color: Colors.white),

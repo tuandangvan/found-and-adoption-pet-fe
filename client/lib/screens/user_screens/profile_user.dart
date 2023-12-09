@@ -11,6 +11,7 @@ import 'package:found_adoption_application/screens/user_screens/menu_frame_user.
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/services/user/profile_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,13 +26,22 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<List<Post>>? petStoriesPosts;
   late Future<InfoUser>? userFuture;
   var currentClient;
+  late bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     petStoriesPosts = getAllPostPersonal(widget.userId);
     userFuture = getProfile(context, widget.userId);
-    // currentClient = getCurrentClient();
+    getClient();
+  }
+
+  Future<void> getClient() async {
+    var temp = await getCurrentClient();
+    setState(() {
+      currentClient = temp;
+      isLoading = false;
+    });
   }
 
   @override
@@ -126,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   ElevatedButton.icon(
                                     onPressed: () {
-                                      // Xử lý khi nhấn nút Follow
+                                      notification("Feature under development", false);
                                     },
                                     icon: Icon(Icons.person_add,
                                         color: Colors.white),
@@ -139,23 +149,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   SizedBox(width: 8.0),
-                                  // currentClient.id == widget.userId
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditProfileScreen()));
-                                    },
-                                    icon: Icon(Icons.edit, color: Colors.white),
-                                    label: Text('Edit profile'),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context).primaryColor,
-                                      onPrimary: Colors.white,
-                                    ),
-                                  )
-                                  // : SizedBox(width: 5.0),
+                                  currentClient.id == widget.userId
+                                      ? ElevatedButton.icon(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfileScreen()));
+                                          },
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.white),
+                                          label: Text('Edit profile'),
+                                          style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Theme.of(context).primaryColor,
+                                            onPrimary: Colors.white,
+                                          ),
+                                        )
+                                      : SizedBox(width: 5.0),
                                 ],
                               ),
                             ],
