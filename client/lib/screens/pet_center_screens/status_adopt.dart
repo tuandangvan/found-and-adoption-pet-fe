@@ -33,7 +33,10 @@ class _StatusAdoptState extends State<StatusAdopt>
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color.fromRGBO(48, 96, 96, 1.0),),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
           onPressed: () async {
             var currentClient = await getCurrentClient();
 
@@ -144,29 +147,53 @@ class AdoptionTabView extends StatelessWidget {
                                   ));
                         },
                         child: Text(
-                          adopt.userId!.lastName,
+                          "${adopt.userId!.firstName} + ' ' + ${adopt.userId!.lastName}",
                           style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         )),
+                    // Row(
+                    //   children: [
+                    //     const Icon(
+                    //       Icons.location_on_outlined,
+                    //       size: 16.0,
+                    //       color: Color.fromRGBO(48, 96, 96, 1.0),
+                    //     ),
+                    //     Text(
+                    //       '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
+                    //       style: const TextStyle(
+                    //         fontSize: 15.0,
+                    //         color: Color.fromRGBO(48, 96, 96, 1.0),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 16.0,
-                          color: Color.fromRGBO(48, 96, 96, 1.0),
-                        ),
-                        Text(
-                          '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
-                          style: const TextStyle(
-                            fontSize: 15.0,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Icon(
+                            Icons.location_on_outlined,
+                            size: 16.0,
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         ),
+                        SizedBox(width: 8.0),
+                        Flexible(
+                          child: Text(
+                            '${adopt.userId!.address}',
+                            style: TextStyle(
+                                fontSize: 16.0, fontStyle: FontStyle.italic),
+                            softWrap: true,
+                          ),
+                        ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ],
@@ -294,7 +321,7 @@ class AdoptionTabView extends StatelessWidget {
                       'Express Adoption Interest:',
                       style: TextStyle(
                         fontSize: 15.0,
-                        fontStyle: FontStyle.italic , // Đặt chữ nghiêng
+                        fontStyle: FontStyle.italic, // Đặt chữ nghiêng
                         decoration: TextDecoration.underline, // Thêm gạch đít
                         decorationColor: Colors.black, // Màu của gạch đít
                         color: Color.fromRGBO(48, 96, 96, 1.0),
@@ -311,7 +338,8 @@ class AdoptionTabView extends StatelessWidget {
                   ],
                 ),
               ),
-            ),const SizedBox(height: 3.0),
+            ),
+            const SizedBox(height: 3.0),
             adopt.cancelledReasonCenter != 'Nothing' ||
                     adopt.cancelledReasonUser != 'Nothing'
                 ? Container(
@@ -320,7 +348,8 @@ class AdoptionTabView extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                       border: Border.all(
-                        color: const Color.fromRGBO(48, 96, 96, 1.0), // Màu viền
+                        color:
+                            const Color.fromRGBO(48, 96, 96, 1.0), // Màu viền
                         width: 2.0, // Độ dày viền
                       ),
                       boxShadow: [
