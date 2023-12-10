@@ -2,14 +2,15 @@ import 'package:found_adoption_application/models/notify.dart';
 import 'package:found_adoption_application/services/api.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 
-Future<List<Notify>> getStatusAdoptCenter(String status) async {
+Future<List<Notify>> getNotify() async {
   var responseData;
+  List<Notify> adopts = List.empty();
   try {
     responseData = await api('/notify/', 'GET', '');
 
     if (responseData['success']) {
       var adoptList = responseData['data'] as List<dynamic>;
-      List<Notify> adopts =
+      adopts =
           adoptList.map((json) => Notify.fromJson(json)).toList();
       return adopts;
     }
@@ -17,6 +18,5 @@ Future<List<Notify>> getStatusAdoptCenter(String status) async {
     print(e);
     notification(e.toString(), true);
   }
-  // ignore: cast_from_null_always_fails
-  return null as List<Notify>;
+  return adopts;
 }

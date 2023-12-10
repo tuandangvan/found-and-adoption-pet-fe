@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:found_adoption_application/models/userId_centerId.dart';
+import 'package:intl/intl.dart';
 
 class Notify {
   final String id;
@@ -9,11 +10,11 @@ class Notify {
   final String name;
   final String avatar;
   final String content;
-  final Bool? idDestinate;
-  final String? allowView;
-  final Bool? read;
-  final String? createdAt;
-  final String? updatedAt;
+  final String? idDestinate;
+  final bool? allowView;
+  final bool? read;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Notify(
       {required this.id,
@@ -29,18 +30,19 @@ class Notify {
       this.updatedAt});
 
   factory Notify.fromJson(Map<String, dynamic> json) {
+    var receiverList = json['receiver'] as List<dynamic>;
     return Notify(
       id: json['_id'] as String,
       title: json['title'] as String,
-      receiver: json['receiver'] as List<UserId_CenterId>,
+      receiver: receiverList.map((json) => UserId_CenterId.fromJson(json)).toList(),
       name: json['name'] as String,
       avatar: json['avatar'] as String,
       content: json['content'] as String,
-      idDestinate: json['idDestinate'] as Bool,
-      allowView: json['allowView'] as String,
-      read: json['read'] as Bool,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      idDestinate: json['idDestinate'] as String,
+      allowView: json['allowView'] as bool,
+      read: json['read'] as bool,
+      createdAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']),
+      updatedAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']),
     );
   }
   Map<String, dynamic> toMap() {

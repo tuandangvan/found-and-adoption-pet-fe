@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/models/notify.dart';
+import 'package:found_adoption_application/services/notify/notifyAPI.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationPage extends StatelessWidget {
@@ -21,20 +23,43 @@ class NotificationPage extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: notificationData.length,
-        itemBuilder: (context, index) {
-          return NotificationCard(notificationData[index]);
-        },
-      ),
+      body: FutureBuilder(
+          future: getNotify(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else if (snapshot.hasData) {
+              List<Notify> notifies = snapshot.data as List<Notify>;
+              return ListView.builder(
+                itemCount: notifies.length,
+                itemBuilder: (context, index) {
+                  return NotificationCard(notifies[index]);
+                },
+              );
+            } else {
+              return const Center(
+                child: Icon(
+                  Icons.cloud_off, // Thay thế bằng icon bạn muốn sử dụng
+                  size: 48.0,
+                  color: Colors.grey,
+                ),
+              );
+            }
+          }),
     );
   }
 }
 
 class NotificationCard extends StatefulWidget {
-  final NotificationModel notification;
+  final Notify notifies;
 
-  NotificationCard(this.notification);
+  NotificationCard(this.notifies);
 
   @override
   _NotificationCardState createState() => _NotificationCardState();
@@ -43,8 +68,9 @@ class NotificationCard extends StatefulWidget {
 class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
-    String timeAgo =
-        timeago.format(widget.notification.time, locale: 'en_short');
+    String timeAgo = timeago.format(
+        widget.notifies.createdAt!.subtract(Duration(minutes: 2)),
+        locale: 'en_short');
 
     return Card(
       margin: EdgeInsets.all(8.0),
@@ -52,10 +78,10 @@ class _NotificationCardState extends State<NotificationCard> {
       child: ListTile(
         leading: CircleAvatar(
           radius: 30.0,
-          backgroundImage: AssetImage(widget.notification.avatar),
+          backgroundImage: NetworkImage(widget.notifies.avatar),
         ),
         title: Text(
-          widget.notification.userName,
+          widget.notifies.name,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
@@ -65,7 +91,7 @@ class _NotificationCardState extends State<NotificationCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.notification.title,
+                  widget.notifies.title,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -75,7 +101,7 @@ class _NotificationCardState extends State<NotificationCard> {
               ],
             ),
             SizedBox(height: 4.0),
-            Text(widget.notification.content),
+            Text(widget.notifies.content),
           ],
         ),
       ),
@@ -83,43 +109,43 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 }
 
-class NotificationModel {
-  final String avatar;
-  final String userName;
-  final String title;
-  final String content;
-  final DateTime time;
+// class NotificationModel {
+//   final String avatar;
+//   final String userName;
+//   final String title;
+//   final String content;
+//   final DateTime time;
 
-  NotificationModel({
-    required this.avatar,
-    required this.userName,
-    required this.title,
-    required this.content,
-    required this.time,
-  });
-}
+//   NotificationModel({
+//     required this.avatar,
+//     required this.userName,
+//     required this.title,
+//     required this.content,
+//     required this.time,
+//   });
+// }
 
-// Dữ liệu giả định cho thông báo
-List<NotificationModel> notificationData = [
-  NotificationModel(
-    avatar: 'assets/images/Lan.jpg',
-    userName: 'UserA',
-    title: 'New Message',
-    content: 'You have a new message from UserB.',
-    time: DateTime.now().subtract(Duration(minutes: 2)),
-  ),
-  NotificationModel(
-    avatar: 'assets/images/Lan.jpg',
-    userName: 'UserC',
-    title: 'Friend Request',
-    content: 'UserD sent you a friend request.',
-    time: DateTime.now().subtract(Duration(hours: 6)),
-  ),
-  NotificationModel(
-    avatar: 'assets/images/Lan.jpg',
-    userName: 'UserE',
-    title: 'New Post',
-    content: 'UserF just posted a new photo.',
-    time: DateTime.now().subtract(Duration(days: 1)),
-  ),
-];
+// // Dữ liệu giả định cho thông báo
+// List<NotificationModel> notificationData = [
+//   NotificationModel(
+//     avatar: 'assets/images/Lan.jpg',
+//     userName: 'UserA',
+//     title: 'New Message',
+//     content: 'You have a new message from UserB.',
+//     time: DateTime.now().subtract(Duration(minutes: 2)),
+//   ),
+//   NotificationModel(
+//     avatar: 'assets/images/Lan.jpg',
+//     userName: 'UserC',
+//     title: 'Friend Request',
+//     content: 'UserD sent you a friend request.',
+//     time: DateTime.now().subtract(Duration(hours: 6)),
+//   ),
+//   NotificationModel(
+//     avatar: 'assets/images/Lan.jpg',
+//     userName: 'UserE',
+//     title: 'New Post',
+//     content: 'UserF just posted a new photo.',
+//     time: DateTime.now().subtract(Duration(days: 1)),
+//   ),
+// ];

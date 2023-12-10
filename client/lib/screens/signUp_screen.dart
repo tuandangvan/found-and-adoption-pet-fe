@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         passwordController.text.toString(), signupType);
 
                     print(
-                        'From  Sign Up Screen with signUpType: ${signupType}');
+                        'From  Sign Up Screen with signUpType: $signupType');
 
                     final email = emailController.text.toString();
                     final emailRegisterBox =

@@ -165,9 +165,15 @@ Future<bool> checkRefreshToken() async {
     var clientBox =
         currentUser != null && currentUser.role == 'USER' ? userBox : centerBox;
 
+    // var name = currentUser != null && currentUser.role == 'USER'
+    //     ? currentUser!.firstName
+    //     : currentCenter!.name;
+
     var name = currentUser != null && currentUser.role == 'USER'
         ? currentUser!.firstName
-        : currentCenter!.name;
+        : currentCenter != null
+            ? currentCenter.name
+            : 'Unknown';
 
     final refreshTokenTimestamp = clientBox.get('refreshTokenTimestamp');
     const refreshTokenValidityDays = 7;

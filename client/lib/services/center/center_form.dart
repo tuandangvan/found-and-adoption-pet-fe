@@ -11,8 +11,8 @@ Future<void> centerform(BuildContext context, String name, String phoneNumber,
   final accountRegisterBox = await Hive.openBox('accountRegisterBox');
   final storedAccount = accountRegisterBox.get('account');
   try {
-    final apiUrl =
-        Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${storedAccount}");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/center/${storedAccount}");
     final response = await http.post(
       apiUrl,
       headers: {
@@ -25,8 +25,7 @@ Future<void> centerform(BuildContext context, String name, String phoneNumber,
         'aboutMe': aboutMe
       }),
     );
-    var responseData = json.decode(response.body);;
-
+    var responseData = json.decode(response.body);
     if (response.statusCode == 201) {
       notification("Success!", false);
       Navigator.push(

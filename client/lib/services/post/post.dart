@@ -9,7 +9,7 @@ Future<List<Post>> getAllPost() async {
     responseData = await api('/post', 'GET', '');
   } catch (e) {
     print(e);
-  //  notification(e.toString(), true);
+    //  notification(e.toString(), true);
   }
   var postList = responseData['data'] as List<dynamic>;
   List<Post> posts = postList.map((json) => Post.fromJson(json)).toList();
@@ -25,7 +25,7 @@ Future<String> changeStatusPost(String postId, String status) async {
     message = responseData['message'];
   } catch (err) {
     print(err);
-  //  notification(e.toString(), true);
+    //  notification(e.toString(), true);
   }
   return message;
 }
@@ -36,9 +36,11 @@ Future<List<Post>> getAllPostPersonal(var id) async {
     responseData = await api('/post/personal/${id}', 'GET', '');
   } catch (e) {
     print(e);
-  //  notification(e.toString(), true);
+    //  notification(e.toString(), true);
   }
-  var postList = responseData['data'] as List<dynamic>;
+  List<dynamic> postList = List.empty();
+
+  postList = responseData['data'] != null ? responseData['data'] : List.empty();
   List<Post> posts = postList.map((json) => Post.fromJson(json)).toList();
   return posts;
 }
@@ -62,7 +64,7 @@ Future<bool> addPost(String content, List<dynamic> imagePaths) async {
     }
   } catch (e) {
     print(e);
-  //  notification(e.toString(), true);
+    //  notification(e.toString(), true);
     return false;
   }
 }
