@@ -133,7 +133,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               // If data is successfully fetched, display the form
               InfoCenter center = snapshot.data!;
               return SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -149,7 +149,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                           child: Hero(
                             tag: 'avatarTag',
                             child: CircleAvatar(
-                              radius: 50.0,
+                              radius: 40.0,
                               backgroundImage: NetworkImage('${center.avatar}'),
                             ),
                           ),
@@ -171,7 +171,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                     Colors.white, // Đổi màu văn bản của nút
                               ),
                             ),
-                            SizedBox(width: 8.0),
+                            SizedBox(width: 3.0),
                             currentClient.id == widget.centerId
                                 ? ElevatedButton.icon(
                                     onPressed: () {

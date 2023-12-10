@@ -56,6 +56,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -104,6 +105,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                   ),
                 ],
               ),
+
+              //Nửa giao diện ở dưới(bắt đầu chứa content của user)
               Expanded(
                   child: Container(
                 color: Colors.white,
@@ -112,53 +115,45 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           CircleAvatar(
                             radius: 30.0,
                             backgroundImage: NetworkImage(
-                                '${ownerUser != null ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
+                                '${ownerUser!.id != '' ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
                           ),
                           const SizedBox(
                             width: 8,
                           ),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      ownerUser != null
-                                          ? ownerUser!.address
-                                          : widget.animal.centerId!.address,
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      'May 25, 2019',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
+                                Flexible(
+                                  child: Text(
+                                    ownerUser!.id != ''
+                                        ? "${ownerUser!.firstName + ' ' + ownerUser!.lastName}"
+                                        : widget.animal.centerId!.name,
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                    softWrap: true,
+                                  ),
                                 ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  widget.animal!.description.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w600),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Text(
+                                    'May 25, 2019',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               ],
                             ),
@@ -212,27 +207,28 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                             widget.animal.statusAdopt != 'HAS_ONE_OWNER'
                                 ? Expanded(
                                     child: GestureDetector(
-                                    onTap: () {
-                                      showInfoInputDialog(
-                                          context, widget.animal.id);
-                                    },
-                                    child: Material(
-                                      borderRadius: BorderRadius.circular(20),
-                                      elevation: 4,
-                                      color: Theme.of(context).primaryColor,
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(20.0),
-                                        child: Text(
-                                          'Adoption',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      onTap: () {
+                                        showInfoInputDialog(
+                                            context, widget.animal.id);
+                                      },
+                                      child: Material(
+                                        borderRadius: BorderRadius.circular(20),
+                                        elevation: 4,
+                                        color: Theme.of(context).primaryColor,
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(20.0),
+                                          child: Text(
+                                            'Adoption',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ))
+                                  )
                                 : const SizedBox(),
                           ],
                         ),
@@ -245,7 +241,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           //THÔNG TIN PET
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.all(3),
             child: Material(
               elevation: 8,
               borderRadius: BorderRadius.circular(20),
@@ -253,12 +249,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 width: MediaQuery.of(context).size.width * 0.7,
+
+                // height: 170,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
-                height: 118,
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,20 +294,29 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                     ),
                     const SizedBox(height: 10),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Icon(
-                          // ignore: deprecated_member_use
                           FontAwesomeIcons.mapMarkerAlt,
                           color: Theme.of(context).primaryColor,
-                          size: 16.0,
+                          size: 15,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          widget.animal.centerId!.address,
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w400),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.animal.centerId!.address,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w400),
+
+                            softWrap:
+                                true, // Để cho phép văn bản xuống dòng khi quá dài
+                          ),
                         ),
                       ],
                     ),

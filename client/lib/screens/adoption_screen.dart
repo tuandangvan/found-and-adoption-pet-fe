@@ -104,8 +104,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   @override
   Widget build(BuildContext context) {
     if (!isLoading) {
-      final deviceWidth = MediaQuery.of(context).size.width;
-
       return Padding(
         padding: const EdgeInsets.only(top: 60),
         child: Column(
@@ -113,8 +111,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 22),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
                     child: Icon(FontAwesomeIcons.bars),
@@ -150,30 +148,47 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                       }
                     },
                   ),
-                  Column(
-                    children: [
-                      Text('Location  ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.4))),
-                      Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.mapMarkerAlt,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          Text(currentClient.address,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 22)),
-                          // Text('Ukraine  ',
-                          //     style: TextStyle(
-                          //         fontWeight: FontWeight.w300, fontSize: 22)),
-                        ],
-                      )
-                    ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Location  ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 18,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.4))),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.mapMarkerAlt,
+                              color: Theme.of(context).primaryColor,
+                              size: 15,
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  currentClient.address,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                  softWrap:
+                                      true, // Để cho phép văn bản xuống dòng khi quá dài
+                                  textAlign:
+                                      TextAlign.center, // Căn giữa văn bản
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   CircleAvatar(
                     radius: 20,
@@ -182,6 +197,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 ],
               ),
             ),
+
+            //SEARCH
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 24),
@@ -239,178 +256,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                             }),
                       ),
 
-                      //CHI TIẾT VỀ THÔNG TIN CÁC PET ĐƯỢC NHẬN NUÔI
-                      Expanded(
-                        child: FutureBuilder<List<Pet>>(
-                            future: getAllPet(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                animals = snapshot.data ?? [];
-                                return ListView.builder(
-                                    itemCount: animals.length,
-                                    itemBuilder: (context, index) {
-                                      final animal = animals[index];
-
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return AnimalDetailScreen(
-                                                animal: animal, currentId: currentClient);
-                                          }));
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 28, right: 10, left: 20),
-                                          child: Stack(
-                                            alignment: Alignment.centerLeft,
-                                            children: [
-                                              Material(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                elevation: 4.0,
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 20),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      SizedBox(
-                                                          width: deviceWidth *
-                                                              0.4),
-                                                      Flexible(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  animal
-                                                                      .namePet,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          26,
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .primaryColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
-                                                                ),
-                                                                Icon(animal.gender ==
-                                                                        "FEMALE"
-                                                                    ? FontAwesomeIcons
-                                                                        .venus
-                                                                    : FontAwesomeIcons
-                                                                        .mars),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Text(
-                                                              animal.breed,
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Text(
-                                                              '${animal.age} years old',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Row(
-                                                              children: [
-                                                                Icon(
-                                                                  FontAwesomeIcons
-                                                                      .mapMarkerAlt,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                  size: 16.0,
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 6),
-                                                                Text(
-                                                                  'Distance: ',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          15,
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .primaryColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Stack(
-                                                alignment: Alignment.centerLeft,
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20), // Bo góc 20 độ
-                                                    child: Hero(
-                                                      tag: animal.namePet,
-                                                      child: Image(
-                                                        image: NetworkImage(
-                                                            animal
-                                                                .images.first),
-                                                        height: 190,
-                                                        width:
-                                                            deviceWidth * 0.4,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              }
-                            }),
-                      ),
+                      //Thông tin chi tiết các pet
+                      animalAdopt(),
                     ],
                   ),
                 ),
@@ -422,5 +269,145 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     } else {
       return Scaffold();
     }
+  }
+
+  //Thông tin chi tiết các pet
+  Widget animalAdopt() {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return Expanded(
+      child: FutureBuilder<List<Pet>>(
+          future: getAllPet(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              animals = snapshot.data ?? [];
+              return ListView.builder(
+                  itemCount: animals.length,
+                  itemBuilder: (context, index) {
+                    final animal = animals[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return AnimalDetailScreen(
+                              animal: animal, currentId: currentClient);
+                        }));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 28, right: 10, left: 20),
+                        child: Stack(
+                          alignment: Alignment.centerLeft,
+                          children: [
+                            Material(
+                              borderRadius: BorderRadius.circular(20),
+                              elevation: 4.0,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(width: deviceWidth * 0.4),
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                animal.namePet,
+                                                style: TextStyle(
+                                                    fontSize: 26,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Icon(animal.gender == "FEMALE"
+                                                  ? FontAwesomeIcons.venus
+                                                  : FontAwesomeIcons.mars),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            animal.breed,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            '${animal.age} years old',
+                                            style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.mapMarkerAlt,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 16.0,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                'Distance: ',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Stack(
+                              alignment: Alignment.centerLeft,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(20), // Bo góc 20 độ
+                                  child: Hero(
+                                    tag: animal.namePet,
+                                    child: Image(
+                                      image: NetworkImage(animal.images.first),
+                                      height: 190,
+                                      width: deviceWidth * 0.4,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            }
+          }),
+    );
   }
 }

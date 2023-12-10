@@ -81,8 +81,7 @@ Future<void> login(
             MaterialPageRoute(
                 builder: (context) =>
                     MenuFrameCenter(centerId: retrievedCenter.id)));
-      }
-      else if(responseData['data']['role'] == 'ADMIN'){
+      } else if (responseData['data']['role'] == 'ADMIN') {
         notification('You is ADMIN!', true);
       }
     } else {
@@ -91,6 +90,10 @@ Future<void> login(
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+
+    if (e.toString() ==
+        "ClientException with SocketException: Failed host lookup: 'found-and-adoption-pet-api-be.vercel.app' (OS Error: No address associated with hostname, errno = 7), uri=https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-in") {
+      notification("Check your Network and Try again.", true);
+    }
   }
 }

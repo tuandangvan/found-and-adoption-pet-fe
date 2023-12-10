@@ -65,28 +65,28 @@ class _StatusAdoptUserState extends State<StatusAdoptUser>
             }
           },
         ),
-        title: 
-            const Text(
-              'Adoption Status',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w800,
-                color: Color.fromRGBO(48, 96, 96, 1.0),
-              ),
-            ),
+        title: const Text(
+          'Adoption Status',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w800,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
+        ),
         bottom: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),  // Điều chỉnh chiều cao mong muốn
-        child: TabBar(
-          controller: _tabController,
-          labelColor: Color.fromRGBO(48, 96, 96, 1.0),
-          tabs: const [
-            Tab(text: 'Pending'),
-            Tab(text: 'Accept'),
-            Tab(text: 'Cancel'),
-          ],
+          preferredSize:
+              Size.fromHeight(40.0), // Điều chỉnh chiều cao mong muốn
+          child: TabBar(
+            controller: _tabController,
+            labelColor: Color.fromRGBO(48, 96, 96, 1.0),
+            tabs: const [
+              Tab(text: 'Pending'),
+              Tab(text: 'Accept'),
+              Tab(text: 'Cancel'),
+            ],
+          ),
         ),
       ),
-    ),
       body: TabBarView(
         controller: _tabController,
         children: [
@@ -162,22 +162,46 @@ class AdoptionTabView extends StatelessWidget {
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         )),
+                    // Row(
+                    //   children: [
+                    //     const Icon(
+                    //       Icons.location_on_outlined,
+                    //       size: 16.0,
+                    //       color: Color.fromRGBO(48, 96, 96, 1.0),
+                    //     ),
+                    //     Text(
+                    //       '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
+                    //       style: const TextStyle(
+                    //         fontSize: 15.0,
+                    //         color: Color.fromRGBO(48, 96, 96, 1.0),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 16.0,
-                          color: Color.fromRGBO(48, 96, 96, 1.0),
-                        ),
-                        Text(
-                          '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
-                          style: const TextStyle(
-                            fontSize: 15.0,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Icon(
+                            Icons.location_on_outlined,
+                            size: 16.0,
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         ),
+                        SizedBox(width: 8.0),
+                        Flexible(
+                          child: Text(
+                            '${adopt.userId!.address}',
+                            style: TextStyle(
+                                fontSize: 16.0, fontStyle: FontStyle.italic),
+                            softWrap: true,
+                          ),
+                        ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ],
