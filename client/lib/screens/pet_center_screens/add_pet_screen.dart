@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
@@ -120,9 +121,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
                         MenuFrameCenter(centerId: currentClient.id)));
           },
           icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-            color: Colors.black,
+            FontAwesomeIcons.bars,
+            size: 25,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
         ),
       ),

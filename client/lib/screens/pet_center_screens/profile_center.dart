@@ -74,7 +74,11 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(
+            FontAwesomeIcons.bars,
+            size: 25,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
           onPressed: () async {
             var currentClient = await getCurrentClient();
 
