@@ -22,6 +22,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
     'Profile',
     'Add pet',
     'Manager Adopt',
+    'Notify',
     // 'Messages',
   ];
 
@@ -31,6 +32,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
     FontAwesomeIcons.userAlt,
     FontAwesomeIcons.plus,
     FontAwesomeIcons.checkToSlot,
+    FontAwesomeIcons.bell,
     // FontAwesomeIcons.envelope,
   ];
 

@@ -8,8 +8,8 @@ class User {
   final String? email;
   final String? status;
   final String? aboutMe;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   User({
     required this.id,

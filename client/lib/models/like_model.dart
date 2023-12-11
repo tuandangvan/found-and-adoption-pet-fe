@@ -1,5 +1,6 @@
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart';
+import 'package:intl/intl.dart';
 
 class Like {
   final String id;
@@ -21,9 +22,14 @@ class Like {
               avatar: json['userId']['avatar'] as String,
               address: json['userId']['address'] as String,
               phoneNumber: json['userId']['phoneNumber'] as String,
-                aboutMe: json['userId']['aboutMe'] as String,
-                createdAt: json['userId']['createdAt'] as String,
-                updatedAt: json['userId']['updatedAt'] as String,)
+              aboutMe: json['userId']['aboutMe'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['userId']['createdAt']))
+                  .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['userId']['updatedAt']))
+                  .add(Duration(hours: 7)),
+            )
           : null,
       centerId: json['centerId'] != null
           ? PetCenter(
@@ -32,9 +38,12 @@ class Like {
               avatar: json['centerId']['avatar'] as String,
               address: json['centerId']['address'] as String,
               phoneNumber: json['centerId']['phoneNumber'] as String,
-                aboutMe: json['centerId']['aboutMe'] as String,
-                createdAt: json['centerId']['createdAt'] as String,
-                updatedAt: json['centerId']['updatedAt'] as String,)
+              aboutMe: json['centerId']['aboutMe'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
+            )
           : null,
     );
   }

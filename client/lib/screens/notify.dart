@@ -1,24 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/notify.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
+import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/screens/user_screens/status_adopt.dart';
 import 'package:found_adoption_application/services/notify/notifyAPI.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationPage extends StatelessWidget {
+  const NotificationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(48, 96, 96, 1.0),
-        title: Row(
+        leading: IconButton(
+          onPressed: () async {
+            var currentClient = await getCurrentClient();
+
+            if (currentClient != null) {
+              if (currentClient.role == 'USER') {
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MenuFrameUser(
+                            userId: currentClient.id,
+                          )),
+                );
+              } else if (currentClient.role == 'CENTER') {
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MenuFrameCenter(centerId: currentClient.id)),
+                );
+              }
+            }
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        title: const Row(
           children: [
             Icon(
               Icons.notifications_active_sharp,
-              color: Colors.white,
+              color: Color.fromRGBO(48, 96, 96, 1.0),
             ),
             SizedBox(width: 12.0),
             Text(
               'Notification',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+              style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0)),
             ),
           ],
         ),
@@ -59,9 +97,10 @@ class NotificationPage extends StatelessWidget {
 class NotificationCard extends StatefulWidget {
   final Notify notifies;
 
-  NotificationCard(this.notifies);
+  const NotificationCard(this.notifies, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NotificationCardState createState() => _NotificationCardState();
 }
 
@@ -69,83 +108,59 @@ class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
     String timeAgo = timeago.format(
-        widget.notifies.createdAt!.subtract(Duration(minutes: 2)),
+        widget.notifies.createdAt!.subtract(const Duration(seconds: 10)),
         locale: 'en_short');
 
-    return Card(
-      margin: EdgeInsets.all(8.0),
-      elevation: 2.0,
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30.0,
-          backgroundImage: NetworkImage(widget.notifies.avatar),
-        ),
-        title: Text(
-          widget.notifies.name,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return GestureDetector(
+        onTap: () async {
+          var currentClient = await getCurrentClient();
+          if (currentClient.role == 'USER') {
+            if (widget.notifies.title == 'Adoption') {
+              // ignore: use_build_context_synchronously
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const StatusAdoptUser()));
+            }
+          } else {
+            if (widget.notifies.title == 'Adoption') {
+              // ignore: use_build_context_synchronously
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => StatusAdopt()));
+            }
+          }
+        },
+        child: Card(
+          margin: const EdgeInsets.all(8.0),
+          elevation: 2.0,
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 30.0,
+              backgroundImage: NetworkImage(widget.notifies.avatar),
+            ),
+            title: Text(
+              widget.notifies.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.notifies.title,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.notifies.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Sent $timeAgo',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Sent $timeAgo',
-                  style: TextStyle(color: Colors.grey),
-                ),
+                const SizedBox(height: 4.0),
+                Text(widget.notifies.content),
               ],
             ),
-            SizedBox(height: 4.0),
-            Text(widget.notifies.content),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
-
-// class NotificationModel {
-//   final String avatar;
-//   final String userName;
-//   final String title;
-//   final String content;
-//   final DateTime time;
-
-//   NotificationModel({
-//     required this.avatar,
-//     required this.userName,
-//     required this.title,
-//     required this.content,
-//     required this.time,
-//   });
-// }
-
-// // Dữ liệu giả định cho thông báo
-// List<NotificationModel> notificationData = [
-//   NotificationModel(
-//     avatar: 'assets/images/Lan.jpg',
-//     userName: 'UserA',
-//     title: 'New Message',
-//     content: 'You have a new message from UserB.',
-//     time: DateTime.now().subtract(Duration(minutes: 2)),
-//   ),
-//   NotificationModel(
-//     avatar: 'assets/images/Lan.jpg',
-//     userName: 'UserC',
-//     title: 'Friend Request',
-//     content: 'UserD sent you a friend request.',
-//     time: DateTime.now().subtract(Duration(hours: 6)),
-//   ),
-//   NotificationModel(
-//     avatar: 'assets/images/Lan.jpg',
-//     userName: 'UserE',
-//     title: 'New Post',
-//     content: 'UserF just posted a new photo.',
-//     time: DateTime.now().subtract(Duration(days: 1)),
-//   ),
-// ];

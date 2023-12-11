@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:found_adoption_application/models/userId_centerId.dart';
 import 'package:intl/intl.dart';
 
@@ -34,15 +32,18 @@ class Notify {
     return Notify(
       id: json['_id'] as String,
       title: json['title'] as String,
-      receiver: receiverList.map((json) => UserId_CenterId.fromJson(json)).toList(),
+      receiver:
+          receiverList.map((json) => UserId_CenterId.fromJson(json)).toList(),
       name: json['name'] as String,
       avatar: json['avatar'] as String,
       content: json['content'] as String,
       idDestinate: json['idDestinate'] as String,
       allowView: json['allowView'] as bool,
       read: json['read'] as bool,
-      createdAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']),
-      updatedAt: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']),
+      createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
+      updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']))
+          .add(Duration(hours: 7)),
     );
   }
   Map<String, dynamic> toMap() {
