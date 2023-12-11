@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/screens/new_post_screen.dart';
@@ -28,7 +29,11 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Pet stories', style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0),fontSize: 23),),
+        title: const Text(
+          'Pet stories',
+          style:
+              TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0), fontSize: 23),
+        ),
         leading: IconButton(
           onPressed: () async {
             var currentClient = await getCurrentClient();
@@ -55,8 +60,8 @@ class _FeedScreenState extends State<FeedScreen> {
             }
           },
           icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
+            FontAwesomeIcons.bars,
+            size: 25,
             color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
         ),
@@ -97,7 +102,7 @@ class _FeedScreenState extends State<FeedScreen> {
               return const Scaffold(
                 body: Center(
                   child: Icon(
-                    Icons.cloud_off , // Thay thế bằng icon bạn muốn sử dụng
+                    Icons.cloud_off, // Thay thế bằng icon bạn muốn sử dụng
                     size: 48.0,
                     color: Colors.grey,
                   ),

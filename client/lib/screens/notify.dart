@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/notify.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
@@ -41,8 +42,8 @@ class NotificationPage extends StatelessWidget {
             }
           },
           icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
+            FontAwesomeIcons.bars,
+            size: 25,
             color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
         ),
@@ -117,8 +118,10 @@ class _NotificationCardState extends State<NotificationCard> {
           if (currentClient.role == 'USER') {
             if (widget.notifies.title == 'Adoption') {
               // ignore: use_build_context_synchronously
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const StatusAdoptUser()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const StatusAdoptUser()));
             }
           } else {
             if (widget.notifies.title == 'Adoption') {

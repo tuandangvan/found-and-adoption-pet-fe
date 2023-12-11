@@ -32,8 +32,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
       Tween<double>(begin: 1.0, end: 0.7).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
-      Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
-      Tween<double>(begin: 1.0, end: 0.3).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.0).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.0).animate(_animationController),
     ];
 
     //hoạt ảnh chạy từ begin -> end
@@ -46,7 +46,9 @@ class _MenuFrameUserState extends State<MenuFrameUser>
 
   //Map chứa cặp key-value (int - widget)
   Map<int, Widget> screens = {
-    0: AdoptionScreen(centerId: null,),
+    0: AdoptionScreen(
+      centerId: null,
+    ),
     1: FeedScreen(),
     2: ProfilePage(userId: null),
     3: StatusAdoptUser(),
@@ -89,8 +91,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
     return AnimatedPositioned(
         duration: duration,
         top: 0,
-        left: menuOpen ? deviceWidth * 0.3 - (position * 50) : 0.0,
-        right: menuOpen ? deviceWidth * -1.2 + (position * 50) : 0.0,
+        left: menuOpen ? deviceWidth * 0.55 - (position * 50) : 0.0,
+        right: menuOpen ? deviceWidth * -0.45 + (position * 50) : 0.0,
         bottom: 0,
         child: ScaleTransition(
             scale: scaleAnimations[position],
@@ -108,10 +110,13 @@ class _MenuFrameUserState extends State<MenuFrameUser>
               },
               child: AbsorbPointer(
                 absorbing: menuOpen,
-                child: Material(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(menuOpen ? 50 : 0),
+                  child: Material(
                     animationDuration: duration,
-                    borderRadius: BorderRadius.circular(menuOpen ? 40 : 0),
-                    child: screenSnapshot[position]),
+                    child: screenSnapshot[position],
+                  ),
+                ),
               ),
             )));
   }

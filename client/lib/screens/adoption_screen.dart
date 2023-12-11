@@ -165,7 +165,11 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    child: Icon(FontAwesomeIcons.bars),
+                    child: const Icon(
+                      FontAwesomeIcons.bars,
+                      size: 25,
+                      color: Color.fromRGBO(48, 96, 96, 1.0),
+                    ),
                     onTap: () async {
                       var userBox = await Hive.openBox('userBox');
                       var centerBox = await Hive.openBox('centerBox');
@@ -229,7 +233,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   currentClient.address,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                   ),
@@ -246,7 +250,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                   CircleAvatar(
                     radius: 20,
                     backgroundImage: NetworkImage(currentClient.avatar),
-                  )
+                  ),
                 ],
               ),
             ),
