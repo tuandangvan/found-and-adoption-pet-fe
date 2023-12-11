@@ -125,6 +125,8 @@ class AdoptionTabView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
                     onTap: () {
@@ -141,68 +143,70 @@ class AdoptionTabView extends StatelessWidget {
                       backgroundImage: NetworkImage(adopt.userId!.avatar),
                     )),
                 const SizedBox(width: 8.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfilePage(
-                                      userId: adopt.userId!
-                                          .id) // Thay thế bằng tên lớp tương ứng
-                                  ));
-                        },
-                        child: Text(
-                          adopt.userId!.lastName,
-                          style: const TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(48, 96, 96, 1.0),
-                          ),
-                        )),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 16.0,
-                          color: Color.fromRGBO(48, 96, 96, 1.0),
-                        ),
-                        Text(
-                          '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                            color: Color.fromRGBO(48, 96, 96, 1.0),
-                          ),
-                        ),
-                      ],
-                    ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePage(
+                                        userId: adopt.userId!
+                                            .id) // Thay thế bằng tên lớp tương ứng
+                                    ));
+                          },
+                          child: Text(
+                            adopt.userId!.lastName,
+                            style: const TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(48, 96, 96, 1.0),
+                            ),
+                          )),
+                      // Row(
+                      //   children: [
+                      //     const Icon(
+                      //       Icons.location_on_outlined,
+                      //       size: 16.0,
+                      //       color: Color.fromRGBO(48, 96, 96, 1.0),
+                      //     ),
+                      //     Text(
+                      //       '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
+                      //       style: const TextStyle(
+                      //         fontSize: 15.0,
+                      //         color: Color.fromRGBO(48, 96, 96, 1.0),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
 
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.baseline,
-                    //   textBaseline: TextBaseline.alphabetic,
-                    //   children: [
-                    //     const Align(
-                    //       alignment: Alignment.topLeft,
-                    //       child: Icon(
-                    //         Icons.location_on_outlined,
-                    //         size: 16.0,
-                    //         color: Color.fromRGBO(48, 96, 96, 1.0),
-                    //       ),
-                    //     ),
-                    //     SizedBox(width: 8.0),
-                    //     Flexible(
-                    //       child: Text(
-                    //         '${adopt.userId!.address}',
-                    //         style: TextStyle(
-                    //             fontSize: 16.0, fontStyle: FontStyle.italic),
-                    //         softWrap: true,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // )
-                  ],
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Icon(
+                              Icons.location_on_outlined,
+                              size: 16.0,
+                              color: Color.fromRGBO(48, 96, 96, 1.0),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              '${adopt.userId!.address}',
+                              style: TextStyle(
+                                  fontSize: 14.0, fontStyle: FontStyle.italic),
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
