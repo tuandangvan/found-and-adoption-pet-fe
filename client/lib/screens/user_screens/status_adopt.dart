@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/adopt.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -37,7 +38,8 @@ class _StatusAdoptUserState extends State<StatusAdoptUser>
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios,
+            FontAwesomeIcons.bars,
+            size: 25,
             color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
           onPressed: () async {
