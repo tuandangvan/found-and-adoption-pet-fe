@@ -21,7 +21,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
     'Pet Story',
     'Profile',
     'Add pet',
-    'Manager Adopt',
+    'Manage Adopt',
     'Notify',
     // 'Messages',
   ];
@@ -54,7 +54,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
                   ? Colors.white
                   : Colors.white.withOpacity(0.5),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 5),
             Text(
               menuItems[index],
               style: TextStyle(
