@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class InfoUser {
   final String id;
   final String accountId;
@@ -11,8 +13,8 @@ class InfoUser {
   final String address;
   final bool experience;
   final String aboutMe;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const InfoUser({
     required this.id,
@@ -27,8 +29,8 @@ class InfoUser {
     required this.address,
     required this.experience,
     required this.aboutMe,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   // Factory method để tạo đối tượng InfoUser từ JSON
@@ -46,8 +48,10 @@ class InfoUser {
       address: json['address'] as String,
       experience: json['experience'] ? json['experience'] : false,
       aboutMe: json['aboutMe'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
+      updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']))
+          .add(Duration(hours: 7)),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/models/pet_center.dart';
 import 'package:found_adoption_application/models/user.dart';
+import 'package:intl/intl.dart';
 
 class Adopt {
   final String id;
@@ -11,8 +12,8 @@ class Adopt {
   final String? cancelledReasonCenter;
   final String? cancelledReasonUser;
   final String statusAdopt;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Adopt(
       {required this.id,
@@ -38,8 +39,12 @@ class Adopt {
               address: json['userId']['address'] as String,
               phoneNumber: json['userId']['phoneNumber'] as String,
               aboutMe: json['userId']['aboutMe'] as String,
-              createdAt: json['userId']['createdAt'] as String,
-              updatedAt: json['userId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['userId']['createdAt']))
+                  .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['userId']['updatedAt']))
+                  .add(Duration(hours: 7)),
             )
           : null,
       centerId: json['centerId'] != null
@@ -50,8 +55,10 @@ class Adopt {
               address: json['centerId']['address'] as String,
               phoneNumber: json['centerId']['phoneNumber'] as String,
               aboutMe: json['centerId']['aboutMe'] as String,
-              createdAt: json['centerId']['createdAt'] as String,
-              updatedAt: json['centerId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
             )
           : null,
       petId: json['petId'] != null
@@ -69,16 +76,20 @@ class Adopt {
               level: json['petId']['level'],
               foundOwner_id: json['petId']['foundOwner'],
               statusAdopt: json['petId']['statusAdopt'],
-              createdAt: json['petId']['createdAt'] as String,
-              updatedAt: json['petId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['petId']['createdAt']))
+          .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['petId']['updatedAt']))
+          .add(Duration(hours: 7)),
             )
           : null,
       descriptionAdoption: json['descriptionAdoption'] as String,
       cancelledReasonCenter: json['cancelledReasonCenter'] as String,
       cancelledReasonUser: json['cancelledReasonUser'] as String,
       statusAdopt: json['statusAdopt'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
+      updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']))
+          .add(Duration(hours: 7)),
     );
   }
   Map<String, dynamic> toMap() {
@@ -90,7 +101,9 @@ class Adopt {
       'descriptionAdoption': descriptionAdoption,
       'cancelledReasonCenter': cancelledReasonCenter,
       'cancelledReasonUser': cancelledReasonUser,
-      'statusAdopt': statusAdopt
+      'statusAdopt': statusAdopt,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
     };
   }
 }

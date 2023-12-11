@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
-import 'package:found_adoption_application/models/userInfo.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
-import 'package:found_adoption_application/services/user/profile_api.dart';
+import 'package:intl/intl.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
   final Pet animal;
@@ -21,7 +20,6 @@ class AnimalDetailScreen extends StatefulWidget {
 class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int currentIndex = 0;
   dynamic currentClient;
-  late InfoUser? ownerUser;
 
   final CarouselController carouselController = CarouselController();
 
@@ -29,26 +27,6 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void initState() {
     super.initState();
     currentClient = widget.currentId;
-    ownerUser = InfoUser(
-        id: '',
-        accountId: '',
-        email: '',
-        role: '',
-        status: '',
-        firstName: '',
-        lastName: '',
-        avatar: '',
-        phoneNumber: '',
-        address: '',
-        experience: true,
-        aboutMe: '',
-        createdAt: '',
-        updatedAt: '');
-
-    if (widget.animal.statusAdopt == 'HAS_ONE_OWNER') {
-      ownerUser =
-          getProfile(context, widget.animal.foundOwner!.id) as InfoUser?;
-    }
   }
 
   @override
@@ -124,7 +102,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                           CircleAvatar(
                             radius: 30.0,
                             backgroundImage: NetworkImage(
-                                '${ownerUser!.id != '' ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
+                                '${widget.animal.statusAdopt == 'HAS_ONE_OWNER' ? widget.animal.foundOwner!.avatar : widget.animal.centerId!.avatar}'),
+                            // backgroundImage: NetworkImage(
+                            //     '${ownerUser!.id != '' ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
                           ),
                           const SizedBox(
                             width: 8,
@@ -136,9 +116,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    ownerUser!.id != ''
-                                        ? "${ownerUser!.firstName + ' ' + ownerUser!.lastName}"
+                                    // ownerUser!.id != ''
+                                    widget.animal.statusAdopt == 'HAS_ONE_OWNER'
+                                        ? '${widget.animal.foundOwner!.firstName} ${widget.animal.foundOwner!.lastName}'
                                         : widget.animal.centerId!.name,
+                                    //     ? "${ownerUser!.firstName + ' ' + ownerUser!.lastName}"
+                                    //     : widget.animal.centerId!.name,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
                                         fontSize: 16,
@@ -149,7 +132,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Text(
-                                    'May 25, 2019',
+                                    DateFormat.yMMMMd().add_Hms().format(widget.animal.createdAt!),
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w600),

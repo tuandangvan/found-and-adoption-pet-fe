@@ -10,7 +10,7 @@ Future<String> createAdopt(String petId, String descriptionAdoption) async {
     var responseData = await api('/adopt', 'POST', body);
     print(responseData);
 
-    if (responseData['success'] as bool) {
+    if (responseData['success']) {
       notification(responseData['message'], false);
       return responseData['id'];
     } else {

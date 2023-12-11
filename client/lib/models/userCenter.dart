@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class InfoCenter {
   final String id;
   final String accountId;
@@ -9,8 +11,8 @@ class InfoCenter {
   final String phoneNumber;
   final String address;
   final String aboutMe;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const InfoCenter({
     required this.id,
@@ -40,8 +42,10 @@ class InfoCenter {
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
       aboutMe: json['aboutMe'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
+      updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']))
+          .add(Duration(hours: 7)),
     );
   }
 }

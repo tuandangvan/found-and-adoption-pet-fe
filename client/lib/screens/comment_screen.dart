@@ -101,7 +101,7 @@ class _CommentScreenState extends State<CommentScreen> {
       centerId: centerId,
       commentId: '',
       content: data['content'],
-      createdAt: "20-11-2023",
+      createdAt: DateTime.now(),
     );
 
     // Thêm comment mới vào danh sách commentsFuture
@@ -369,7 +369,7 @@ class _CommentScreenState extends State<CommentScreen> {
                         userId: userCmt,
                         centerId: centerCmt,
                         content: commentController.text,
-                        createdAt: "");
+                        createdAt: DateTime.now());
 
                     // Gửi comment thông qua Socket.IO
                     socket.emit('comment', newComment.toMap());
