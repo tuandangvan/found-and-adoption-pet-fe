@@ -1,5 +1,6 @@
 import 'package:found_adoption_application/models/user.dart';
 import 'package:found_adoption_application/models/pet_center.dart';
+import 'package:intl/intl.dart';
 
 class Pet {
   final String id;
@@ -17,8 +18,8 @@ class Pet {
   final User? foundOwner;
   final String? foundOwner_id;
   final String statusAdopt;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Pet({
     required this.id,
@@ -51,8 +52,12 @@ class Pet {
               address: json['centerId']['address'] as String,
               phoneNumber: json['centerId']['phoneNumber'] as String,
               aboutMe: json['centerId']['aboutMe'] as String,
-              createdAt: json['centerId']['createdAt'] as String,
-              updatedAt: json['centerId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['centerId']['createdAt']))
+                  .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['centerId']['createdAt']))
+                  .add(Duration(hours: 7)),
             )
           : null,
       namePet: json['namePet'],
@@ -72,9 +77,13 @@ class Pet {
               avatar: json['foundOwner']['avatar'] as String,
               address: json['foundOwner']['address'] as String,
               phoneNumber: json['foundOwner']['phoneNumber'] as String,
-              aboutMe: json['centerId']['aboutMe'] as String,
-              createdAt: json['centerId']['createdAt'] as String,
-              updatedAt: json['centerId']['updatedAt'] as String,
+              aboutMe: json['foundOwner']['aboutMe'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['foundOwner']['createdAt']))
+                  .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss")
+                      .parse(json['foundOwner']['updatedAt']))
+                  .add(Duration(hours: 7)),
             )
           : null,
       statusAdopt: json['statusAdopt'],
@@ -82,8 +91,10 @@ class Pet {
       foundOwner_id: json['statusAdopt'] == 'HAS_ONE_OWNER'
           ? json['foundOwner']['_id']
           : null,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
+      updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['updatedAt']))
+          .add(Duration(hours: 7)),
     );
   }
 

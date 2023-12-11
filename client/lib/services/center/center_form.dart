@@ -26,8 +26,6 @@ Future<void> centerform(BuildContext context, String name, String phoneNumber,
       }),
     );
     var responseData = json.decode(response.body);
-    ;
-
     if (response.statusCode == 201) {
       notification("Success!", false);
       Navigator.push(

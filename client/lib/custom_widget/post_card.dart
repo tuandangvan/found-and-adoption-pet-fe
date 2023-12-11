@@ -9,6 +9,8 @@ import 'package:found_adoption_application/screens/user_screens/profile_user.dar
 import 'package:found_adoption_application/services/post/like_post_api.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -139,7 +141,19 @@ class _PostCardState extends State<PostCard> {
 
                           //Thời gian đăng bài
                           Text(
-                            clientPost.createdAt.toString(),
+                            DateFormat.yMMMMd()
+                                .add_Hms()
+                                .format(clientPost.createdAt),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            '${timeago.format(
+                                clientPost.createdAt!
+                                    .subtract(const Duration(seconds: 10)),
+                                locale: 'en_short')} ago',
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,

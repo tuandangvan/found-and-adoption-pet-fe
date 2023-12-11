@@ -162,46 +162,46 @@ class AdoptionTabView extends StatelessWidget {
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         )),
-                    // Row(
-                    //   children: [
-                    //     const Icon(
-                    //       Icons.location_on_outlined,
-                    //       size: 16.0,
-                    //       color: Color.fromRGBO(48, 96, 96, 1.0),
-                    //     ),
-                    //     Text(
-                    //       '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
-                    //       style: const TextStyle(
-                    //         fontSize: 15.0,
-                    //         color: Color.fromRGBO(48, 96, 96, 1.0),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
                       children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Icon(
-                            Icons.location_on_outlined,
-                            size: 16.0,
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 16.0,
+                          color: Color.fromRGBO(48, 96, 96, 1.0),
+                        ),
+                        Text(
+                          '${adopt.userId!.address}', // Thay đổi bằng biến chứa địa chỉ của người dùng
+                          style: const TextStyle(
+                            fontSize: 15.0,
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                         ),
-                        SizedBox(width: 8.0),
-                        Flexible(
-                          child: Text(
-                            '${adopt.userId!.address}',
-                            style: TextStyle(
-                                fontSize: 16.0, fontStyle: FontStyle.italic),
-                            softWrap: true,
-                          ),
-                        ),
                       ],
-                    )
+                    ),
+
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.baseline,
+                    //   textBaseline: TextBaseline.alphabetic,
+                    //   children: [
+                    //     const Align(
+                    //       alignment: Alignment.topLeft,
+                    //       child: Icon(
+                    //         Icons.location_on_outlined,
+                    //         size: 16.0,
+                    //         color: Color.fromRGBO(48, 96, 96, 1.0),
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 8.0),
+                    //     Flexible(
+                    //       child: Text(
+                    //         '${adopt.userId!.address}',
+                    //         style: TextStyle(
+                    //             fontSize: 16.0, fontStyle: FontStyle.italic),
+                    //         softWrap: true,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 ),
               ],

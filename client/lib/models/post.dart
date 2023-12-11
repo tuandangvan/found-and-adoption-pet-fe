@@ -38,8 +38,10 @@ class Post {
               address: json['userId']['address'] as String,
               phoneNumber: json['userId']['phoneNumber'] as String,
               aboutMe: json['userId']['aboutMe'] as String,
-              createdAt: json['userId']['createdAt'] as String,
-              updatedAt: json['userId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['userId']['createdAt']))
+          .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['userId']['updatedAt']))
+          .add(Duration(hours: 7)),
             )
           : null,
       petCenterId: json['centerId'] != null
@@ -50,8 +52,10 @@ class Post {
               address: json['centerId']['address'] as String,
               phoneNumber: json['centerId']['phoneNumber'] as String,
               aboutMe: json['centerId']['aboutMe'] as String,
-              createdAt: json['centerId']['createdAt'] as String,
-              updatedAt: json['centerId']['updatedAt'] as String,
+              createdAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
+              updatedAt: (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['centerId']['createdAt']))
+          .add(Duration(hours: 7)),
             )
           : null,
       content: json['content'] as String,
@@ -59,7 +63,8 @@ class Post {
       reaction: json['reaction'] as List<dynamic>,
       comments: commentList.map((json) => Comment.fromJson(json)).toList(),
       createdAt:
-          DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").parse(json['createdAt']),
+          (DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['createdAt']))
+          .add(Duration(hours: 7)),
       status: json['status'],
     );
   }
