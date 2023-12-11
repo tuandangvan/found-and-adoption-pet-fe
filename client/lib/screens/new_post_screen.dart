@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:found_adoption_application/screens/feed_screen.dart';
 import 'package:found_adoption_application/services/image/multi_image_api.dart';
 import 'package:found_adoption_application/services/post/post.dart';
-import 'package:hive/hive.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewPostScreen extends StatefulWidget {
@@ -24,6 +24,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   final TextEditingController _captionController = TextEditingController();
   var avatar = '';
+  var name = '';
 
   Future<void> selectImage() async {
     List<dynamic> finalResult2 = [];
@@ -36,11 +37,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
     var result = await uploadMultiImage(imageFileList);
     finalResult2 = result.map((url) => url).toList();
-
-    // print('test selectedImage: $finalResult');
-    print('test selectedImage: $finalResult2');
-
-    // Check if the widget is still mounted before calling setState
     if (mounted) {
       setState(() {
         finalResult = finalResult2;
@@ -49,16 +45,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   Future<void> _post() async {
-    // Example: Print the caption and reset the state
-    print('Caption: ${_captionController.text}');
-    // Sử dụng await để đợi giá trị trả về từ Future
-    print('test images here: $finalResult');
-
-    // Kiểm tra trạng thái mounted trước khi gọi setState
     if (mounted) {
-      // Call the API to post content with image paths
       addPost(_captionController.text.toString(), finalResult);
-
       setState(() {
         _captionController.clear();
         imageFileList.clear();
@@ -67,21 +55,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   Future<void> openHiveBox() async {
-    var avatar2 = '';
-    var userBox = await Hive.openBox('userBox');
-    var centerBox = await Hive.openBox('centerBox');
-
-    var currentUser = userBox.get('currentUser');
-    var currentCenter = centerBox.get('currentCenter');
-
-    avatar2 = currentUser != null ? currentUser.avatar : currentCenter.avatar;
-    print('test avatar2: $avatar2');
-
+    var currentClient = await getCurrentClient();
     setState(() {
-      avatar = avatar2;
+      avatar = currentClient.avatar;
+      name = currentClient.role == 'USER'
+          ? '${currentClient.firstName} ${currentClient.lastName}'
+          : currentClient.name;
     });
-
-    print('test avatar in openHiveBox: $avatar');
   }
 
   @override
@@ -125,9 +105,9 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     ),
                   ),
                   const SizedBox(width: 8.0),
-                  const Text(
-                    'Username',
-                    style: TextStyle(
+                  Text(
+                    name.toString(),
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
