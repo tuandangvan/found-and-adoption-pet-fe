@@ -19,9 +19,9 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
     'Adoption',
     'Pet Stories',
     'Profile',
-    'Manager Adopt',
+    'Manage Adopt',
     'Notify',
-    'Favorite',
+    // 'Favorite',
     'Messages',
   ];
 
@@ -30,8 +30,8 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
     FontAwesomeIcons.newspaper,
     FontAwesomeIcons.userAlt,
     FontAwesomeIcons.checkToSlot,
-    FontAwesomeIcons.envelope,
-    FontAwesomeIcons.heart,
+    FontAwesomeIcons.bell,
+    // FontAwesomeIcons.heart,
     FontAwesomeIcons.envelope,
   ];
 
@@ -53,14 +53,14 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
                   ? Colors.white
                   : Colors.white.withOpacity(0.5),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 5),
             Text(
               menuItems[index],
               style: TextStyle(
                   color: selectedMenuIndex == index
                       ? Colors.white
                       : Colors.white.withOpacity(0.5),
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600),
             ),
           ],

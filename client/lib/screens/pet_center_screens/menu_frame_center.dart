@@ -103,8 +103,8 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
     return AnimatedPositioned(
         duration: duration,
         top: 0,
-        left: menuOpen ? deviceWidth * 0.55 - (position * 45) : 0.0,
-        right: menuOpen ? deviceWidth * -0.45 + (position * 45) : 0.0,
+        left: menuOpen ? deviceWidth * 0.55 - (position * 50) : 0.0,
+        right: menuOpen ? deviceWidth * -0.45 + (position * 50) : 0.0,
         bottom: 0,
         child: ScaleTransition(
             scale: scaleAnimations[position],
