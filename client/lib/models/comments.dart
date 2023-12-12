@@ -8,7 +8,7 @@ class Comment {
   PetCenter? centerId;
   final String? commentId;
   final String content;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   Comment(
       {required this.id,
@@ -16,7 +16,7 @@ class Comment {
       this.centerId,
       this.commentId,
       required this.content,
-      required this.createdAt});
+      this.createdAt});
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
