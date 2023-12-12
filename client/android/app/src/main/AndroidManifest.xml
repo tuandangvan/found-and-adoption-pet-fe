@@ -19,7 +19,7 @@
     </intent>
 </queries>
     <application
-        android:label="found_adoption_application"
+        android:label="Found and Adopt"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

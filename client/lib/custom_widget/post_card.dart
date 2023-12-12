@@ -1,20 +1,21 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:found_adoption_application/models/like_model.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
+import 'package:found_adoption_application/screens/edit_post_screen.dart';
 import 'package:found_adoption_application/screens/like_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/profile_center.dart';
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/services/post/like_post_api.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostCard extends StatefulWidget {
   final snap;
-  PostCard({super.key, required this.snap});
+  const PostCard({super.key, required this.snap});
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -35,15 +36,15 @@ class _PostCardState extends State<PostCard> {
   Future<void> getLiked() async {
     List<Like>? likes = await getLike(context, clientPost.id);
     var currentClient = await getCurrentClient();
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
-        quantityLike = likes!.length;
+        quantityLike = likes.length;
       });
     }
     likes.forEach((element) {
       if (element.centerId?.id == currentClient.id ||
           element.userId?.id == currentClient.id) {
-        if (this.mounted) {
+        if (mounted) {
           setState(() {
             liked = true;
           });
@@ -127,7 +128,7 @@ class _PostCardState extends State<PostCard> {
                             );
                     },
                     child: Padding(
-                      padding: EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.only(left: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -135,7 +136,7 @@ class _PostCardState extends State<PostCard> {
                             clientPost.userId != null
                                 ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
                                 : clientPost.petCenterId.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
 
@@ -144,17 +145,14 @@ class _PostCardState extends State<PostCard> {
                             DateFormat.yMMMMd()
                                 .add_Hms()
                                 .format(clientPost.createdAt),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
                             ),
                           ),
                           Text(
-                            '${timeago.format(
-                                clientPost.createdAt!
-                                    .subtract(const Duration(seconds: 10)),
-                                locale: 'en_short')} ago',
-                            style: TextStyle(
+                            '${timeago.format(clientPost.createdAt!.subtract(const Duration(seconds: 10)), locale: 'en_short')} ago',
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
                             ),
@@ -165,44 +163,72 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var currentClient = await getCurrentClient();
+                      // ignore: use_build_context_synchronously
                       showDialog(
-                          context: context,
-                          builder: (context) => Dialog(
-                                child: ListView(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                        context: context,
+                        builder: (context) => Dialog(
+                          child: ListView(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shrinkWrap: true,
+                            children: ((currentClient.id ==
+                                            clientPost.userId?.id ||
+                                        currentClient.id ==
+                                            clientPost.petCenterId?.id)
+                                    ? [
+                                        {'text': 'Edit', 'icon': Icons.edit},
+                                        {
+                                          'text': 'Delete',
+                                          'icon': Icons.delete
+                                        },
+                                        {
+                                          'text': 'Change Status',
+                                          'icon': Icons.refresh
+                                        },
+                                      ]
+                                    : [
+                                        {'text': 'Report', 'icon': Icons.report}
+                                      ])
+                                .map(
+                                  (item) => InkWell(
+                                    onTap: () {
+                                      if (item['text'] == 'Change Status') {
+                                        _showBottomSheet(clientPost.id);
+                                      } else if (item['text'] == 'Edit') {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditPostScreen(
+                                                        onePost: clientPost)));
+                                      } else if (item['text'] == 'Delete') {
+                                        _showDeleteConfirmationDialog(
+                                            clientPost.id);
+                                      }
+                                      // Add other logic for handling other options
+                                    },
+                                    child: ListTile(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 12,
+                                      ),
+                                      title: Text(item['text'] as String),
+                                      leading: Icon(item['icon'] as IconData?),
+                                    ),
                                   ),
-                                  //widget co lại dựa theo nội dung
-                                  shrinkWrap: true,
-                                  //sử dụng map để tạo ra ds các InkWell(hiệu ứng khi nhấp button)
-                                  children: ['Delete', 'Change Status']
-                                      .map(
-                                        (e) => InkWell(
-                                            onTap: () {
-                                              if (e.toString() ==
-                                                  'Change Status') {
-                                                _showBottomSheet(clientPost.id);
-                                                // InkWell.pop();
-                                              }
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 16,
-                                                      horizontal: 12),
-                                              child: Text(e),
-                                            )),
-                                      )
-                                      .toList(),
-                                ),
-                              ));
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.more_vert)),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
 
@@ -233,11 +259,11 @@ class _PostCardState extends State<PostCard> {
                     }
                   },
                   icon: liked == false
-                      ? Icon(
+                      ? const Icon(
                           Icons.favorite_border,
                           color: Colors.red,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.favorite,
                           color: Colors.red,
                         ),
@@ -288,7 +314,7 @@ class _PostCardState extends State<PostCard> {
                     child: Container(
                         child: Text(
                       '${quantityLike} likes',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ))),
                 Container(
                   width: double.infinity,
@@ -401,53 +427,67 @@ class _PostCardState extends State<PostCard> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('ACTIVE'),
+                leading: const Icon(Icons.check_circle),
+                title: const Text('Active'),
                 onTap: () async {
                   var message = await changeStatusPost(postId, 'ACTIVE');
                   setState(() {
-                    Fluttertoast.showToast(
-                      msg: message,
-                      toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
-                      gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-                      timeInSecForIosWeb:
-                          1, // Thời gian hiển thị cho iOS và web
-                      backgroundColor: Colors.grey, // Màu nền của toast
-                      textColor: Colors.white, // Màu chữ của toast
-                      fontSize: 16.0, // Kích thước chữ của toast
-                    );
+                    notification(message, false);
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   });
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: Text('HIDDEN'),
+                leading: const Icon(Icons.visibility_off),
+                title: const Text('Hidden'),
                 onTap: () async {
                   var message = await changeStatusPost(postId, 'HIDDEN');
                   setState(() {
-                    Fluttertoast.showToast(
-                      msg: message,
-                      toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
-                      gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-                      timeInSecForIosWeb:
-                          1, // Thời gian hiển thị cho iOS và web
-                      backgroundColor: Colors.grey, // Màu nền của toast
-                      textColor: Colors.white, // Màu chữ của toast
-                      fontSize: 16.0, // Kích thước chữ của toast
-                    );
+                    notification(message, false);
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   });
-                  Navigator.pop(context);
                 },
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(String postId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this post?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                var message = await deleteOnePost(postId);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                notification(message, false);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
         );
       },
     );

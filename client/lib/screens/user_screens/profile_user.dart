@@ -101,154 +101,170 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-        body: FutureBuilder<InfoUser>(
-            future: userFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // If the Future is still loading, show a loading indicator
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                // If there is an error fetching data, show an error message
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                // If data is successfully fetched, display the form
-                InfoUser user = snapshot.data!;
-                return SingleChildScrollView(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Ảnh đại diện
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: RefreshIndicator(
+            onRefresh: _refresh,
+            child: FutureBuilder<InfoUser>(
+                future: userFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // If the Future is still loading, show a loading indicator
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    // If there is an error fetching data, show an error message
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    // If data is successfully fetched, display the form
+                    InfoUser user = snapshot.data!;
+                    return SingleChildScrollView(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Avatar
-                              InkWell(
-                                onTap: () {
-                                  _showFullScreenImage(context, user.avatar);
-                                },
-                                child: Hero(
-                                  tag: 'avatarTag',
-                                  child: CircleAvatar(
-                                    radius: 40.0,
-                                    backgroundImage:
-                                        NetworkImage('${user.avatar}'),
-                                  ),
-                                ),
-                              ),
-                              // Nút Follow và Edit Profile
+                              // Ảnh đại diện
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      notification(
-                                          "Feature under development", false);
+                                  // Avatar
+                                  InkWell(
+                                    onTap: () {
+                                      _showFullScreenImage(
+                                          context, user.avatar);
                                     },
-                                    icon: Icon(Icons.person_add,
-                                        color: Colors.white),
-                                    label: Text('Follow'),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context)
-                                          .primaryColor, // Đổi màu nền của nút
-                                      onPrimary: Colors
-                                          .white, // Đổi màu văn bản của nút
+                                    child: Hero(
+                                      tag: 'avatarTag',
+                                      child: CircleAvatar(
+                                        radius: 40.0,
+                                        backgroundImage:
+                                            NetworkImage('${user.avatar}'),
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(width: 8.0),
-                                  currentClient.id == widget.userId
-                                      ? ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditProfileScreen()));
-                                          },
-                                          icon: Icon(Icons.edit,
-                                              color: Colors.white),
-                                          label: Text('Edit profile'),
-                                          style: ElevatedButton.styleFrom(
-                                            primary:
-                                                Theme.of(context).primaryColor,
-                                            onPrimary: Colors.white,
-                                          ),
-                                        )
-                                      : SizedBox(width: 5.0),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0),
-
-                          // Họ và Tên
-                          Text(
-                            '${user.firstName} ${user.lastName}',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8.0),
-
-                          // Contact me
-                          buildSectionHeader('Contact me', Icons.mail),
-                          buildContactInfo(
-                              user.phoneNumber, Icons.phone, 'phone'),
-                          buildContactInfo(user.email, Icons.email, 'email'),
-                          buildContactInfo(
-                              user.address,
-                              IconData(0xe3ab, fontFamily: 'MaterialIcons'),
-                              'address'),
-                          SizedBox(height: 16.0),
-
-                          // About me
-                          buildSectionHeader('About me', Icons.info),
-                          buildInfo(user.aboutMe),
-                          SizedBox(height: 16.0),
-
-                          // Experience
-                          buildSectionHeader('Experience', Icons.work),
-                          buildInfo(user.experience
-                              ? "Has been Experience"
-                              : "No Experience"),
-                          SizedBox(height: 16.0),
-
-                          Container(
-                            width: double.infinity,
-                            height: 8.0,
-                            color: const Color.fromARGB(255, 176, 175, 175),
-                            margin: EdgeInsets.symmetric(vertical: 16.0),
-                          ),
-
-                          // List các bài viết đã đăng
-                          buildSectionHeader(
-                              'Article posted', Icons.library_books),
-                          // Dùng ListView để hiển thị danh sách các bài viết
-                          DefaultTabController(
-                              length: 1,
-                              child: Column(children: [
-                                // TabBar để chọn giữa "Pet Stories" và "Pet Adoption"
-                                TabBar(
-                                  labelColor: Theme.of(context).primaryColor,
-                                  tabs: [
-                                    Tab(text: 'Pet Stories'),
-                                  ],
-                                ),
-                                // TabBarView để hiển thị nội dung tương ứng với từng tab
-                                SizedBox(
-                                  height:
-                                      500, // Thay đổi kích thước này tùy theo nhu cầu của bạn
-                                  child: TabBarView(
+                                  // Nút Follow và Edit Profile
+                                  Row(
                                     children: [
-                                      // Nội dung cho tab "Pet Stories"
-                                      buildPostsList(petStoriesPosts!),
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          notification(
+                                              "Feature under development",
+                                              false);
+                                        },
+                                        icon: Icon(Icons.person_add,
+                                            color: Colors.white),
+                                        label: Text('Follow'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Theme.of(context)
+                                              .primaryColor, // Đổi màu nền của nút
+                                          onPrimary: Colors
+                                              .white, // Đổi màu văn bản của nút
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      currentClient.id == widget.userId
+                                          ? ElevatedButton.icon(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditProfileScreen()));
+                                              },
+                                              icon: Icon(Icons.edit,
+                                                  color: Colors.white),
+                                              label: Text('Edit profile'),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Theme.of(context)
+                                                    .primaryColor,
+                                                onPrimary: Colors.white,
+                                              ),
+                                            )
+                                          : SizedBox(width: 5.0),
                                     ],
                                   ),
-                                )
-                              ]))
-                        ]));
-              }
-            }));
+                                ],
+                              ),
+                              const SizedBox(height: 16.0),
+
+                              // Họ và Tên
+                              Text(
+                                '${user.firstName} ${user.lastName}',
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 8.0),
+
+                              // Contact me
+                              buildSectionHeader('Contact me', Icons.mail),
+                              buildContactInfo(
+                                  user.phoneNumber, Icons.phone, 'phone'),
+                              buildContactInfo(
+                                  user.email, Icons.email, 'email'),
+                              buildContactInfo(
+                                  user.address,
+                                  IconData(0xe3ab, fontFamily: 'MaterialIcons'),
+                                  'address'),
+                              SizedBox(height: 16.0),
+
+                              // About me
+                              buildSectionHeader('About me', Icons.info),
+                              buildInfo(user.aboutMe),
+                              SizedBox(height: 16.0),
+
+                              // Experience
+                              buildSectionHeader('Experience', Icons.work),
+                              buildInfo(user.experience
+                                  ? "Has been Experience"
+                                  : "No Experience"),
+                              SizedBox(height: 16.0),
+
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                color: const Color.fromARGB(255, 176, 175, 175),
+                                margin: EdgeInsets.symmetric(vertical: 16.0),
+                              ),
+
+                              // List các bài viết đã đăng
+                              buildSectionHeader(
+                                  'Article posted', Icons.library_books),
+                              // Dùng ListView để hiển thị danh sách các bài viết
+                              DefaultTabController(
+                                  length: 1,
+                                  child: Column(children: [
+                                    // TabBar để chọn giữa "Pet Stories" và "Pet Adoption"
+                                    TabBar(
+                                      labelColor:
+                                          Theme.of(context).primaryColor,
+                                      tabs: [
+                                        Tab(text: 'Pet Stories'),
+                                      ],
+                                    ),
+                                    // TabBarView để hiển thị nội dung tương ứng với từng tab
+                                    SizedBox(
+                                      height:
+                                          500, // Thay đổi kích thước này tùy theo nhu cầu của bạn
+                                      child: TabBarView(
+                                        children: [
+                                          // Nội dung cho tab "Pet Stories"
+                                          buildPostsList(petStoriesPosts!),
+                                        ],
+                                      ),
+                                    )
+                                  ]))
+                            ]));
+                  }
+                })));
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      petStoriesPosts = getAllPostPersonal(widget.userId);
+      userFuture = getProfile(context, widget.userId);
+    });
   }
 
 // Widget hiển thị danh sách bài đăng
