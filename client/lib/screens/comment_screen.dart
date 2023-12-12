@@ -10,6 +10,7 @@ import 'package:found_adoption_application/screens/pet_center_screens/profile_ce
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/services/post/comment.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -189,6 +190,9 @@ class _CommentScreenState extends State<CommentScreen> {
                           ),
                           title: Container(
                             padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.grey.shade200),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -219,11 +223,11 @@ class _CommentScreenState extends State<CommentScreen> {
                                     child: Text(
                                       // data[i]['name'],
                                       comments[index].userId != null
-                                      ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
-                                      : '${comments[index].centerId!.name}',
+                                          ? '${comments[index].userId!.firstName} ${comments[index].userId!.lastName}'
+                                          : '${comments[index].centerId!.name}',
                                       style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                       ),
                                     )),
                                 Text(
@@ -236,9 +240,6 @@ class _CommentScreenState extends State<CommentScreen> {
                                 ),
                               ],
                             ),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.grey.shade200),
                           ),
                           trailing: IconButton(
                               onPressed: () {},
@@ -270,7 +271,13 @@ class _CommentScreenState extends State<CommentScreen> {
         email: '',
         status: '');
     center_comment.PetCenter centerCmt = center_comment.PetCenter(
-        id: '', name: '', avatar: '', address: '', phoneNumber: '', email: '', status: '');
+        id: '',
+        name: '',
+        avatar: '',
+        address: '',
+        phoneNumber: '',
+        email: '',
+        status: '');
 
     return Scaffold(
       appBar: AppBar(
@@ -339,11 +346,11 @@ class _CommentScreenState extends State<CommentScreen> {
 
                     var id = await postComment(
                         widget.postId, commentController.text.toString());
+                    if (id != '') {
+                      var currentClient = await getCurrentClient();
 
-                    var currentClient = await getCurrentClient();
-
-                    if (currentClient.role == 'USER') {
-                      userCmt = user_comment.User(
+                      if (currentClient.role == 'USER') {
+                        userCmt = user_comment.User(
                           id: currentClient.id,
                           firstName: currentClient.firstName,
                           lastName: currentClient.lastName,
@@ -351,28 +358,30 @@ class _CommentScreenState extends State<CommentScreen> {
                           address: '',
                           phoneNumber: '',
                           email: '',
-                          status: '');
-                    } else {
-                      centerCmt = center_comment.PetCenter(
-                        id: currentClient.id,
-                        name: currentClient.name,
-                        avatar: currentClient.avatar,
-                        address: '',
-                        phoneNumber: '',
-                        email: '',
-                        status: ''
-                      );
-                    }
+                          status: '',
+                        );
+                      } else {
+                        centerCmt = center_comment.PetCenter(
+                          id: currentClient.id,
+                          name: currentClient.name,
+                          avatar: currentClient.avatar,
+                          address: '',
+                          phoneNumber: '',
+                          email: '',
+                          status: '',
+                        );
+                      }
 
-                    Comment newComment = Comment(
+                      Comment newComment = Comment(
                         id: id.toString(),
                         userId: userCmt,
                         centerId: centerCmt,
                         content: commentController.text,
-                        createdAt: DateTime.now());
+                      );
 
-                    // Gửi comment thông qua Socket.IO
-                    socket.emit('comment', newComment.toMap());
+                      // Gửi comment thông qua Socket.IO
+                      socket.emit('comment', newComment.toMap());
+                    }
 
                     commentController.clear();
                     FocusScope.of(context).unfocus();
@@ -431,16 +440,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     });
                   });
                 }
-
-                Fluttertoast.showToast(
-                  msg: message,
-                  toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
-                  gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-                  timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
-                  backgroundColor: Colors.grey, // Màu nền của toast
-                  textColor: Colors.white, // Màu chữ của toast
-                  fontSize: 16.0, // Kích thước chữ của toast
-                );
+                notification(message, false);
               },
               child: Text('Delete'),
             ),

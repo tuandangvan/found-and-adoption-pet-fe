@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/edit_pet_screen.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:intl/intl.dart';
 
@@ -70,14 +71,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                             Navigator.pop(context);
                           },
                           child: Icon(
-                            FontAwesomeIcons.arrowLeft,
+                            Icons.arrow_back_ios,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
-                        Icon(
-                          CupertinoIcons.share,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                        // Icon(
+                        //   Icons.edit_attributes,
+                        //   color: Theme.of(context).primaryColor,
+                        // ),
                       ],
                     ),
                   ),
@@ -102,7 +103,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                           CircleAvatar(
                             radius: 30.0,
                             backgroundImage: NetworkImage(
-                                '${widget.animal.statusAdopt == 'HAS_ONE_OWNER' ? widget.animal.foundOwner!.avatar : widget.animal.centerId!.avatar}'),
+                                widget.animal.statusAdopt == 'HAS_ONE_OWNER'
+                                    ? widget.animal.foundOwner!.avatar
+                                    : widget.animal.centerId!.avatar),
                             // backgroundImage: NetworkImage(
                             //     '${ownerUser!.id != '' ? ownerUser!.avatar : widget.animal.centerId!.avatar}'),
                           ),
@@ -132,8 +135,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Text(
-                                    DateFormat.yMMMMd().add_Hms().format(widget.animal.createdAt!),
-                                    style: TextStyle(
+                                    DateFormat.yMMMMd()
+                                        .add_Hms()
+                                        .format(widget.animal.createdAt!),
+                                    style: const TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -144,11 +149,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 0,
                       ),
                       Text(
                         widget.animal.description.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,
                             fontSize: 16),
@@ -159,7 +164,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               )),
               currentClient.role == "USER"
                   ? Container(
-                      height: 90,
+                      height: 5,
                       decoration: BoxDecoration(
                           color:
                               Theme.of(context).primaryColor.withOpacity(0.06),
@@ -185,7 +190,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                               ),
                             ),
                             const SizedBox(
-                              width: 24,
+                              height: 0,
                             ),
                             widget.animal.statusAdopt != 'HAS_ONE_OWNER'
                                 ? Expanded(
@@ -212,12 +217,49 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       ),
                                     ),
                                   )
-                                : const SizedBox(),
+                                : const SizedBox(
+                                    height: 0,
+                                  ),
+                            const SizedBox(
+                              width: 10,
+                            ),
                           ],
                         ),
                       ),
                     )
                   : const SizedBox(),
+              currentClient.role == 'CENTER'
+                  ? Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditPetScreen(pet: widget.animal)));
+                        },
+                        child: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          elevation: 4,
+                          color: Theme.of(context).primaryColor,
+                          child: const Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                              'Edit pet',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      height: 0,
+                    ),
             ],
           ),
 
@@ -286,7 +328,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                           color: Theme.of(context).primaryColor,
                           size: 15,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 3,
                         ),
                         Expanded(

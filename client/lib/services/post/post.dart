@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/services/api.dart';
+import 'package:found_adoption_application/services/image/multi_image_api.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
+import 'package:image_picker/image_picker.dart';
 
 Future<List<Post>> getAllPost() async {
   var responseData = {};
@@ -14,6 +16,18 @@ Future<List<Post>> getAllPost() async {
   var postList = responseData['data'] as List<dynamic>;
   List<Post> posts = postList.map((json) => Post.fromJson(json)).toList();
   return posts;
+}
+
+Future<Post> getOnePost(String postId) async {
+  var responseData = {};
+  try {
+    responseData = await api('/post/$postId', 'GET', '');
+  } catch (e) {
+    print(e);
+    //  notification(e.toString(), true);
+  }
+  Post post = Post.fromJson(responseData['data']);
+  return post;
 }
 
 Future<String> changeStatusPost(String postId, String status) async {
@@ -67,4 +81,43 @@ Future<bool> addPost(String content, List<dynamic> imagePaths) async {
     //  notification(e.toString(), true);
     return false;
   }
+}
+
+Future<void> updatePost(String content, List<XFile> imagePaths,
+    bool isNewUpload, String postId) async {
+  var responseData = {};
+  List<dynamic> finalResult = [];
+  var result;
+
+  if (imagePaths.isNotEmpty && isNewUpload) {
+    result = await uploadMultiImage(imagePaths);
+    finalResult = result.map((url) => url).toList();
+  }
+
+  var body = jsonEncode({
+    "content": content,
+    if(isNewUpload) "images" : finalResult,
+  });
+  try {
+    responseData = await api('/post/$postId', 'PUT', body);
+    if (responseData['success']) {
+      notification(responseData['message'], false);
+    } else {
+      notification(responseData['message'], true);
+    }
+  } catch (e) {
+    print(e);
+    //  notification(e.toString(), true);
+  }
+}
+
+Future<String> deleteOnePost(String postId) async {
+  var responseData = {};
+  try {
+    responseData = await api('/post/$postId', 'DELETE', '');
+  } catch (e) {
+    print(e);
+    notification(e.toString(), true);
+  }
+  return responseData['message'];
 }
