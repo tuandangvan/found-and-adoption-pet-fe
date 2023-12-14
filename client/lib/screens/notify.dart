@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/notify.dart';
+import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/status_adopt.dart';
+import 'package:found_adoption_application/screens/post_screen.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/status_adopt.dart';
 import 'package:found_adoption_application/services/notify/notifyAPI.dart';
@@ -122,12 +124,42 @@ class _NotificationCardState extends State<NotificationCard> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const StatusAdoptUser()));
+            } else if (widget.notifies.title == 'Post') {
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PostScreen(postId: widget.notifies.idDestinate!)));
+            } else if (widget.notifies.title == 'Comment') {
+
+              print(widget.notifies.idDestinate);
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CommentScreen(postId: widget.notifies.idDestinate!)));
             }
           } else {
             if (widget.notifies.title == 'Adoption') {
               // ignore: use_build_context_synchronously
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => StatusAdopt()));
+            } else if (widget.notifies.title == 'Post') {
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PostScreen(postId: widget.notifies.idDestinate!)));
+            } else if (widget.notifies.title == 'Comment') {
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CommentScreen(postId: widget.notifies.idDestinate!)));
             }
           }
         },
