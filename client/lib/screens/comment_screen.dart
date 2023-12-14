@@ -12,7 +12,6 @@ import 'package:found_adoption_application/services/post/comment.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CommentScreen extends StatefulWidget {
   final postId;
