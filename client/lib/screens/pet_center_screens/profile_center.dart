@@ -126,16 +126,35 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
           future: centerFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // If the Future is still loading, show a loading indicator
               return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
               // If there is an error fetching data, show an error message
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return const Center(child: Text('User not found.'));
             } else {
               // If data is successfully fetched, display the form
               InfoCenter center = snapshot.data!;
+              if (center.status == 'HIDDEN') {
+                if (currentClient.id != widget.centerId) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.visibility_off,
+                          size: 100,
+                          color: Colors.grey,
+                        ),
+                        Text(
+                          'This center is hidden',
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                        )
+                      ],
+                    ),
+                  );
+                }
+              }
               return SingleChildScrollView(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
@@ -177,22 +196,53 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                             ),
                             SizedBox(width: 3.0),
                             currentClient.id == widget.centerId
-                                ? ElevatedButton.icon(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const EditProfileCenterScreen()));
+                                ? PopupMenuButton<int>(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 1,
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfileCenterScreen()));
+                                          },
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.white),
+                                          label: Text('Edit profile'),
+                                          style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Theme.of(context).primaryColor,
+                                            onPrimary: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 2,
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            _showBottomSheet(
+                                                center.id, center.status);
+                                          },
+                                          icon: Icon(Icons.change_circle,
+                                              color: Colors.white),
+                                          label: Text('Change status'),
+                                          style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Theme.of(context).primaryColor,
+                                            onPrimary: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      // Handle your logic based on selected value
                                     },
-                                    icon: Icon(Icons.edit, color: Colors.white),
-                                    label: Text('Edit profile'),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context).primaryColor,
-                                      onPrimary: Colors.white,
-                                    ),
+                                    icon: Icon(Icons.more_vert,
+                                        color: Colors.grey),
                                   )
-                                : const SizedBox(width: 5.0),
+                                : SizedBox(width: .0),
                           ],
                         ),
                       ],
@@ -200,10 +250,24 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     SizedBox(height: 16.0),
 
                     // Họ và Tên
-                    Text(
-                      '${center.name}',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        // User's name
+                        Text(
+                          '${center.name} ',
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        // Status icon
+                        Icon(
+                          center.status == 'ACTIVE'
+                              ? Icons.check_circle
+                              : Icons.visibility_off,
+                          color: center.status == 'ACTIVE'
+                              ? Colors.green
+                              : Colors.grey,
+                        ),
+                      ],
                     ),
                     SizedBox(height: 8.0),
 
@@ -685,6 +749,58 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showBottomSheet(String centerId, status) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              status == 'HIDDEN'
+                  ? ListTile(
+                      leading: const Icon(Icons.check_circle),
+                      title: const Text('Active'),
+                      onTap: () async {
+                        await changeStatus(context, centerId, 'ACTIVE');
+                        setState(() {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileCenterPage(
+                                        centerId: centerId,
+                                      )));
+                        });
+                      },
+                    )
+                  : ListTile(
+                      leading: const Icon(Icons.visibility_off),
+                      title: const Text('Hidden'),
+                      onTap: () async {
+                        changeStatus(context, centerId, 'HIDDEN');
+                        setState(() {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileCenterPage(
+                                        centerId: centerId,
+                                      )));
+                        });
+                      },
+                    ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

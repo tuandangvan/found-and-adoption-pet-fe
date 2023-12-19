@@ -3,7 +3,8 @@ import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/services/user/user_form_api.dart';
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key});
+  final String accountId;
+  const RegistrationForm({super.key, required this.accountId});
 
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
@@ -179,23 +180,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
               MaterialButton(
                 minWidth: double.infinity,
                 height: 60,
-                onPressed: () {},
+                onPressed: () async {
+                  await userform(
+                      context,
+                      widget.accountId,
+                      firstNameController.text.toString(),
+                      lastNameController.text.toString(),
+                      phoneNumberController.text.toString(),
+                      addressController.text.toString(),
+                      selectedRadio,
+                      auboutMeController.text.toString());
+                },
                 color: const Color.fromRGBO(48, 96, 96, 1.0),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: GestureDetector(
-                  onTap: () async {
-                    await userform(
-                        context,
-                        firstNameController.text.toString(),
-                        lastNameController.text.toString(),
-                        phoneNumberController.text.toString(),
-                        addressController.text.toString(),
-                        selectedRadio,
-                        auboutMeController.text.toString());
-                  },
                   child: Text(
                     "Continue",
                     style: TextStyle(

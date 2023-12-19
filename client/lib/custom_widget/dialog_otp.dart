@@ -177,7 +177,7 @@ class _ShowOTPInputDialogState extends State<ShowOTPInputDialog> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegistrationForm()));
+                                builder: (context) => RegistrationForm(accountId: '',)));
                       } else {
                         Navigator.push(
                             context,

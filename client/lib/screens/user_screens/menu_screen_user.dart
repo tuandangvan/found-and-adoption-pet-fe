@@ -136,17 +136,8 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
                     ),
                     TextButton(
                         onPressed: () async {
-                          //Navigate
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => WelcomeScreen())));
+                          _showLogoutDialog(context);
 
-                          var userBox = await Hive.openBox('userBox');
-                          await userBox.put('currentUser', null);
-
-                          var centerBox = await Hive.openBox('centerBox');
-                          await centerBox.put('currentCenter', null);
                           //Close Hive
                           // await Hive.close();
                         },
@@ -164,6 +155,49 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showLogoutDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Log out'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You are about to log out. Are you sure?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Log out'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                //Navigate
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => WelcomeScreen())));
+
+                var userBox = await Hive.openBox('userBox');
+                await userBox.put('currentUser', null);
+
+                var centerBox = await Hive.openBox('centerBox');
+                await centerBox.put('currentCenter', null);
+                // Code to logout the user goes here
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

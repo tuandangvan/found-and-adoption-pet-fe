@@ -121,3 +121,22 @@ Future<String> deleteOnePost(String postId) async {
   }
   return responseData['message'];
 }
+
+Future<void> reportPost(String postId, String title, String reason) async {
+  var responseData = {};
+  var body = jsonEncode({
+    "title": title,
+    "reason": reason,
+  });
+  try {
+    responseData = await api('/report/$postId', 'POST', body);
+    if (responseData['success']) {
+      notification(responseData['message'], false);
+    } else {
+      notification(responseData['message'], true);
+    }
+  } catch (e) {
+    print(e);
+    //  notification(e.toString(), true);
+  }
+}

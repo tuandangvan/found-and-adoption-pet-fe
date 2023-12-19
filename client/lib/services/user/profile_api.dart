@@ -83,3 +83,16 @@ Future<void> updateProfileCenter(
     // notification(e.toString(), true);
   }
 }
+
+Future<void> changeStatus(BuildContext context, userId, status) async {
+  var responseData;
+  var body = jsonEncode(<String, String>{
+    'status': status,
+  });
+  try {
+    responseData = await api('/user/${userId}/status', 'PUT', body);
+    notification(responseData['message'], false);
+  } catch (e) {
+    // notification(e.toString(), true);
+  }
+}

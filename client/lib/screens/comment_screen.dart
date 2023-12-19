@@ -130,12 +130,11 @@ class _CommentScreenState extends State<CommentScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else if (snapshot.hasData) {
+            return const Center(child: Text('Post not found.')
+                // Text('Error: ${snapshot.error}'),
+                );
+          } else if (snapshot.hasData) {  
             comments = snapshot.data as List<Comment>;
-
             return ListView.builder(
                 itemCount: comments.length,
                 itemBuilder: (context, index) {
@@ -252,7 +251,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   );
                 });
           } else {
-            return SizedBox.shrink();
+            return const Center(child: Text('No comments yet.'));
           }
         });
     //tất cả các cmt của 1 bài post

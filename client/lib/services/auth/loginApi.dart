@@ -1,10 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/custom_widget/dialog_otp.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/pet_center_screens/register_form.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
+import 'package:found_adoption_application/screens/user_screens/registration_form.dart';
+import 'package:found_adoption_application/services/auth/signup_api.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -84,6 +88,22 @@ Future<void> login(
       } else if (responseData['data']['role'] == 'ADMIN') {
         notification('You is ADMIN!', true);
       }
+    } else if (responseData['message'] == 'Account is not active!') {
+      notification(responseData['message'], true);
+      _showLogoutDialog(context, email);
+    } else if (responseData['message'] == 'User information not found!') {
+      print(responseData['message']);
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  RegistrationForm(accountId: responseData['id'])));
+      
+      notification(responseData['message'], true);
+    } else if (responseData['message'] == 'Center information not found!') {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => RegistrationCenterForm()));
     } else {
       notification(responseData['message'], true);
       print(responseData);
@@ -96,4 +116,40 @@ Future<void> login(
       notification("Check your Network and Try again.", true);
     }
   }
+}
+
+Future<void> _showLogoutDialog(BuildContext context, String email) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Notice'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('Account is not active! You are continue?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Continue'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              resendcode(email);
+              //Navigate
+              showOTPInputDialog(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
