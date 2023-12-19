@@ -113,10 +113,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   } else if (snapshot.hasError) {
                     // If there is an error fetching data, show an error message
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return const Center(child: Text('User not found.'));
                   } else {
                     // If data is successfully fetched, display the form
                     InfoUser user = snapshot.data!;
+                    if(user.status == 'HIDDEN'){
+                      if(currentClient.id != widget.userId){
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.visibility_off, size: 100, color: Colors.grey,),
+                              Text('This user is hidden', style: TextStyle(fontSize: 20, color: Colors.grey),)
+                            ],
+                          ),
+                        );
+                      }
+                    }
                     return SingleChildScrollView(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -155,44 +168,88 @@ class _ProfilePageState extends State<ProfilePage> {
                                             color: Colors.white),
                                         label: Text('Follow'),
                                         style: ElevatedButton.styleFrom(
-                                          primary: Theme.of(context)
-                                              .primaryColor, // Đổi màu nền của nút
-                                          onPrimary: Colors
-                                              .white, // Đổi màu văn bản của nút
+                                          primary:
+                                              Theme.of(context).primaryColor,
+                                          onPrimary: Colors.white,
                                         ),
                                       ),
                                       SizedBox(width: 8.0),
                                       currentClient.id == widget.userId
-                                          ? ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            EditProfileScreen()));
+                                          ? PopupMenuButton<int>(
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                  value: 1,
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  EditProfileScreen()));
+                                                    },
+                                                    icon: Icon(Icons.edit,
+                                                        color: Colors.white),
+                                                    label: Text('Edit profile'),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                      onPrimary: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: 2,
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      _showBottomSheet(
+                                                          user.id, user.status);
+                                                    },
+                                                    icon: Icon(
+                                                        Icons.change_circle,
+                                                        color: Colors.white),
+                                                    label:
+                                                        Text('Change status'),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                      onPrimary: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              onSelected: (value) {
+                                                // Handle your logic based on selected value
                                               },
-                                              icon: Icon(Icons.edit,
-                                                  color: Colors.white),
-                                              label: Text('Edit profile'),
-                                              style: ElevatedButton.styleFrom(
-                                                primary: Theme.of(context)
-                                                    .primaryColor,
-                                                onPrimary: Colors.white,
-                                              ),
+                                              icon: Icon(Icons.more_vert,
+                                                  color: Colors.grey),
                                             )
-                                          : SizedBox(width: 5.0),
+                                          : SizedBox(width: .0),
                                     ],
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 16.0),
-
+                              // Status icon
                               // Họ và Tên
-                              Text(
-                                '${user.firstName} ${user.lastName}',
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
+                              Row(
+                                children: [
+                                  // User's name
+                                  Text(
+                                    '${user.firstName} ${user.lastName} ',
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  // Status icon
+                                  Icon(user.status == 'ACTIVE'?
+                                    Icons.check_circle: Icons.visibility_off,
+                                    color: user.status == 'ACTIVE'
+                                        ? Colors.green
+                                        : Colors.grey,
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 8.0),
 
@@ -408,5 +465,57 @@ class _ProfilePageState extends State<ProfilePage> {
   // Hàm để sao chép văn bản vào clipboard
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
+  }
+
+  void _showBottomSheet(String userId, status) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              status == 'HIDDEN'
+                  ? ListTile(
+                      leading: const Icon(Icons.check_circle),
+                      title: const Text('Active'),
+                      onTap: () async {
+                        await changeStatus(context, userId, 'ACTIVE');
+                        setState(() {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage(
+                                        userId: userId,
+                                      )));
+                        });
+                      },
+                    )
+                  : ListTile(
+                      leading: const Icon(Icons.visibility_off),
+                      title: const Text('Hidden'),
+                      onTap: () async {
+                        changeStatus(context, userId, 'HIDDEN');
+                        setState(() {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage(
+                                        userId: userId,
+                                      )));
+                        });
+                      },
+                    ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

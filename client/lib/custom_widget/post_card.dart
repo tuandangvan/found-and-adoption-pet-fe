@@ -194,7 +194,8 @@ class _PostCardState extends State<PostCard> {
                                   (item) => InkWell(
                                     onTap: () {
                                       if (item['text'] == 'Change Status') {
-                                        _showBottomSheet(clientPost.id);
+                                        _showBottomSheet(
+                                            clientPost.id, clientPost);
                                       } else if (item['text'] == 'Edit') {
                                         Navigator.push(
                                             context,
@@ -205,6 +206,122 @@ class _PostCardState extends State<PostCard> {
                                       } else if (item['text'] == 'Delete') {
                                         _showDeleteConfirmationDialog(
                                             clientPost.id);
+                                      } else if (item['text'] == 'Report') {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                ListTile(
+                                                  leading: const Icon(
+                                                      Icons.public_off),
+                                                  title: const Text(
+                                                      'Violates community standards'),
+                                                  onTap: () async {
+                                                    await reportPost(
+                                                        clientPost.id,
+                                                        'POST',
+                                                        'Violates community standards');
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading: const Icon(
+                                                      Icons.error_outline),
+                                                  title: const Text(
+                                                      'Misleading language'),
+                                                  onTap: () async {
+                                                    await reportPost(
+                                                        clientPost.id,
+                                                        'POST',
+                                                        'Misleading language');
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading:
+                                                      const Icon(Icons.warning),
+                                                  title: const Text('Violence'),
+                                                  onTap: () async {
+                                                    await reportPost(
+                                                        clientPost.id,
+                                                        'POST',
+                                                        'Violence');
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading:
+                                                      const Icon(Icons.block),
+                                                  title: const Text(
+                                                      'Inappropriate content'),
+                                                  onTap: () async {
+                                                    await reportPost(
+                                                        clientPost.id,
+                                                        'POST',
+                                                        'Inappropriate content');
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading: const Icon(Icons
+                                                      .difference_outlined),
+                                                  title: const Text('Other'),
+                                                  onTap: () {
+                                                    // Open dialog to enter custom reason
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        TextEditingController
+                                                            reasonController =
+                                                            TextEditingController();
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              'Enter your reason'),
+                                                          content: TextField(
+                                                            controller:
+                                                                reasonController,
+                                                            onChanged: (value) {
+                                                              // Handle value from text field
+                                                            },
+                                                          ),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'Submit'),
+                                                              onPressed:
+                                                                  () async {
+                                                                await reportPost(
+                                                                    clientPost
+                                                                        .id,
+                                                                    'POST',
+                                                                    reasonController
+                                                                        .text
+                                                                        .toString());
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       }
                                       // Add other logic for handling other options
                                     },
@@ -422,7 +539,7 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  void _showBottomSheet(String postId) {
+  void _showBottomSheet(String postId, var clientPost) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -432,30 +549,31 @@ class _PostCardState extends State<PostCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.check_circle),
-                title: const Text('Active'),
-                onTap: () async {
-                  var message = await changeStatusPost(postId, 'ACTIVE');
-                  setState(() {
-                    notification(message, false);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.visibility_off),
-                title: const Text('Hidden'),
-                onTap: () async {
-                  var message = await changeStatusPost(postId, 'HIDDEN');
-                  setState(() {
-                    notification(message, false);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  });
-                },
-              ),
+              (clientPost.status == 'HIDDEN')
+                  ? ListTile(
+                      leading: const Icon(Icons.check_circle),
+                      title: const Text('Active'),
+                      onTap: () async {
+                        var message = await changeStatusPost(postId, 'ACTIVE');
+                        setState(() {
+                          notification(message, false);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      },
+                    )
+                  : ListTile(
+                      leading: const Icon(Icons.visibility_off),
+                      title: const Text('Hidden'),
+                      onTap: () async {
+                        var message = await changeStatusPost(postId, 'HIDDEN');
+                        setState(() {
+                          notification(message, false);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
             ],
           ),
         );

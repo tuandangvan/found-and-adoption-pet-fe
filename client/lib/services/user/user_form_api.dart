@@ -6,10 +6,20 @@ import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> userform(BuildContext context, String firstName, String lastName,
-    String phoneNumber, String address, bool experience, aboutMe) async {
+Future<void> userform(
+    BuildContext context,
+    String accountId,
+    String firstName,
+    String lastName,
+    String phoneNumber,
+    String address,
+    bool experience,
+    aboutMe) async {
   final accountRegisterBox = await Hive.openBox('accountRegisterBox');
-  final storedAccount = accountRegisterBox.get('account');
+  final storedAccount =
+      accountId != '' ? accountId : accountRegisterBox.get('account');
+
+  print(storedAccount);
   try {
     final apiUrl = Uri.parse(
         "https://found-and-adoption-pet-api-be.vercel.app/api/v1/user/${storedAccount}");
@@ -38,6 +48,6 @@ Future<void> userform(BuildContext context, String firstName, String lastName,
     }
   } catch (e) {
     print(e);
-  //  notification(e.toString(), true);
+    //  notification(e.toString(), true);
   }
 }
