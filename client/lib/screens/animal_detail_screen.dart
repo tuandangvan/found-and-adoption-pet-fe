@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_pet_screen.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
+import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:intl/intl.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
@@ -82,7 +83,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                   Icons.more_vert,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                onSelected: (String choice) {
+                                onSelected: (String choice) async {
                                   // Handle menu item selection
                                   if (choice == 'edit') {
                                     Navigator.push(
@@ -93,7 +94,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       ),
                                     );
                                   } else if (choice == 'delete') {
-                                    // Handle delete option
+                                     await deletePet(widget.animal.id);
+                                     Navigator.of(context).pop();
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>

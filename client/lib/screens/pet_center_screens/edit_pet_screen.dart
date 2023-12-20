@@ -94,7 +94,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Add a New Pet',
+        title: const Text('Edit Pet',
             style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0))),
         centerTitle: true,
         elevation: 0,
