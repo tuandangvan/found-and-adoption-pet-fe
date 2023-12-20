@@ -6,6 +6,7 @@ import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_pet_screen.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:intl/intl.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
@@ -570,6 +571,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             ),
             TextButton(
               onPressed: () async {
+                if(infoController.text.toString().isEmpty){
+                  notification('Description not empty!', true);
+                  return;
+                }
                 await createAdopt(
                     widget.animal.id, infoController.text.toString());
                 // ignore: use_build_context_synchronously
