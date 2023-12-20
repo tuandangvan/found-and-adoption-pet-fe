@@ -117,6 +117,34 @@ Future<void> login(
     }
   }
 }
+Future<bool> forgotPassword(String email) async {
+  try {
+    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/forgot-password");
+
+    final response = await http.post(
+      apiUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'email': email
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      notification(responseData['message'], false);
+      return true;
+    } else {
+     final responseData = json.decode(response.body);
+      notification(responseData['message'], true);
+      return false;
+    }
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
 Future<void> _showLogoutDialog(BuildContext context, String email) async {
   return showDialog<void>(

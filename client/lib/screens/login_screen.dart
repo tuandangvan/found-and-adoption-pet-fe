@@ -142,16 +142,70 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
+                        "Login",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              TextEditingController _controller =
+                                  TextEditingController();
+                              return AlertDialog(
+                                title: const Text('Forgot Password'),
+                                content: TextField(
+                                  controller: _controller,
+                                  decoration: InputDecoration(
+                                    labelText: 'Enter your email',
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Forgot Password'),
+                                    onPressed: () async {
+                                      String email = _controller
+                                          .text; // Get value from text field
+                                      await forgotPassword(
+                                          email); // Call the forgotPassword function
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Text(
+                          "Forgot password?",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(255, 1, 64, 93),
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              fontStyle: FontStyle.italic),
+                        )),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
