@@ -95,7 +95,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       ),
                                     );
                                   } else if (choice == 'delete') {
-                                    _showDeleteConfirmationDialog(widget.animal.id);
+                                    _showDeleteConfirmationDialog(
+                                        widget.animal.id);
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
@@ -481,12 +482,20 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.animal.namePet,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.badge, color: Colors.grey),
+                            SizedBox(width: 8),
+                            Text(
+                              widget.animal.namePet,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                         Icon(widget.animal.gender == 'FEMALE'
                             ? FontAwesomeIcons.venus
@@ -497,12 +506,19 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.animal.breed,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w500),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.pets, color: Colors.grey),
+                            SizedBox(width: 8),
+                            Text(
+                              widget.animal.breed,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
                         ),
                         Text(
                           '${widget.animal.age} years old',
@@ -517,13 +533,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        Icon(
-                          FontAwesomeIcons.mapMarkerAlt,
-                          color: Theme.of(context).primaryColor,
-                          size: 15,
-                        ),
-                        const SizedBox(
-                          width: 3,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.mapMarkerAlt,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(width: 8),
+                          ],
                         ),
                         Expanded(
                           child: Text(
@@ -570,7 +588,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             ),
             TextButton(
               onPressed: () async {
-                if(infoController.text.toString().isEmpty){
+                if (infoController.text.toString().isEmpty) {
                   notification('Description not empty!', true);
                   return;
                 }

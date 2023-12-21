@@ -140,10 +140,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             .toList();
       }
     });
-
-    // In giá trị để kiểm tra
-    print('Selected Pet Type: $selectedPetType');
-    print('Search Results: $_searchResults');
   }
 
   Future<void> getClient() async {
@@ -235,10 +231,18 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  currentClient.address,
+                                  currentClient.address.split(',').length > 2
+                                      ? currentClient.address
+                                          .split(',')
+                                          .sublist(currentClient.address
+                                                  .split(',')
+                                                  .length -
+                                              2)
+                                          .join(',')
+                                      : currentClient.address,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 15,
+                                    fontSize: 12,
                                   ),
                                   softWrap: true,
                                   textAlign: TextAlign.center,
@@ -364,38 +368,34 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     );
   }
 
-  Widget fieldInforPet(String infor, String inforDetail){
-return Text.rich(
-    TextSpan(
-      children: [
-        TextSpan(
-          text: '$infor: ',
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-            color: Colors.grey,
+  Widget fieldInforPet(String infor, String inforDetail) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: '$infor: ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.grey,
+            ),
           ),
-        ),
-        TextSpan(
-          text: '$inforDetail',
-          style: TextStyle(
-       
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).primaryColor,
+          TextSpan(
+            text: '$inforDetail',
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
   }
 
   Widget buildAnimalList(List<Pet> animals) {
     final deviceWidth = MediaQuery.of(context).size.width;
-   
-
-    
 
     return Expanded(
       child: ListView.builder(
@@ -408,16 +408,15 @@ return Text.rich(
               ? animals[index]
               : _searchResults[index];
 
-      // Biến tạm thời để giữ giá trị khoảng cách
-        String distanceString = '';
+          // Biến tạm thời để giữ giá trị khoảng cách
+          String distanceString = '';
 
-        // Gọi hàm tính khoảng cách và gán giá trị vào biến tạm thời
-        calculateDistance(currentClient.address, animal.centerId!.address)
-            .then((value) {
-          distanceString = value.toStringAsFixed(2);
-          // Bảo đảm cập nhật lại widget khi giá trị thay đổi
-      
-        });
+          // Gọi hàm tính khoảng cách và gán giá trị vào biến tạm thời
+          calculateDistance(currentClient.address, animal.centerId!.address)
+              .then((value) {
+            distanceString = value.toStringAsFixed(2);
+            // Bảo đảm cập nhật lại widget khi giá trị thay đổi
+          });
 
           return GestureDetector(
             onTap: () {
@@ -434,7 +433,6 @@ return Text.rich(
               );
             },
             child: Padding(
-            
               padding: const EdgeInsets.only(bottom: 28, right: 10, left: 20),
               child: Stack(
                 alignment: Alignment.centerLeft,
@@ -465,11 +463,8 @@ return Text.rich(
                                     //     fontWeight: FontWeight.bold,
                                     //   ),
                                     // ),
-                                    fieldInforPet('name', animal.namePet),
+                                    fieldInforPet('Name', animal.namePet),
 
-                                    
-
-                                    
                                     Icon(
                                       animal.gender == "FEMALE"
                                           ? FontAwesomeIcons.venus
@@ -486,7 +481,7 @@ return Text.rich(
                                 //     fontWeight: FontWeight.w500,
                                 //   ),
                                 // ),
-                                fieldInforPet('breed', animal.breed),
+                                fieldInforPet('Breed', animal.breed),
                                 const SizedBox(height: 10),
                                 // Text(
                                 //   'Age: ${animal.age} years old',
@@ -495,9 +490,10 @@ return Text.rich(
                                 //     fontWeight: FontWeight.w600,
                                 //   ),
                                 // ),
-                                fieldInforPet('age', '${animal.age *12} months'),
+                                fieldInforPet(
+                                    'Age', '${animal.age * 12} months'),
                                 const SizedBox(height: 10),
-                              
+
                                 Row(
                                   children: [
                                     Icon(
@@ -514,9 +510,8 @@ return Text.rich(
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    
                                     Text(
-                                      distanceString,                  
+                                      distanceString,
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Theme.of(context).primaryColor,
@@ -558,26 +553,17 @@ return Text.rich(
     );
   }
 
-   
-
-
-   
-  //tính toán khoảng cách 
-  Future<double> calculateDistance(String currentAddress, String otherAddress) async {
-    LatLng currentP=await convertAddressToLatLng(currentAddress);
-    print('địa chỉ 1: $currentP');
-    LatLng pDestination=await convertAddressToLatLng(otherAddress);
-    print('địa chỉ 2: $pDestination');
-    double distance =  Geolocator.distanceBetween(
+  //tính toán khoảng cách
+  Future<double> calculateDistance(
+      String currentAddress, String otherAddress) async {
+    LatLng currentP = await convertAddressToLatLng(currentAddress);
+    LatLng pDestination = await convertAddressToLatLng(otherAddress);
+    double distance = Geolocator.distanceBetween(
       currentP.latitude,
       currentP.longitude,
       pDestination.latitude,
       pDestination.longitude,
     );
-    print('ủa đc chưa: $distance');
-
     return distance / 1000;
   }
-
-
 }
