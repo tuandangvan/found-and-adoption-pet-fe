@@ -434,7 +434,7 @@ class AdoptionTabView extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () async {
-                      await changeStatusAdoptUser(adopt.id, "CANCELLED");
+                      await _showDeleteConfirmationDialog(context, adopt.id);
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,
@@ -502,5 +502,33 @@ class AdoptionTabView extends StatelessWidget {
           }
           return const Center();
         });
+  }
+
+  Future<void> _showDeleteConfirmationDialog(context, String petId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm cancel'),
+          content: const Text('Are you sure you want to cancel this request?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await changeStatusAdoptUser(petId, "CANCELLED");
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text('Done'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

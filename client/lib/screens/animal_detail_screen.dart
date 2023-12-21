@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/edit_pet_screen.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
+import 'package:found_adoption_application/services/center/petApi.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:intl/intl.dart';
 
 class AnimalDetailScreen extends StatefulWidget {
@@ -93,7 +95,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       ),
                                     );
                                   } else if (choice == 'delete') {
-                                    // Handle delete option
+                                    _showDeleteConfirmationDialog(widget.animal.id);
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
@@ -568,6 +570,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             ),
             TextButton(
               onPressed: () async {
+                if(infoController.text.toString().isEmpty){
+                  notification('Description not empty!', true);
+                  return;
+                }
                 await createAdopt(
                     widget.animal.id, infoController.text.toString());
                 // ignore: use_build_context_synchronously
@@ -637,6 +643,35 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(String petId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this pet?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await deletePet(petId);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

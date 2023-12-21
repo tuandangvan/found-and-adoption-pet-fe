@@ -79,6 +79,22 @@ Future<List<Pet>> getAllPetOfCenter(centerId) async {
   return pets;
 }
 
+Future<void> deletePet(petId) async {
+  var responseData;
+  try {
+    final apiUrl = "/pet/${petId}";
+    responseData = await api(apiUrl, "DELETE", '');
+    if (!responseData['success']) {
+      notification(responseData['message'], true);
+      return;
+    }
+    notification(responseData['message'], false);
+  } catch (e) {
+    print(e);
+    //  notification(e.toString(), true);
+  }
+}
+
 Future<void> updatePet(
     String namePet,
     String petType,
