@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
-import 'package:found_adoption_application/screens/adoption_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -94,7 +94,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Add a New Pet',
+        title: const Text('Edit Pet',
             style: TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0))),
         centerTitle: true,
         elevation: 0,
@@ -288,6 +288,18 @@ class _EditPetScreenState extends State<EditPetScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+                      if (_namePetController.text == '' ||
+                          _breedController.text == '' ||
+                          _colorController.text == '' ||
+                          _ageController.text == '' ||
+                          _descriptionController.text == '' ||
+                          imageFileList.isEmpty ||
+                          _selectedPetType == '' ||
+                          _selectedGender == '') {
+                        notification(
+                            'Please fill in all the information', true);
+                        return;
+                      }
                       // Create a new Pet object with the entered information
                       await handlerUpdatePet();
                       // ignore: use_build_context_synchronously

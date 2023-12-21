@@ -6,6 +6,7 @@ import 'package:found_adoption_application/screens/pet_center_screens/test_notif
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/services/image/multi_image_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -265,7 +266,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       });
                     },
                   ),
-                  const Text('Orther'),
+                  const Text('Unknown'),
                 ],
               ),
               const SizedBox(
@@ -302,6 +303,18 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+                      if (_namePetController.text == '' ||
+                          _breedController.text == '' ||
+                          _colorController.text == '' ||
+                          _ageController.text == '' ||
+                          _descriptionController.text == '' ||
+                          imageFileList.isEmpty ||
+                          _selectedPetType == '' ||
+                          _selectedGender == '') {
+                        notification(
+                            'Please fill in all the information', true);
+                        return;
+                      }
                       // Create a new Pet object with the entered information
                       await postPet();
                     },
