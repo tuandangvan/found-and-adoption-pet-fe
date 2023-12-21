@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/pet_found.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -12,19 +15,19 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(CenterAdapter());
-  // HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
 
   runApp(MyApp());
 }
 
-// class MyHttpOverrides extends HttpOverrides {
-//   @override
-//   HttpClient createHttpClient(SecurityContext? context) {
-//     return super.createHttpClient(context)
-//       ..badCertificateCallback =
-//           (X509Certificate cert, String host, int port) => true;
-//   }
-// }
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 Color mainColor = const Color.fromRGBO(48, 96, 96, 1.0);
 Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
@@ -39,7 +42,7 @@ Color startingColor = const Color.fromRGBO(70, 112, 112, 1.0);
 //       theme: ThemeData(
 //         primaryColor: mainColor,
 //       ),
-//       home: NotificationPage(),
+//       home: PetFound(),
 //     );
 //   }
 // }

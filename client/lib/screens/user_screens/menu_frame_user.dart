@@ -67,6 +67,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
 
           //chèn screen được chọn lên vtri đầu tiên
           screenSnapshot.insert(0, selectedWidget);
+        menuOpen = false;
+    _animationController.reverse();
         });
       },
     ));

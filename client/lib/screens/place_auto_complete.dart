@@ -58,29 +58,66 @@ Widget placesAutoCompleteTextField(TextEditingController controller) {
   );
 }
 
+// Future<LatLng> convertAddressToLatLng(String inputAddress) async {
+//   LatLng coordinate;
+//   try {
+//     // final apiKey =
+//     //     'AIzaSyCunrFgaswY3SoT4komcOrXo_4bhHfdHsU'; // Thay thế bằng API key của bạn
+//     final endpoint =
+//         'https://maps.googleapis.com/maps/api/geocode/json?address=$inputAddress&key=$GOOGLE_MAPS_API_KEY';
+
+//     final response = await http.get(Uri.parse(endpoint));
+//     print('aaaaaa');
+
+//     if (response.statusCode == 200) {
+//       print('aaabbbbaaa');
+//       final data = json.decode(response.body);
+//       final location = data['results'][0]['geometry']['location'];
+
+//       // result = 'LatLng(${location['lat']}, ${location['lng']})';
+//       coordinate = LatLng(location['lat'], location['lng']);
+//       print('tọa độ mới: $coordinate');
+//     } else {
+//       throw Exception('Failed to load data');
+//     }
+//     return coordinate;
+//   } catch (e) {
+//     print('hello: ${e.toString()}');
+//     return LatLng(0.0, 0.0);
+//   }
+// }
+
+
+
 Future<LatLng> convertAddressToLatLng(String inputAddress) async {
   LatLng coordinate;
   try {
-    // final apiKey =
-    //     'AIzaSyCunrFgaswY3SoT4komcOrXo_4bhHfdHsU'; // Thay thế bằng API key của bạn
+    // Thay thế bằng API key của bạn
+    const apiKey = 'AIzaSyDYwGbz4F815dZreWn-rUqR8HK7wyChHtI';
+
     final endpoint =
-        'https://maps.googleapis.com/maps/api/geocode/json?address=$inputAddress&key=$GOOGLE_MAPS_API_KEY';
+        'http://maps.googleapis.com/maps/api/geocode/json?address=$inputAddress&key=$apiKey';
 
     final response = await http.get(Uri.parse(endpoint));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      final location = data['results'][0]['geometry']['location'];
-
-      // result = 'LatLng(${location['lat']}, ${location['lng']})';
-      coordinate = LatLng(location['lat'], location['lng']);
-      print('tọa độ mới: $coordinate');
+      
+      if (data['status'] == 'OK') {
+        final location = data['results'][0]['geometry']['location'];
+        coordinate = LatLng(location['lat'], location['lng']);
+        print('Tọa độ mới: $coordinate');
+      } else {
+        throw Exception('Geocoding failed: ${data['status']}');
+      }
     } else {
       throw Exception('Failed to load data');
     }
+
     return coordinate;
   } catch (e) {
-    print(e.toString());
+    print('Error: ${e.toString()}');
     return LatLng(0.0, 0.0);
   }
 }
+
