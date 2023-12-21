@@ -3,9 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
+import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:hive/hive.dart';
 
@@ -361,8 +364,38 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     );
   }
 
+  Widget fieldInforPet(String infor, String inforDetail){
+return Text.rich(
+    TextSpan(
+      children: [
+        TextSpan(
+          text: '$infor: ',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+            color: Colors.grey,
+          ),
+        ),
+        TextSpan(
+          text: '$inforDetail',
+          style: TextStyle(
+       
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      ],
+    ),
+  );
+  }
+
   Widget buildAnimalList(List<Pet> animals) {
     final deviceWidth = MediaQuery.of(context).size.width;
+   
+
+    
 
     return Expanded(
       child: ListView.builder(
@@ -374,6 +407,17 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
           final animal = _searchKeyword.isEmpty && selectedPetType == ''
               ? animals[index]
               : _searchResults[index];
+
+      // Biến tạm thời để giữ giá trị khoảng cách
+        String distanceString = '';
+
+        // Gọi hàm tính khoảng cách và gán giá trị vào biến tạm thời
+        calculateDistance(currentClient.address, animal.centerId!.address)
+            .then((value) {
+          distanceString = value.toStringAsFixed(2);
+          // Bảo đảm cập nhật lại widget khi giá trị thay đổi
+      
+        });
 
           return GestureDetector(
             onTap: () {
@@ -390,6 +434,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
               );
             },
             child: Padding(
+            
               padding: const EdgeInsets.only(bottom: 28, right: 10, left: 20),
               child: Stack(
                 alignment: Alignment.centerLeft,
@@ -412,14 +457,19 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      animal.namePet,
-                                      style: TextStyle(
-                                        fontSize: 26,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    // Text(
+                                    //   'Name: ${animal.namePet}',
+                                    //   style: TextStyle(
+                                    //     fontSize: 16,
+                                    //     color: Theme.of(context).primaryColor,
+                                    //     fontWeight: FontWeight.bold,
+                                    //   ),
+                                    // ),
+                                    fieldInforPet('name', animal.namePet),
+
+                                    
+
+                                    
                                     Icon(
                                       animal.gender == "FEMALE"
                                           ? FontAwesomeIcons.venus
@@ -428,23 +478,26 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                Text(
-                                  animal.breed,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                                // Text(
+                                //   'Breed: ${animal.breed}',
+                                //   style: TextStyle(
+                                //     fontSize: 14,
+                                //     color: Theme.of(context).primaryColor,
+                                //     fontWeight: FontWeight.w500,
+                                //   ),
+                                // ),
+                                fieldInforPet('breed', animal.breed),
                                 const SizedBox(height: 10),
-                                Text(
-                                  '${animal.age} years old',
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                // Text(
+                                //   'Age: ${animal.age} years old',
+                                //   style: const TextStyle(
+                                //     color: Colors.grey,
+                                //     fontWeight: FontWeight.w600,
+                                //   ),
+                                // ),
+                                fieldInforPet('age', '${animal.age *12} months'),
                                 const SizedBox(height: 10),
+                              
                                 Row(
                                   children: [
                                     Icon(
@@ -455,6 +508,15 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                     const SizedBox(width: 6),
                                     Text(
                                       'Distance: ',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    
+                                    Text(
+                                      distanceString,                  
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Theme.of(context).primaryColor,
@@ -495,4 +557,27 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       ),
     );
   }
+
+   
+
+
+   
+  //tính toán khoảng cách 
+  Future<double> calculateDistance(String currentAddress, String otherAddress) async {
+    LatLng currentP=await convertAddressToLatLng(currentAddress);
+    print('địa chỉ 1: $currentP');
+    LatLng pDestination=await convertAddressToLatLng(otherAddress);
+    print('địa chỉ 2: $pDestination');
+    double distance =  Geolocator.distanceBetween(
+      currentP.latitude,
+      currentP.longitude,
+      pDestination.latitude,
+      pDestination.longitude,
+    );
+    print('ủa đc chưa: $distance');
+
+    return distance / 1000;
+  }
+
+
 }
