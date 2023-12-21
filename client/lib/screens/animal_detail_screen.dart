@@ -84,7 +84,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                   Icons.more_vert,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                onSelected: (String choice) async {
+                                onSelected: (String choice) {
                                   // Handle menu item selection
                                   if (choice == 'edit') {
                                     Navigator.push(
@@ -95,8 +95,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                       ),
                                     );
                                   } else if (choice == 'delete') {
-                                     await deletePet(widget.animal.id);
-                                     Navigator.of(context).pop();
+                                    _showDeleteConfirmationDialog(widget.animal.id);
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
@@ -644,6 +643,35 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(String petId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this pet?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await deletePet(petId);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

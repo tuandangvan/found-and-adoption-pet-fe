@@ -266,7 +266,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       });
                     },
                   ),
-                  const Text('Not know'),
+                  const Text('Unknown'),
                 ],
               ),
               const SizedBox(

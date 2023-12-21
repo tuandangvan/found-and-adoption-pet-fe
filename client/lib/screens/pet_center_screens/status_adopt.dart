@@ -413,7 +413,8 @@ class AdoptionTabView extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () async {
-                      await changeStatusAdoptCenter(adopt.id, "ACCEPTED");
+                      await _showDeleteConfirmationDialog(
+                          context, adopt.id, "ACCEPTED");
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,
@@ -440,7 +441,8 @@ class AdoptionTabView extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      await changeStatusAdoptCenter(adopt.id, "CANCELLED");
+                      await _showDeleteConfirmationDialog(
+                          context, adopt.id, "CANCELLED");
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,
@@ -493,7 +495,10 @@ class AdoptionTabView extends StatelessWidget {
               return ListView.builder(
                 itemCount: adopt!.length,
                 itemBuilder: (context, index) {
-                  return _buildAdoptionRequestCard(context, adopt![index]);
+                  if (adopt![index].petId != null) {
+                    return _buildAdoptionRequestCard(context, adopt![index]);
+                  }
+                  return null;
                 },
               );
             } else {
@@ -508,5 +513,35 @@ class AdoptionTabView extends StatelessWidget {
           }
           return const Center();
         });
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+      context, String adoptId, status) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm cancel'),
+          content: Text(
+              'Are you sure you want to ${status == 'ACCEPTED' ? 'accept' : 'cancel'} this request?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await changeStatusAdoptUser(adoptId, status);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text('Done'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
