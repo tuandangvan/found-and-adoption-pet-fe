@@ -40,12 +40,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My profiles'),
+        title: Text(
+          'My profiles',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
+          ),
+        ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            size: 20,
-            color: Colors.white,
+            size: 25,
+            color: Color.fromRGBO(48, 96, 96, 1.0),
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -57,8 +64,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-              child: CircularProgressIndicator(),
-            );
+                child: CircularProgressIndicator(),
+              );
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
@@ -281,9 +288,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ? textPhoneNumber
                     : (labelText == "Address" ? textAddress : null))),
         readOnly: isReadOnly,
+        enabled: !isReadOnly,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 5),
             labelText: labelText,
+            labelStyle: TextStyle(
+                fontSize: 18,
+                color: (labelText == 'Email' || labelText == 'Role')
+                    ? Colors.grey
+                    : Color.fromRGBO(48, 96, 96, 1.0),
+                fontWeight: FontWeight.bold),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
             hintStyle: TextStyle(

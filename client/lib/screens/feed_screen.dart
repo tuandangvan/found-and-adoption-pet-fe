@@ -32,7 +32,7 @@ class _FeedScreenState extends State<FeedScreen> {
           title: const Text(
             'Pet stories',
             style:
-                TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0), fontSize: 23),
+                TextStyle(color: Color.fromRGBO(48, 96, 96, 1.0),fontWeight: FontWeight.bold, fontSize: 26),
           ),
           leading: IconButton(
             onPressed: () async {

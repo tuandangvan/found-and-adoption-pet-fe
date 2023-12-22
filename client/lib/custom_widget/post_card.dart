@@ -358,6 +358,8 @@ class _PostCardState extends State<PostCard> {
 
           //LIKE+COMMENT SECTION
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: IconButton(
@@ -387,20 +389,26 @@ class _PostCardState extends State<PostCard> {
                   iconSize: 29.0,
                 ),
               ),
-              Expanded(
-                child: IconButton(
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CommentScreen(postId: clientPost.id)));
-                  },
-                  icon:
-                      const Icon(Icons.chat_bubble_outline, color: Colors.red),
-                  iconSize: 29.0,
-                ),
-              ),
+           
+      
+                
+            
+                    IconButton(
+                      onPressed: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CommentScreen(postId: clientPost.id)));
+                      },
+                      icon: const Icon(Icons.chat_bubble_outline,
+                          color: Colors.red),
+                      iconSize: 29.0,
+                    ),
+                    
+                  
+                
+              
               Expanded(
                 child: IconButton(
                   onPressed: () {},
@@ -431,8 +439,24 @@ class _PostCardState extends State<PostCard> {
                     child: Container(
                         child: Text(
                       '${quantityLike} likes',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ))),
+                      style: const TextStyle(fontStyle: FontStyle.italic, color: Color.fromARGB(255, 146, 144, 144)),
+                    ),
+                    ),
+                    ),
+
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CommentScreen(postId: clientPost.id)));
+                      },
+                      child: Text(
+                        'View all ${clientPost.comments.length} comments',
+                        style: const TextStyle(fontSize: 15, color: Color.fromARGB(255, 146, 144, 144), fontStyle: FontStyle.italic),
+                      ),
+                    ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
@@ -454,21 +478,6 @@ class _PostCardState extends State<PostCard> {
                           style: const TextStyle(fontWeight: FontWeight.normal),
                         )
                       ])),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CommentScreen(postId: clientPost.id)));
-                  },
-                  child: Container(
-                    child: Text(
-                      'View all ${clientPost.comments.length} comments',
-                      style: const TextStyle(fontSize: 15, color: Colors.black),
-                    ),
-                  ),
                 ),
                 const SizedBox(
                   height: 5,

@@ -293,7 +293,6 @@ class _EditPetScreenState extends State<EditPetScreen> {
                           _colorController.text == '' ||
                           _ageController.text == '' ||
                           _descriptionController.text == '' ||
-                          imageFileList.isEmpty ||
                           _selectedPetType == '' ||
                           _selectedGender == '') {
                         notification(

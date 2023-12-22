@@ -39,7 +39,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              Column(children: [
+              Column(
+                children: [
                 // the login button
                 MaterialButton(
                   minWidth: double.infinity,

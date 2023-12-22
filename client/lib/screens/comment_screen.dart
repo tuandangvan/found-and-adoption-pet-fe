@@ -139,7 +139,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 itemCount: comments.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 4.0, 2.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(10.0, 4.0, 2.0, 0.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -187,7 +187,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             ),
                           ),
                           title: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
+                            padding: const EdgeInsets.fromLTRB(8.0, 10.0, 4.0, 4.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 color: Colors.grey.shade200),
@@ -239,12 +239,12 @@ class _CommentScreenState extends State<CommentScreen> {
                               ],
                             ),
                           ),
-                          trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              )),
+                          // trailing: IconButton(
+                          //     onPressed: () {},
+                          //     icon: const Icon(
+                          //       Icons.favorite,
+                          //       color: Colors.red,
+                          //     )),
                         ),
                       ],
                     ),
