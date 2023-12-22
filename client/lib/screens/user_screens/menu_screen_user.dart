@@ -22,7 +22,7 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
     'Manage Adopt',
     'Notify',
     // 'Favorite',
-    'Messages',
+    // 'Messages',
   ];
 
   List<IconData> icons = [
@@ -32,7 +32,7 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
     FontAwesomeIcons.checkToSlot,
     FontAwesomeIcons.bell,
     // FontAwesomeIcons.heart,
-    FontAwesomeIcons.envelope,
+    // FontAwesomeIcons.envelope,
   ];
 
   Widget buildMenuRow(int index) {
@@ -89,23 +89,36 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
                   children: [
                     CircleAvatar(
                       radius: 24.0,
-                      backgroundColor: Colors.orange,
+                      backgroundImage: AssetImage('assets/images/Lan.jpg')
+                      
                     ),
                     SizedBox(width: 16),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Ryan',
+                            'Đỗ Mỹ Lan',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20),
                           ),
-                          Text(
-                            'Active Status',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          Row(
+      children: [
+        Icon(
+          Icons.circle, // Chọn một icon màu xanh, ví dụ: đánh dấu đúng (check mark)
+          color: Colors.green, // Màu xanh
+          size: 12,
+        ),
+        SizedBox(width: 8.0), // Khoảng cách giữa icon và văn bản
+        Text(
+          'Đang hoạt động',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
                         ])
                   ],
                 ),
@@ -118,21 +131,27 @@ class _MenuUserScreenState extends State<MenuUserScreen> {
                       .toList(),
                 ),
                 Row(
+                 
                   children: [
+                    // Icon(
+                    //   FontAwesomeIcons.gear,
+                    //   color: Colors.white.withOpacity(0.5),
+                    // ),
+                    // SizedBox(width: 16),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: Text(
+                    //     'Settings      |',
+                    //     style: TextStyle(
+                    //         color: Colors.white.withOpacity(0.5),
+                    //         fontSize: 20,
+                    //         fontWeight: FontWeight.w600),
+                    //   ),
+                    // ),
+
                     Icon(
-                      FontAwesomeIcons.gear,
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                    SizedBox(width: 16),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Settings      |',
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.5),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      Icons.logout_rounded,
+                      color: Colors.white.withOpacity(0.5)
                     ),
                     TextButton(
                         onPressed: () async {

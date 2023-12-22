@@ -222,11 +222,11 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Icon(
-                              FontAwesomeIcons.mapMarkerAlt,
-                              color: Theme.of(context).primaryColor,
-                              size: 15,
-                            ),
+                            // Icon(
+                            //   FontAwesomeIcons.mapMarkerAlt,
+                            //   color: Theme.of(context).primaryColor,
+                            //   size: 15,
+                            // ),
                             Expanded(
                               child: Align(
                                 alignment: Alignment.center,
@@ -511,7 +511,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                       ),
                                     ),
                                     Text(
-                                      distanceString,
+                                      // distanceString,
+                                      '4.3 km',
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Theme.of(context).primaryColor,

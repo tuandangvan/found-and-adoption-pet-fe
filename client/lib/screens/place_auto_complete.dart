@@ -95,10 +95,15 @@ Future<LatLng> convertAddressToLatLng(String inputAddress) async {
     // Thay thế bằng API key của bạn
     const apiKey = 'AIzaSyDYwGbz4F815dZreWn-rUqR8HK7wyChHtI';
 
+
+    final encodedAddress = Uri.encodeComponent(inputAddress);
+    print('test 111: $encodedAddress');
+
     final endpoint =
-        'http://maps.googleapis.com/maps/api/geocode/json?address=$inputAddress&key=$apiKey';
+        'http://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey';
 
     final response = await http.get(Uri.parse(endpoint));
+    print('test endpoint: $endpoint');
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

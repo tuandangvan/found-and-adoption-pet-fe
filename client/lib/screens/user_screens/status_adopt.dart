@@ -161,7 +161,7 @@ class AdoptionTabView extends StatelessWidget {
                                     ));
                           },
                           child: Text(
-                            adopt.userId!.lastName,
+                            '${adopt.userId!.firstName} ${adopt.userId!.lastName}',
                             style: const TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
@@ -252,6 +252,7 @@ class AdoptionTabView extends StatelessWidget {
                           ),
                         ],
                       ),
+                     
                     ],
                   ),
                 ),
@@ -332,6 +333,7 @@ class AdoptionTabView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
+                      textAlign: TextAlign.center,
                       'Express Adoption Interest:',
                       style: TextStyle(
                         fontSize: 15.0,

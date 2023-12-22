@@ -211,7 +211,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       ),
                     )
                   : Padding(
-                      padding: const EdgeInsets.only(top: 45),
+                      padding: const EdgeInsets.fromLTRB(4.0, 45, 4.0, 4.0),
                       child: Container(
                         // height: MediaQuery.sizeOf(context).height * 0.45,
                         color: Colors.white,
@@ -455,7 +455,31 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               //     : const SizedBox(
               //         height: 0,
               //       ),
+
+              MaterialButton(
+                  color: Theme.of(context).primaryColor,
+                  minWidth: double.infinity,
+                  height: 60,
+                  onPressed: () {
+                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditPetScreen(pet: widget.animal),
+                                      ),
+                                    );
+                  },
+                  // defining the shape
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Text(
+                    "Edit Pet",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
+                  ),
+                ),
             ],
+
           ),
 
           //THÔNG TIN PET
