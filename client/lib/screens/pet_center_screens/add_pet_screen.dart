@@ -211,32 +211,32 @@ class _AddPetScreenState extends State<AddPetScreen> {
               ),
 
               //DropdownButtonFormField LEVEL
-              DropdownButtonFormField<String>(
-                value: _selectedLevel,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedLevel = value!;
-                  });
-                },
-                decoration: const InputDecoration(labelText: 'Level'),
-                items: ['URGENT', 'NORMAL']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 192, 77, 36)),
-                    ),
-                  );
-                }).toList(),
-              ),
+              // DropdownButtonFormField<String>(
+              //   value: _selectedLevel,
+              //   onChanged: (String? value) {
+              //     setState(() {
+              //       _selectedLevel = value!;
+              //     });
+              //   },
+              //   decoration: const InputDecoration(labelText: 'Level'),
+              //   items: ['URGENT', 'NORMAL']
+              //       .map<DropdownMenuItem<String>>((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(
+              //         value,
+              //         style: const TextStyle(
+              //             color: Color.fromARGB(255, 192, 77, 36)),
+              //       ),
+              //     );
+              //   }).toList(),
+              // ),
 
               // Your other form fields go here
 
               Row(
                 children: [
-                  const Text('Gender:'),
+                  const Text('Gender:', style: TextStyle(fontSize: 12),) ,
                   Radio(
                     value: 'MALE',
                     groupValue: _selectedGender,
@@ -246,7 +246,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       });
                     },
                   ),
-                  const Text('Male'),
+                  const Text('Male', style: TextStyle(fontSize: 12),),
                   Radio(
                     value: 'FEMALE',
                     groupValue: _selectedGender,
@@ -256,7 +256,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       });
                     },
                   ),
-                  const Text('Female'),
+                  const Text('Female', style: TextStyle(fontSize: 12),),
                   Radio(
                     value: 'ORTHER',
                     groupValue: _selectedGender,

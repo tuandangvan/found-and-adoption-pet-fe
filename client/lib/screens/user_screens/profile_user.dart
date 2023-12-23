@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
 import 'package:found_adoption_application/models/post.dart';
 import 'package:found_adoption_application/models/userInfo.dart';
+import 'package:found_adoption_application/screens/change_password.dart';
 import 'package:found_adoption_application/screens/map_page.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/place_auto_complete.dart';
@@ -190,6 +191,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     icon: Icon(Icons.edit,
                                                         color: Colors.white),
                                                     label: Text('Edit profile'),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                      onPrimary: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                //Update Password
+                                                PopupMenuItem(
+                                                  value: 1,
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  UpdatePasswordScreen()));
+                                                    },
+                                                    icon: Icon(Icons.password,
+                                                        color: Colors.white),
+                                                    label: Text('Change Password'),
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       primary: Theme.of(context)
