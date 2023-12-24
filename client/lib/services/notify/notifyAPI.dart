@@ -16,7 +16,7 @@ Future<List<Notify>> getNotify() async {
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+    // notification(e.toString(), true);
   }
   return adopts;
 }

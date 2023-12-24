@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 title: const Text('Forgot Password'),
                                 content: TextField(
                                   controller: _controller,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     labelText: 'Enter your email',
                                   ),
                                 ),
