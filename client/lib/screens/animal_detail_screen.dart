@@ -139,7 +139,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       ? Positioned(
                         
                         child: Padding(
-                            padding: const EdgeInsets.only(top: 82),
+                            padding: const EdgeInsets.only(top: 78),
                             child: Container(
                               // height: MediaQuery.sizeOf(context).height * 0.45,
                               color: Colors.white,
@@ -223,7 +223,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                           ),
                       )
                       : Padding(
-                          padding: const EdgeInsets.only(top: 82),
+                          padding: const EdgeInsets.only(top: 78),
                           child: Container(
                             // height: MediaQuery.sizeOf(context).height * 0.45,
                             color: Colors.white,
