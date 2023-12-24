@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/services/auth_api.dart';
-import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:found_adoption_application/models/current_center.dart';
