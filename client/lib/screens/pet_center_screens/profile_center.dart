@@ -19,6 +19,7 @@ import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:found_adoption_application/screens/change_password.dart';
 
 class ProfileCenterPage extends StatefulWidget {
   final centerId;
@@ -218,6 +219,29 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                                           ),
                                         ),
                                       ),
+
+                                      //Update Password
+                                                PopupMenuItem(
+                                                  value: 1,
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  UpdatePasswordScreen()));
+                                                    },
+                                                    icon: Icon(Icons.password,
+                                                        color: Colors.white),
+                                                    label: Text('Change Password'),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
+                                                      onPrimary: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
                                       PopupMenuItem(
                                         value: 2,
                                         child: ElevatedButton.icon(
@@ -286,10 +310,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     buildInfo(center.aboutMe),
                     SizedBox(height: 16.0),
 
-                    // Experience
-                    // buildSectionHeader('Experience', Icons.work),
-                    // buildInfo(
-                    //     'Y tế rất nà xịn xò nhé. Khó khăn cứ alo trung tâm...hí hí'),
+                    
                     SizedBox(height: 16.0),
 
                     Container(
