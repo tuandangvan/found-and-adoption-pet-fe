@@ -34,551 +34,488 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+     
       resizeToAvoidBottomInset: false,
+    
       body: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         children: [
           Column(
+
+    
             children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Container(
-                    child: widget.animal.images.length == 1
-                        ? Hero(
-                            tag: widget.animal.namePet,
-                            child: Image(
-                              height: screenHeight * 0.5,
-                              width: double.infinity,
-                              image: NetworkImage(widget.animal.images.first),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : _slider(widget.animal.images),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        currentClient.role == 'CENTER'
-                            ? PopupMenuButton<String>(
-                                color: Colors.white,
-                                icon: Icon(
-                                  Icons.more_vert,
+           
+                  Stack(
+                    alignment: Alignment.topLeft,
+                    children: [
+                      Container(
+                        child: widget.animal.images.length == 1
+                            ? Hero(
+                                tag: widget.animal.namePet,
+                                child: Image(
+                                  height: screenHeight * 0.52,
+                                  width: double.infinity,
+                                  image: NetworkImage(widget.animal.images.first),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : _slider(widget.animal.images),
+                      ),
+                  
+                      
+                         Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Icon(
+                                  Icons.arrow_back_ios,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                onSelected: (String choice) {
-                                  // Handle menu item selection
-                                  if (choice == 'edit') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditPetScreen(pet: widget.animal),
-                                      ),
-                                    );
-                                  } else if (choice == 'delete') {
-                                    _showDeleteConfirmationDialog(
-                                        widget.animal.id);
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<String>>[
-                                  PopupMenuItem<String>(
-                                    value: 'edit',
-                                    child: Text(
-                                      'Edit',
-                                      style: TextStyle(
+                              ),
+                              currentClient.role == 'CENTER'
+                                  ? PopupMenuButton<String>(
+                                      color: Colors.white,
+                                      icon: Icon(
+                                        Icons.more_vert,
                                         color: Theme.of(context).primaryColor,
                                       ),
-                                    ),
-                                  ),
-                                  PopupMenuItem<String>(
-                                    value: 'delete',
-                                    child: Text(
-                                      'Delete',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              //Nửa giao diện ở dưới(bắt đầu chứa content của user)
-              currentClient.role == 'CENTER'
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 70),
-                      child: Container(
-                        // height: MediaQuery.sizeOf(context).height * 0.45,
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundImage: NetworkImage(
-                                      widget.animal.statusAdopt ==
-                                              'HAS_ONE_OWNER'
-                                          ? widget.animal.foundOwner!.avatar
-                                          : widget.animal.centerId!.avatar,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10.0),
-                                          child: Text(
-                                            widget.animal.statusAdopt ==
-                                                    'HAS_ONE_OWNER'
-                                                ? '${widget.animal.foundOwner!.firstName} ${widget.animal.foundOwner!.lastName}'
-                                                : widget.animal.centerId!.name,
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                      onSelected: (String choice) {
+                                        // Handle menu item selection
+                                        if (choice == 'edit') {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditPetScreen(pet: widget.animal),
                                             ),
-                                            softWrap: true,
+                                          );
+                                        } else if (choice == 'delete') {
+                                          _showDeleteConfirmationDialog(
+                                              widget.animal.id);
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry<String>>[
+                                        PopupMenuItem<String>(
+                                          value: 'edit',
+                                          child: Text(
+                                            'Edit',
+                                            style: TextStyle(
+                                              color: Theme.of(context).primaryColor,
+                                            ),
                                           ),
                                         ),
-                                        Align(
-                                          alignment: Alignment.topLeft,
+                                        PopupMenuItem<String>(
+                                          value: 'delete',
                                           child: Text(
-                                            DateFormat.yMMMMd()
-                                                .add_Hms()
-                                                .format(
-                                                    widget.animal.createdAt!),
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle: FontStyle.italic,
+                                            'Delete',
+                                            style: TextStyle(
+                                              color: Theme.of(context).primaryColor,
                                             ),
                                           ),
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                widget.animal.description.toString(),
-                                style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14),
-                              ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.fromLTRB(4.0, 45, 4.0, 4.0),
-                      child: Container(
-                        // height: MediaQuery.sizeOf(context).height * 0.45,
-                        color: Colors.white,
+                      
+                    ],
+                  ),
+                  
+                  //Nửa giao diện ở dưới(bắt đầu chứa content của user)
+                  currentClient.role == 'CENTER'
+                      ? Positioned(
+                        
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundImage: NetworkImage(
-                                      widget.animal.statusAdopt ==
-                                              'HAS_ONE_OWNER'
-                                          ? widget.animal.foundOwner!.avatar
-                                          : widget.animal.centerId!.avatar,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                            padding: const EdgeInsets.only(top: 65),
+                            child: Container(
+                              // height: MediaQuery.sizeOf(context).height * 0.45,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10.0),
-                                          child: Text(
+                                        CircleAvatar(
+                                          radius: 30.0,
+                                          backgroundImage: NetworkImage(
                                             widget.animal.statusAdopt ==
                                                     'HAS_ONE_OWNER'
-                                                ? '${widget.animal.foundOwner!.firstName} ${widget.animal.foundOwner!.lastName}'
-                                                : widget.animal.centerId!.name,
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            softWrap: true,
+                                                ? widget.animal.foundOwner!.avatar
+                                                : widget.animal.centerId!.avatar,
                                           ),
                                         ),
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            DateFormat.yMMMMd()
-                                                .add_Hms()
-                                                .format(
-                                                    widget.animal.createdAt!),
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                widget.animal.description.toString(),
-                                style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14),
-                              ),
-
-                              //Button Adoption
-                              Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Material(
-                                        borderRadius: BorderRadius.circular(20),
-                                        elevation: 4,
-                                        color: Theme.of(context).primaryColor,
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(20.0),
-                                          child: Icon(
-                                            FontAwesomeIcons.heart,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      widget.animal.statusAdopt !=
-                                              'HAS_ONE_OWNER'
-                                          ? Expanded(
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showInfoInputDialog(context,
-                                                      widget.animal.id);
-                                                },
-                                                child: Material(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  elevation: 4,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(20.0),
-                                                    child: Text(
-                                                      'Adoption',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 10.0),
+                                                child: Text(
+                                                  widget.animal.statusAdopt ==
+                                                          'HAS_ONE_OWNER'
+                                                      ? '${widget.animal.foundOwner!.firstName} ${widget.animal.foundOwner!.lastName}'
+                                                      : widget.animal.centerId!.name,
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  softWrap: true,
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  DateFormat.yMMMMd()
+                                                      .add_Hms()
+                                                      .format(
+                                                          widget.animal.createdAt!),
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle: FontStyle.italic,
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                          : const SizedBox(
-                                              height: 0,
-                                              
-                                            ),
-                                      // const SizedBox(
-                                      //   width: 10,
-                                      // ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-              currentClient.role == "USER"
-                  ? Container(
-                      height: 5,
-                      decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.06),
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(30),
-                            topLeft: Radius.circular(30),
-                          )),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 22),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Material(
-                              borderRadius: BorderRadius.circular(20),
-                              elevation: 4,
-                              color: Theme.of(context).primaryColor,
-                              child: const Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Icon(
-                                  FontAwesomeIcons.heart,
-                                  color: Colors.white,
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      height: screenHeight*0.15,
+                                      child: Text(
+                                        widget.animal.description.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                           
-                            widget.animal.statusAdopt != 'HAS_ONE_OWNER'
-                                ? Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        showInfoInputDialog(
-                                            context, widget.animal.id);
-                                      },
-                                      child: Material(
-                                        borderRadius: BorderRadius.circular(20),
-                                        elevation: 4,
-                                        color: Theme.of(context).primaryColor,
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(20.0),
-                                          child: Text(
-                                            'Adoption',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
-                                            textAlign: TextAlign.center,
-                                          ),
+                          ),
+                      )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 70),
+                          child: Container(
+                            // height: MediaQuery.sizeOf(context).height * 0.45,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 30.0,
+                                        backgroundImage: NetworkImage(
+                                          widget.animal.statusAdopt ==
+                                                  'HAS_ONE_OWNER'
+                                              ? widget.animal.foundOwner!.avatar
+                                              : widget.animal.centerId!.avatar,
                                         ),
                                       ),
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 0,
-                                  ),
-                            const SizedBox(
-                              width: 0,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
-              currentClient.role == 'CENTER'
-                  ? 
-                    
-                         MaterialButton(
-                  color: Theme.of(context).primaryColor,
-                  minWidth: double.infinity,
-                  height: 60,
-                  onPressed: () {
-                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditPetScreen(pet: widget.animal),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 10.0),
+                                              child: Text(
+                                                widget.animal.statusAdopt ==
+                                                        'HAS_ONE_OWNER'
+                                                    ? '${widget.animal.foundOwner!.firstName} ${widget.animal.foundOwner!.lastName}'
+                                                    : widget.animal.centerId!.name,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                softWrap: true,
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                DateFormat.yMMMMd()
+                                                    .add_Hms()
+                                                    .format(
+                                                        widget.animal.createdAt!),
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    );
-                  },
-                  // defining the shape
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "Edit Pet",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
-                  ),
-                
-                      
-                    )
-                  : const SizedBox(
-                      height: 0,
-                    ),
+                                    ],
+                                  ),
+                                  Text(
+                                    widget.animal.description.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14),
+                                  ),
+                  
+                               
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                  currentClient.role == "USER" 
+                      ? Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                            height: 60,
+                            decoration: BoxDecoration(
+                                color:
+                                    Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(30),
+                                  topLeft: Radius.circular(30),
+                                )),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 22),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Material(
+                                    borderRadius: BorderRadius.circular(20),
+                                    elevation: 4,
+                                    color: Theme.of(context).primaryColor,
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: Icon(
+                                        FontAwesomeIcons.heart,
+                                        color: Colors.white,
+                                      ),
+                                      
+                                    ),
+                                  ),
+                                 const SizedBox(width: 8,),
+                                 
+                                       Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              showInfoInputDialog(
+                                                  context, widget.animal.id);
+                                            },
+                                            child: Material(
+                                              borderRadius: BorderRadius.circular(20),
+                                              elevation: 4,
+                                              color: Theme.of(context).primaryColor,
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(20.0),
+                                                child: Text(
+                                                  'Adoption',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 18),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                     
+                                
+                                ],
+                              ),
+                            ),
+                          ),
+                      )
+                      : const SizedBox(),  //HIỂN THỊ 2 BUTTON CỦA USER
+                  
+                  currentClient.role == 'CENTER' &&widget.animal.statusAdopt != 'HAS_ONE_OWNER'
+                      ? 
+                        
+                             Padding(
+                              padding: EdgeInsets.all(2),
+                               child: MaterialButton(
+                                                 color: Theme.of(context).primaryColor,
+                                                 minWidth: double.infinity,
+                                                 height: 60,
+                                                 onPressed: () {
+                                                   Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditPetScreen(pet: widget.animal),
+                                            ),
+                                          );
+                                                 },
+                                                 // defining the shape
+                                                 shape: RoundedRectangleBorder(
+                                                     side: BorderSide(color: Colors.black),
+                                                     borderRadius: BorderRadius.circular(50)),
+                                                 child: Text(
+                                                   "Edit Pet",
+                                                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
+                                                 ),
+                                               
+                                                     
+                                                   ),
+                             )
+                      : const SizedBox(
+                          height: 0,
+                        ),
+              
 
-              // MaterialButton(
-              //     color: Theme.of(context).primaryColor,
-              //     minWidth: double.infinity,
-              //     height: 60,
-              //     onPressed: () {
-              //       Navigator.push(
-              //                         context,
-              //                         MaterialPageRoute(
-              //                           builder: (context) =>
-              //                               EditPetScreen(pet: widget.animal),
-              //                         ),
-              //                       );
-              //     },
-              //     // defining the shape
-              //     shape: RoundedRectangleBorder(
-              //         side: BorderSide(color: Colors.black),
-              //         borderRadius: BorderRadius.circular(50)),
-              //     child: Text(
-              //       "Edit Pet",
-              //       style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
-              //     ),
-              //   ),
+              
             ],
 
           ),
 
           //THÔNG TIN PET
 
-          Padding(
-            padding: const EdgeInsets.all(3),
-            child: Material(
-              elevation: 8,
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                width: MediaQuery.of(context).size.width * 0.7,
-
-                // height: 170,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(Icons.badge, color: Colors.grey),
-                            SizedBox(width: 8),
-                            Text(
-                              widget.animal.namePet,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Icon(widget.animal.gender == 'FEMALE'
-                            ? FontAwesomeIcons.venus
-                            : FontAwesomeIcons.mars),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(Icons.pets, color: Colors.grey),
-                            SizedBox(width: 8),
-                            Text(
-                              widget.animal.breed,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '${widget.animal.age} years old',
-                          style: const TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.mapMarkerAlt,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(width: 8),
-                          ],
-                        ),
-                        Expanded(
-                          child: Text(
-                            widget.animal.centerId!.address,
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400),
-
-                            softWrap:
-                                true, // Để cho phép văn bản xuống dòng khi quá dài
+          Positioned(
+             top: MediaQuery.of(context).size.height*0.42, // Điều chỉnh giá trị top để đặt vị trí theo chiều cao
+            left:MediaQuery.of(context).size.height*0.05,
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  width: MediaQuery.of(context).size.width * 0.75,
+            
+                  // height: 170,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+            
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.badge, color: Colors.grey),
+                              SizedBox(width: 8),
+                              Text(
+                                widget.animal.namePet,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontStyle: FontStyle.italic,
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Icon(widget.animal.gender == 'FEMALE'
+                              ? FontAwesomeIcons.venus
+                              : FontAwesomeIcons.mars),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.pets, color: Colors.grey),
+                              SizedBox(width: 8),
+                              Text(
+                                widget.animal.breed,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '${widget.animal.age} years old',
+                            style: const TextStyle(
+                                color: Colors.grey, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.mapMarkerAlt,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                            ],
+                          ),
+                          Expanded(
+                            child: Text(
+                                widget.animal.centerId!.address,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                softWrap: true,
+                                maxLines: 3, // Giới hạn số dòng là 3
+                                overflow: TextOverflow.ellipsis, // Hiển thị dấu ba chấm (...) khi vượt quá số dòng
+                              ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
