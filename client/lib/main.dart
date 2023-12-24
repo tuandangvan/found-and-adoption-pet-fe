@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
+import 'package:found_adoption_application/services/auth_api.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
-import 'package:found_adoption_application/screens/pet_found.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -56,6 +57,11 @@ class _MyAppState extends State<MyApp> {
   Future<bool> hasValidRefreshToken = checkRefreshToken();
 
   late io.Socket socket;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   var serverUrl = 'http://socket-found-adoption-dangvantuan.koyeb.app';
 
@@ -86,6 +92,26 @@ class _MyAppState extends State<MyApp> {
                             currentUser != null && currentUser.role == 'USER'
                                 ? currentUser
                                 : currentCenter;
+
+                        Map<String, dynamic> decodedToken =
+                            Jwt.parseJwt(currentClient.refreshToken);
+                        DateTime expirationTime =
+                            DateTime.fromMillisecondsSinceEpoch(
+                                decodedToken['exp'] * 1000);
+                        DateTime now = DateTime.now();
+
+                        bool isTokenExpired = now.isAfter(expirationTime);
+                        if (!isTokenExpired) {
+                          refreshAccessToken();
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => WelcomeScreen())));
+                          notification(
+                              "The login session has expired, please log in again!",
+                              false);
+                        }
 
                         if (currentClient != null) {
                           //connect socket server

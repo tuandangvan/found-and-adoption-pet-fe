@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/like_model.dart';
 import 'package:found_adoption_application/screens/comment_screen.dart';
 import 'package:found_adoption_application/screens/edit_post_screen.dart';
@@ -132,12 +133,24 @@ class _PostCardState extends State<PostCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            clientPost.userId != null
-                                ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
-                                : clientPost.petCenterId.name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                          Row(
+                            children: [
+                              Text(
+                                clientPost.userId != null
+                                    ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
+                                    : clientPost.petCenterId.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              clientPost.userId == null
+                                  ? Icon(FontAwesomeIcons.paw,
+                                      size: 12, color: Colors.grey)
+                                  : Icon(FontAwesomeIcons.user,
+                                      size: 12, color: Colors.grey)
+                            ],
                           ),
 
                           //Thời gian đăng bài
@@ -389,26 +402,17 @@ class _PostCardState extends State<PostCard> {
                   iconSize: 29.0,
                 ),
               ),
-           
-      
-                
-            
-                    IconButton(
-                      onPressed: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CommentScreen(postId: clientPost.id)));
-                      },
-                      icon: const Icon(Icons.chat_bubble_outline,
-                          color: Colors.red),
-                      iconSize: 29.0,
-                    ),
-                    
-                  
-                
-              
+              IconButton(
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CommentScreen(postId: clientPost.id)));
+                },
+                icon: const Icon(Icons.chat_bubble_outline, color: Colors.red),
+                iconSize: 29.0,
+              ),
               Expanded(
                 child: IconButton(
                   onPressed: () {},
@@ -429,34 +433,38 @@ class _PostCardState extends State<PostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  LikeScreen(postId: clientPost.id)));
-                    },
-                    child: Container(
-                        child: Text(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LikeScreen(postId: clientPost.id)));
+                  },
+                  child: Container(
+                    child: Text(
                       '${quantityLike} likes',
-                      style: const TextStyle(fontStyle: FontStyle.italic, color: Color.fromARGB(255, 146, 144, 144)),
+                      style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Color.fromARGB(255, 146, 144, 144)),
                     ),
-                    ),
-                    ),
-
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CommentScreen(postId: clientPost.id)));
-                      },
-                      child: Text(
-                        'View all ${clientPost.comments.length} comments',
-                        style: const TextStyle(fontSize: 15, color: Color.fromARGB(255, 146, 144, 144), fontStyle: FontStyle.italic),
-                      ),
-                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CommentScreen(postId: clientPost.id)));
+                  },
+                  child: Text(
+                    'View all ${clientPost.comments.length} comments',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Color.fromARGB(255, 146, 144, 144),
+                        fontStyle: FontStyle.italic),
+                  ),
+                ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),

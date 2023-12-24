@@ -36,7 +36,7 @@ Future<List<Adopt>> getStatusAdoptCenter(String status) async {
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+    // notification(e.toString(), true);
   }
   // ignore: cast_from_null_always_fails
   return null as List<Adopt>;
@@ -55,7 +55,7 @@ Future<List<Adopt>> getStatusAdoptUser(String status) async {
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+    // notification(e.toString(), true);
   }
   // ignore: cast_from_null_always_fails
   return null as List<Adopt>;
@@ -72,7 +72,7 @@ Future<void> changeStatusAdoptCenter(String adoptId, String statusAdopt) async {
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+    // notification(e.toString(), true);
   }
 }
 
@@ -87,7 +87,7 @@ Future<void> changeStatusAdoptUser(String adoptId, String statusAdopt) async {
     }
   } catch (e) {
     print(e);
-    notification(e.toString(), true);
+    // notification(e.toString(), true);
   }
 }
 
