@@ -152,8 +152,10 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isLoading) {
-      return Padding(
+      return Scaffold(
+      body: isLoading
+      ?CircularProgressIndicator()
+      :Padding(
         padding: const EdgeInsets.only(top: 60),
         child: Column(
           children: [
@@ -297,10 +299,9 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             ),
           ],
         ),
+      )
       );
-    } else {
-      return Scaffold();
-    }
+
   }
 
   Widget buildSearchBar() {
