@@ -130,6 +130,44 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 16.0, // Kích thước chữ của toast
                           );
                         } else {
+                          // showDialog(
+                          //   context: context,
+                          //   barrierDismissible: false,
+                          //   builder: (BuildContext context) {
+                          //     return FutureBuilder(
+                          //       future: login(
+                          //         context,
+                          //         emailController.text.toString(),
+                          //         passwordController.text.toString(),
+                          //       ),
+                          //       builder: (context, snapshot) {
+                          //         if (snapshot.connectionState ==
+                          //             ConnectionState.waiting) {
+                          //           return Dialog(
+                          //             backgroundColor: Colors.transparent,
+                          //             child: new Container(
+                          //               width: 50.0,
+                          //               height: 50.0,
+                          //               child: new Center(
+                          //                 child:
+                          //                     const CircularProgressIndicator(),
+                          //               ),
+                          //             ),
+                          //           );
+                          //         } else {
+                          //           if (snapshot.error != null) {
+                          //             // Handle error
+                          //             return Text('An error occurred!');
+                          //           } else {
+                          //             // Handle completed
+                          //             return Container();
+                          //           }
+                          //         }
+                          //       },
+                          //     );
+                          //   },
+                          // );
+
                           await login(
                             context,
                             emailController.text.toString(),

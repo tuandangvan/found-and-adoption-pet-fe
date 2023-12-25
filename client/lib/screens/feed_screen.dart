@@ -89,7 +89,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return const Center(child: Text('Please try again later'));
               } else {
                 List<Post>? postList = snapshot.data;
 

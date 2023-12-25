@@ -299,7 +299,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
         ),
       );
     } else {
-      return Scaffold();
+      return const CircularProgressIndicator();
     }
   }
 
@@ -355,11 +355,11 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       future: getAllPet(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return const Center(child: Text('Please try again later'));
         } else {
           animals = snapshot.data ?? [];
           return buildAnimalList(animals);

@@ -438,7 +438,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     });
                   });
                 }
-                notification(message, false);
+                notification('he comment has been deleted', false);
               },
               child: Text('Delete'),
             ),
