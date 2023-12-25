@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/like_model.dart';
@@ -56,9 +57,11 @@ class _PostCardState extends State<PostCard> {
 
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
+    final int maxLines = 3;
     return Card(
       color: Colors.white,
       elevation: 5,
@@ -468,24 +471,56 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
-                  child: RichText(
-                      text: TextSpan(
-                          style: const TextStyle(color: Colors.black),
-                          children: [
-                        TextSpan(
-                          // text: clientPost.petCenterId!.name,
-                          text: clientPost.userId != null
-                              ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
-                              : clientPost.petCenterId
-                                  .name, // Xử lý trường hợp khác nếu cần thiết
-                          // '${snapshot.data!.userId.firstName} ${snapshot.data!.userId.lastName}    ',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: '  ${clientPost.content}',
-                          style: const TextStyle(fontWeight: FontWeight.normal),
-                        )
-                      ])),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              TextSpan(
+                                text: clientPost.userId != null
+                                    ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
+                                    : clientPost.petCenterId.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              // TextSpan(
+                              //   text: '  ${clientPost.content}',
+                              //   style:
+                              //       const TextStyle(fontWeight: FontWeight.normal),
+                              // )
+
+                              TextSpan(
+                  text: isExpanded
+                      ? '  ${clientPost.content}'
+                      : '  ${clientPost.content.substring(0, clientPost.content.length < 100 ? clientPost.content.length : 100)}...',
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
+                if (clientPost.content.length > 100)
+                  TextSpan(
+                    text: isExpanded ? '  Ẩn bớt' : '  Xem thêm',
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontStyle: FontStyle.italic,
+                      
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                  ),
+
+                              
+                            ]
+
+                            ,
+                  
+                      )
+                  )],
+                  ),
                 ),
                 const SizedBox(
                   height: 5,
