@@ -133,7 +133,7 @@ class _CommentScreenState extends State<CommentScreen> {
             return const Center(child: Text('Post not found.')
                 // Text('Error: ${snapshot.error}'),
                 );
-          } else if (snapshot.hasData) {  
+          } else if (snapshot.hasData) {
             comments = snapshot.data as List<Comment>;
             return ListView.builder(
                 itemCount: comments.length,
@@ -187,7 +187,8 @@ class _CommentScreenState extends State<CommentScreen> {
                             ),
                           ),
                           title: Container(
-                            padding: const EdgeInsets.fromLTRB(8.0, 10.0, 4.0, 4.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 10.0, 4.0, 4.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 color: Colors.grey.shade200),
@@ -429,7 +430,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 var message = await deleteComment(postId, commentId);
                 Navigator.of(context).pop();
                 String commentId2 = extractCommentId(message);
-                if (commentId != '') {
+                if (commentId2 != '') {
                   setState(() {
                     commentsFuture.then((comments) {
                       comments
@@ -437,8 +438,9 @@ class _CommentScreenState extends State<CommentScreen> {
                       return comments;
                     });
                   });
-                }
-                notification('he comment has been deleted', false);
+                  notification('The comment has been deleted', false);
+                } else
+                  notification(message, true);
               },
               child: Text('Delete'),
             ),

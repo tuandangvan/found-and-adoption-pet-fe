@@ -6,6 +6,7 @@ import 'package:found_adoption_application/screens/pet_center_screens/menu_frame
 import 'package:found_adoption_application/screens/pet_center_screens/test_notification.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -71,7 +72,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
 
   Future<void> handlerUpdatePet() async {
     if (mounted) {
-      updatePet(
+      await updatePet(
           _namePetController.text.toString(),
           _selectedPetType,
           _breedController.text.toString(),
@@ -300,8 +301,9 @@ class _EditPetScreenState extends State<EditPetScreen> {
                         return;
                       }
                       // Create a new Pet object with the entered information
+                      Loading(context);
                       await handlerUpdatePet();
-                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
                       Navigator.of(context).pop();
                     },
                     child: const Text('Edit Pet'),

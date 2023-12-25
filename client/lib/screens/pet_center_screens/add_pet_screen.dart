@@ -6,6 +6,7 @@ import 'package:found_adoption_application/screens/pet_center_screens/test_notif
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/services/image/multi_image_api.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -74,7 +75,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
     // Kiểm tra trạng thái mounted trước khi gọi setState
     if (mounted) {
       // Call the API to post content with image paths
-      addPet(
+      await addPet(
           _namePetController.text.toString(),
           _selectedPetType,
           _breedController.text.toString(),
@@ -316,7 +317,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
                         return;
                       }
                       // Create a new Pet object with the entered information
+                      Loading(context);
                       await postPet();
+                      Navigator.of(context).pop();
                     },
                     child: const Text('Add Pet'),
                   ),
