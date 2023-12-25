@@ -301,7 +301,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     buildContactInfo(center.email, Icons.email, 'email'),
                     buildContactInfo(
                         center.address,
-                        IconData(0xe3ab, fontFamily: 'MaterialIcons'),
+                        const IconData(0xe3ab, fontFamily: 'MaterialIcons'),
                         'address'),
                     SizedBox(height: 16.0),
 
@@ -370,7 +370,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return const Center(child: Text('Please try again later'));
           } else {
             List<Post>? postList = snapshot.data;
             if (postList != null) {
@@ -469,7 +469,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                           child: CircularProgressIndicator(),
                         );
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return const Center(child: Text('Please try again later'));
                       } else {
                         animals = snapshot.data ?? [];
                         return ListView.builder(

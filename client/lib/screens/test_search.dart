@@ -328,7 +328,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return const Center(child: Text('Please try again later'));
             } else {
               animals = snapshot.data ?? [];
               return ListView.builder(

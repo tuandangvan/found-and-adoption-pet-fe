@@ -37,7 +37,7 @@ Future<String> refreshAccessToken() async {
       userBox.put('currentUser', currentUser);
     } else {
       currentCenter.accessToken = newAccessToken;
-      centerBox.put('curentCenter', currentCenter);
+      centerBox.put('currentCenter', currentCenter);
     }
     return newAccessToken;
   } else {
