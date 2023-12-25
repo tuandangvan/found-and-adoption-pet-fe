@@ -186,7 +186,7 @@ class _PostCardState extends State<PostCard> {
                         context: context,
                         builder: (context) => Dialog(
                           child: ListView(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 5),
                             shrinkWrap: true,
                             children: ((currentClient.id ==
                                             clientPost.userId?.id ||
@@ -341,14 +341,14 @@ class _PostCardState extends State<PostCard> {
                                       }
                                       // Add other logic for handling other options
                                     },
-                                    child: ListTile(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                        horizontal: 12,
+                                    child: Container(
+                                      height: 70,
+                                      child: ListTile(
+                                        title: Text(item['text'] as String, style: TextStyle(
+                                          fontSize: 12
+                                        ),),
+                                        leading: Icon(item['icon'] as IconData?, size: 20,),
                                       ),
-                                      title: Text(item['text'] as String),
-                                      leading: Icon(item['icon'] as IconData?),
                                     ),
                                   ),
                                 )

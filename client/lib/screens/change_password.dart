@@ -74,7 +74,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     obscureText: _isObscure,
                     decoration: InputDecoration(
                       labelText: 'Your current password',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscure ? Icons.visibility : Icons.visibility_off,
@@ -126,7 +128,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                           });
                         },
                       ),
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                       errorText: isValidate
                           ? null
                           : 'Password must have at least 8 characters, include uppercase, \nlowercase and number', // Show error text when the password is not valid
@@ -149,7 +153,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     controller: confirmPassword,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscure3 ? Icons.visibility : Icons.visibility_off,
@@ -176,6 +182,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                       onPrimary: Colors.white,
                       onSurface: Colors.grey,
                       fixedSize: Size.fromHeight(60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50), 
+                      ),
                     ),
                     onPressed: isValidate &&
                             isPasswordValid &&

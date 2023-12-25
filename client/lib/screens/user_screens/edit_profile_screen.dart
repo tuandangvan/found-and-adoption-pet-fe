@@ -67,7 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return const Center(child: Text('Please try again later'));
             } else {
               InfoUser user = snapshot.data!;
               if (count == 0) {
@@ -244,11 +244,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       ? currentUser.lastName
                                       : textLastName.text.toString();
                               userBox.put('currentUser', currentUser);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditProfileScreen()));
+                              setState(() {
+                                userFuture = getProfile(context, null);
+                                textFisrtName.text = "";
+                                textLastName.text = "";
+                                textAddress.text = "";
+                                textPhoneNumber.text = "";
+                              });
                             },
                             child: Text(
                               'SAVE',

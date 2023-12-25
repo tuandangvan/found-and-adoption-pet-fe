@@ -53,6 +53,7 @@ Future<void> login(
         var retrievedUser =
             userBox.get('currentUser'); // Lấy thông tin User từ Hive
         notification("Login user success!", false);
+        Navigator.pop(context);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -80,31 +81,35 @@ Future<void> login(
         var retrievedCenter =
             centerBox.get('currentCenter'); // Lấy thông tin User từ Hive
         notification("Login center success!", false);
+        Navigator.pop(context);
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     MenuFrameCenter(centerId: retrievedCenter.id)));
       } else if (responseData['data']['role'] == 'ADMIN') {
+        Navigator.pop(context);
         notification('You is ADMIN!', true);
       }
     } else if (responseData['message'] == 'Account is not active!') {
+      Navigator.pop(context);
       notification(responseData['message'], true);
       _showLogoutDialog(context, email);
     } else if (responseData['message'] == 'User information not found!') {
-      print(responseData['message']);
+      Navigator.pop(context);
       // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   RegistrationForm(accountId: responseData['id'])));
-      
+
       notification(responseData['message'], true);
     } else if (responseData['message'] == 'Center information not found!') {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => RegistrationCenterForm()));
     } else {
+      Navigator.pop(context);
       notification(responseData['message'], true);
       print(responseData);
     }
@@ -113,22 +118,23 @@ Future<void> login(
 
     if (e.toString() ==
         "ClientException with SocketException: Failed host lookup: 'found-and-adoption-pet-api-be.vercel.app' (OS Error: No address associated with hostname, errno = 7), uri=https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/sign-in") {
+      Navigator.pop(context);
       notification("Check your Network and Try again.", true);
     }
   }
 }
+
 Future<bool> forgotPassword(String email) async {
   try {
-    final apiUrl = Uri.parse("https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/forgot-password");
+    final apiUrl = Uri.parse(
+        "https://found-and-adoption-pet-api-be.vercel.app/api/v1/auth/forgot-password");
 
     final response = await http.post(
       apiUrl,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'email': email
-      }),
+      body: jsonEncode({'email': email}),
     );
 
     if (response.statusCode == 200) {
@@ -136,7 +142,7 @@ Future<bool> forgotPassword(String email) async {
       notification(responseData['message'], false);
       return true;
     } else {
-     final responseData = json.decode(response.body);
+      final responseData = json.decode(response.body);
       notification(responseData['message'], true);
       return false;
     }

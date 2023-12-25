@@ -6,6 +6,7 @@ import 'package:found_adoption_application/screens/user_screens/menu_frame_user.
 import 'package:found_adoption_application/screens/user_screens/profile_user.dart';
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 
 class StatusAdoptUser extends StatefulWidget {
   const StatusAdoptUser({super.key});
@@ -480,9 +481,7 @@ class AdoptionTabView extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return const Center(child: Text('Please try again later'));
           } else if (snapshot.hasData) {
             adopt = snapshot.data;
             if (adopt!.isNotEmpty) {
@@ -522,8 +521,10 @@ class AdoptionTabView extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
+                Loading(context);
                 await changeStatusAdoptUser(petId, "CANCELLED");
                 // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               child: const Text('Done'),

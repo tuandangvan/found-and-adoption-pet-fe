@@ -5,6 +5,7 @@ import 'package:found_adoption_application/services/auth/loginApi.dart';
 import 'package:found_adoption_application/screens/signUp_screen.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/custom_widget/input_widget.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -76,11 +77,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: [
-                      inputField(label: "Email", controller: emailController),
+                      inputField(
+                          label: "Email",
+                          controller: emailController,
+                          isPassword: false,
+                          isLogin: true),
                       inputField(
                           label: "Password",
                           obscureText: true,
-                          controller: passwordController)
+                          controller: passwordController,
+                          isPassword: true,
+                          isLogin: true)
                     ],
                   ),
                 ),
@@ -130,44 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 16.0, // Kích thước chữ của toast
                           );
                         } else {
-                          // showDialog(
-                          //   context: context,
-                          //   barrierDismissible: false,
-                          //   builder: (BuildContext context) {
-                          //     return FutureBuilder(
-                          //       future: login(
-                          //         context,
-                          //         emailController.text.toString(),
-                          //         passwordController.text.toString(),
-                          //       ),
-                          //       builder: (context, snapshot) {
-                          //         if (snapshot.connectionState ==
-                          //             ConnectionState.waiting) {
-                          //           return Dialog(
-                          //             backgroundColor: Colors.transparent,
-                          //             child: new Container(
-                          //               width: 50.0,
-                          //               height: 50.0,
-                          //               child: new Center(
-                          //                 child:
-                          //                     const CircularProgressIndicator(),
-                          //               ),
-                          //             ),
-                          //           );
-                          //         } else {
-                          //           if (snapshot.error != null) {
-                          //             // Handle error
-                          //             return Text('An error occurred!');
-                          //           } else {
-                          //             // Handle completed
-                          //             return Container();
-                          //           }
-                          //         }
-                          //       },
-                          //     );
-                          //   },
-                          // );
-
+                          Loading(context);
                           await login(
                             context,
                             emailController.text.toString(),
@@ -220,9 +190,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () async {
                                       String email = _controller
                                           .text; // Get value from text field
+
+                                      Loading(context);
                                       await forgotPassword(
                                           email); // Call the forgotPassword function
                                       Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      
                                     },
                                   ),
                                 ],

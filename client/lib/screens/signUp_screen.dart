@@ -3,6 +3,7 @@ import 'package:found_adoption_application/custom_widget/input_widget.dart';
 
 import 'package:found_adoption_application/screens/login_screen.dart';
 import 'package:found_adoption_application/services/auth/signup_api.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 import 'package:hive/hive.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String signupType = 'USER';
+  bool isValidate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +67,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Column(
                 children: <Widget>[
                   // inputFile(label: "Username"),
-                  inputField(label: "Email", controller: emailController),
+                  inputField(label: "Email", controller: emailController, isPassword: false, isLogin: false),
                   inputField(
                       label: "Password",
                       obscureText: true,
-                      controller: passwordController),
+                      controller: passwordController, isPassword: true, isLogin: false),
 
                   // inputField(label: "Confirm Password ", obscureText: true),
 
@@ -160,11 +162,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () async {
-                    signup(context, emailController.text.toString(),
+                    Loading(context);
+                    await signup(context, emailController.text.toString(),
                         passwordController.text.toString(), signupType);
-
-                    print(
-                        'From  Sign Up Screen with signUpType: $signupType');
+                    Navigator.of(context).pop();
 
                     final email = emailController.text.toString();
                     final emailRegisterBox =
