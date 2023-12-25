@@ -285,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   user.email, Icons.email, 'email'),
                               buildContactInfo(
                                   user.address,
-                                  IconData(0xe3ab, fontFamily: 'MaterialIcons'),
+                                  const IconData(0xe3ab, fontFamily: 'MaterialIcons'),
                                   'address'),
                               SizedBox(height: 16.0),
 
@@ -358,7 +358,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return const Center(child: Text('Please try again later'));
           } else {
             List<Post>? postList = snapshot.data;
             if (postList!.isNotEmpty) {

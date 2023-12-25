@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
 
                         bool isTokenExpired = now.isAfter(expirationTime);
                         if (!isTokenExpired) {
-                          refreshAccessToken();
+                          // refreshAccessToken();
                         } else {
                           Navigator.push(
                               context,
