@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/filter_test.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -152,155 +153,198 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isLoading) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 60),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    child: const Icon(
-                      FontAwesomeIcons.bars,
-                      size: 25,
-                      color: Color.fromRGBO(48, 96, 96, 1.0),
-                    ),
-                    onTap: () async {
-                      var userBox = await Hive.openBox('userBox');
-                      var centerBox = await Hive.openBox('centerBox');
+    return Scaffold(
+   
+            body: isLoading
+            ? const CircularProgressIndicator()
+            : Builder(builder: (BuildContext context) {
+                return NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 60),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 22),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        child: const Icon(
+                                          FontAwesomeIcons.bars,
+                                          size: 25,
+                                          color:
+                                              Color.fromRGBO(48, 96, 96, 1.0),
+                                        ),
+                                        onTap: () async {
+                                          var userBox =
+                                              await Hive.openBox('userBox');
+                                          var centerBox =
+                                              await Hive.openBox('centerBox');
 
-                      var currentUser = userBox.get('currentUser');
-                      var currentCenter = centerBox.get('currentCenter');
+                                          var currentUser =
+                                              userBox.get('currentUser');
+                                          var currentCenter =
+                                              centerBox.get('currentCenter');
 
-                      var currentClient =
-                          currentUser != null && currentUser.role == 'USER'
-                              ? currentUser
-                              : currentCenter;
+                                          var currentClient =
+                                              currentUser != null &&
+                                                      currentUser.role == 'USER'
+                                                  ? currentUser
+                                                  : currentCenter;
 
-                      if (currentClient != null) {
-                        if (currentClient.role == 'USER') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MenuFrameUser(
-                                userId: currentClient.id,
-                              ),
-                            ),
-                          );
-                        } else if (currentClient.role == 'CENTER') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MenuFrameCenter(
-                                centerId: currentClient.id,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Location  ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.4),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            // Icon(
-                            //   FontAwesomeIcons.mapMarkerAlt,
-                            //   color: Theme.of(context).primaryColor,
-                            //   size: 15,
-                            // ),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  currentClient.address.split(',').length > 2
-                                      ? currentClient.address
-                                          .split(',')
-                                          .sublist(currentClient.address
-                                                  .split(',')
-                                                  .length -
-                                              2)
-                                          .join(',')
-                                      : currentClient.address,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
+                                          if (currentClient != null) {
+                                            if (currentClient.role == 'USER') {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MenuFrameUser(
+                                                    userId: currentClient.id,
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (currentClient.role ==
+                                                'CENTER') {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MenuFrameCenter(
+                                                    centerId: currentClient.id,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Location  ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 18,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(0.4),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.baseline,
+                                              textBaseline:
+                                                  TextBaseline.alphabetic,
+                                              children: [
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      currentClient.address
+                                                                  .split(',')
+                                                                  .length >
+                                                              2
+                                                          ? currentClient
+                                                              .address
+                                                              .split(',')
+                                                              .sublist(currentClient
+                                                                      .address
+                                                                      .split(
+                                                                          ',')
+                                                                      .length -
+                                                                  2)
+                                                              .join(',')
+                                                          : currentClient
+                                                              .address,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 12,
+                                                      ),
+                                                      softWrap: true,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage:
+                                            NetworkImage(currentClient.avatar),
+                                      ),
+                                    ],
                                   ),
-                                  softWrap: true,
-                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(currentClient.avatar),
-                  ),
-                ],
-              ),
-            ),
 
-            //SEARCH
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                    color: Theme.of(context).primaryColor.withOpacity(0.06),
-                  ),
-                  height: 300,
-                  child: Column(
-                    children: [
-                      buildSearchBar(),
-                      //ANIMATION CÁC LOẠI ĐỘNG VẬT
-                      Container(
-                        height: 120,
-                        child: ListView.builder(
-                            padding: EdgeInsets.only(left: 24),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: animalTypes.length,
-                            itemBuilder: (context, index) {
-                              return buildAnimalIcon(index);
-                            }),
-                      ),
-                      buildAnimalAdopt(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const CircularProgressIndicator();
-    }
+                                //SEARCH
+                           
+                            
+                                 
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(30),
+                                          topRight: Radius.circular(30),
+                                        ),
+                                        color: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.06),
+                                      ),
+                                      height: 228,
+                                      child: Positioned.fill(
+                                        child: Column(
+                                          children: [
+                                            buildSearchBar(),
+                                            //ANIMATION CÁC LOẠI ĐỘNG VẬT
+                                            Container(
+                                              height: 120,
+                                              child: ListView.builder(
+                                                  padding:
+                                                      EdgeInsets.only(left: 24),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: animalTypes.length,
+                                                  itemBuilder: (context, index) {
+                                                    return buildAnimalIcon(index);
+                                                  }),
+                                            ),
+                                                //  Expanded(child: buildAnimalAdopt()),
+
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  
+                                
+                              ],
+                            ),
+                          ]),
+                        ),
+                      )
+                    ];
+                  },
+                  body: buildAnimalAdopt(),
+                );
+              }));
   }
 
   Widget buildSearchBar() {
@@ -340,9 +384,28 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 },
               ),
             ),
-            Icon(
-              FontAwesomeIcons.filter,
+            IconButton(
+              icon: Icon(Icons.filter_alt_outlined),
               color: Colors.grey,
+
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FractionallySizedBox(
+                      widthFactor: 0.8, // Chiều cao là 50% màn hình
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                        child: FilterDialog()),
+                      heightFactor: 0.8,
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),
@@ -351,20 +414,23 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   }
 
   Widget buildAnimalAdopt() {
-    return FutureBuilder<List<Pet>>(
-      future: getAllPet(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Please try again later'));
-        } else {
-          animals = snapshot.data ?? [];
-          return buildAnimalList(animals);
-        }
-      },
+    return Container(
+      color: Theme.of(context).primaryColor.withOpacity(0.06),
+      child: FutureBuilder<List<Pet>>(
+        future: getAllPet(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Please try again later'));
+          } else {
+            animals = snapshot.data ?? [];
+            return buildAnimalList(animals);
+          }
+        },
+      ),
     );
   }
 
