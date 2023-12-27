@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
+import 'package:found_adoption_application/screens/filter_test.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -383,9 +384,28 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 },
               ),
             ),
-            Icon(
-              FontAwesomeIcons.filter,
+            IconButton(
+              icon: Icon(Icons.filter_alt_outlined),
               color: Colors.grey,
+
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FractionallySizedBox(
+                      widthFactor: 0.8, // Chiều cao là 50% màn hình
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                        child: FilterDialog()),
+                      heightFactor: 0.8,
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),
