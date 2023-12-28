@@ -48,6 +48,8 @@ class _MenuFrameUserState extends State<MenuFrameUser>
   Map<int, Widget> screens = {
     0: AdoptionScreen(
       centerId: null,
+      
+   
     ),
     1: FeedScreen(),
     2: ProfilePage(userId: null),
