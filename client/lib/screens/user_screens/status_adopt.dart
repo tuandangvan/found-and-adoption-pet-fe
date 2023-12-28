@@ -253,7 +253,6 @@ class AdoptionTabView extends StatelessWidget {
                           ),
                         ],
                       ),
-                     
                     ],
                   ),
                 ),
@@ -439,12 +438,6 @@ class AdoptionTabView extends StatelessWidget {
                     onPressed: () async {
                       await _showDeleteConfirmationDialog(context, adopt.id);
                       // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const StatusAdoptUser() // Thay thế bằng tên lớp tương ứng
-                              ));
                     },
                     icon: const Icon(Icons.cancel, color: Colors.white),
                     label: const Text(
@@ -526,6 +519,12 @@ class AdoptionTabView extends StatelessWidget {
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const StatusAdoptUser() // Thay thế bằng tên lớp tương ứng
+                        ));
               },
               child: const Text('Done'),
             ),

@@ -341,9 +341,13 @@ class _CommentScreenState extends State<CommentScreen> {
                 withBorder: false,
                 sendButtonMethod: () async {
                   if (formKey.currentState!.validate()) {
+                    String commentText = commentController.text.toString();
+
+                    FocusScope.of(context).unfocus();
+                    commentController.clear();
 
                     var id = await postComment(
-                        widget.postId, commentController.text.toString());
+                        widget.postId, commentText);                    
                     if (id != '') {
                       var currentClient = await getCurrentClient();
 
@@ -374,15 +378,12 @@ class _CommentScreenState extends State<CommentScreen> {
                         id: id.toString(),
                         userId: userCmt,
                         centerId: centerCmt,
-                        content: commentController.text,
+                        content: commentText,
                       );
 
                       // Gửi comment thông qua Socket.IO
                       socket.emit('comment', newComment.toMap());
                     }
-
-                    commentController.clear();
-                    FocusScope.of(context).unfocus();
                   } else {
                     print("Not validated");
                   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/services/auth/change_password.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 class UpdatePasswordScreen extends StatefulWidget {
@@ -196,8 +197,10 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                               notification(
                                   "Please fill in all the information!", true);
                             } else {
+                              Loading(context);
                               bool success = await changePassword(
                                   password.text, newPassword.text);
+                              Navigator.of(context).pop();
                               if (success) {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();

@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
           leading: IconButton(
             icon: const Icon(
               FontAwesomeIcons.bars,
@@ -82,7 +83,6 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             color: Theme.of(context).primaryColor,
           ),
-          backgroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -180,22 +180,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                               itemBuilder: (context) => [
                                                 PopupMenuItem(
                                                   value: 1,
-                                                  child: ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  EditProfileScreen()));
-                                                    },
-                                                    icon: Icon(Icons.edit,
-                                                        color: Colors.white),
-                                                    label: Text('Edit profile'),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary: Theme.of(context)
-                                                          .primaryColor,
-                                                      onPrimary: Colors.white,
+                                                  child: Container(
+                                                    width: 175,
+                                                    child: ElevatedButton.icon(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    EditProfileScreen()));
+                                                      },
+                                                      icon: Icon(Icons.edit,
+                                                          color: Colors.white),
+                                                      label: Text('Edit profile'),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Theme.of(context)
+                                                            .primaryColor,
+                                                        onPrimary: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -203,42 +206,48 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 //Update Password
                                                 PopupMenuItem(
                                                   value: 1,
-                                                  child: ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  UpdatePasswordScreen()));
-                                                    },
-                                                    icon: Icon(Icons.password,
-                                                        color: Colors.white),
-                                                    label: Text('Change Password'),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary: Theme.of(context)
-                                                          .primaryColor,
-                                                      onPrimary: Colors.white,
+                                                  child: Container(
+                                                    width: 175,
+                                                    child: ElevatedButton.icon(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    UpdatePasswordScreen()));
+                                                      },
+                                                      icon: Icon(Icons.password,
+                                                          color: Colors.white),
+                                                      label: Text('Change Password'),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Theme.of(context)
+                                                            .primaryColor,
+                                                        onPrimary: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                                 PopupMenuItem(
                                                   value: 2,
-                                                  child: ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      _showBottomSheet(
-                                                          user.id, user.status);
-                                                    },
-                                                    icon: Icon(
-                                                        Icons.change_circle,
-                                                        color: Colors.white),
-                                                    label:
-                                                        Text('Change status'),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      primary: Theme.of(context)
-                                                          .primaryColor,
-                                                      onPrimary: Colors.white,
+                                                  child: Container(
+                                                    width: 175,
+                                                    child: ElevatedButton.icon(
+                                                      onPressed: () {
+                                                        _showBottomSheet(
+                                                            user.id, user.status);
+                                                      },
+                                                      icon: Icon(
+                                                          Icons.change_circle,
+                                                          color: Colors.white),
+                                                      label:
+                                                          Text('Change status'),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Theme.of(context)
+                                                            .primaryColor,
+                                                        onPrimary: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

@@ -57,6 +57,8 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
   Map<int, Widget> screens = {
     0: AdoptionScreen(
       centerId: null,
+      
+    
     ),
     1: FeedScreen(),
     2: ProfileCenterPage(
