@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:found_adoption_application/models/pet.dart';
+import 'package:found_adoption_application/services/center/petApi.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 class FilterDialog extends StatelessWidget {
   @override
@@ -26,7 +27,16 @@ class _FilterScreenState extends State<FilterScreen> {
   String? selectedBreed;
   RangeValues selectedAgeRange = RangeValues(1, 10);
   List<String> selectedColors = [];
-  List<String> allColors = ['Đen', 'Trắng', 'Đỏ', 'Vàng', 'Hồng', 'Nâu', 'Xám', 'Khác'];
+  List<String> allColors = [
+    'Đen',
+    'Trắng',
+    'Đỏ',
+    'Vàng',
+    'Hồng',
+    'Nâu',
+    'Xám',
+    'Khác'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,7 @@ class _FilterScreenState extends State<FilterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Chọn Giống:'),
+            Text('Select breed:'),
             DropdownButton<String>(
               value: selectedBreed,
               onChanged: (String? newValue) {
@@ -46,8 +56,15 @@ class _FilterScreenState extends State<FilterScreen> {
                   });
                 }
               },
-              items: <String>['Husky', 'Poodle', 'Pitpull', 'Chó cỏ', 'Mèo ta', 'Mèo Anh lông ngắn', 'Khác']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                'Husky',
+                'Poodle',
+                'Pitpull',
+                'Chó cỏ',
+                'Mèo ta',
+                'Mèo Anh lông ngắn',
+                'Khác'
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -55,7 +72,8 @@ class _FilterScreenState extends State<FilterScreen> {
               }).toList(),
             ),
             SizedBox(height: 16.0),
-            Text('Chọn Tuổi: ${selectedAgeRange.start.toInt()} - ${selectedAgeRange.end.toInt()} năm'),
+            Text(
+                'Select old: ${selectedAgeRange.start.toInt()} - ${selectedAgeRange.end.toInt()} năm'),
             RangeSlider(
               values: selectedAgeRange,
               min: 0,
@@ -67,7 +85,7 @@ class _FilterScreenState extends State<FilterScreen> {
               },
             ),
             SizedBox(height: 16.0),
-            Text('Chọn Màu Sắc:'),
+            Text('Select color:'),
             Column(
               children: allColors.map((String color) {
                 return CheckboxListTile(
@@ -89,16 +107,32 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                print('Giống đã chọn: $selectedBreed');
-                print('Tuổi đã chọn: ${selectedAgeRange.start} - ${selectedAgeRange.end}');
-                print('Màu đã chọn: $selectedColors');
+              onPressed: () async {
+                List<int> listAge =
+                    convertRangeValuesToListInt(selectedAgeRange);
+
+                List<Pet> dataPet = await filterPet(
+                    selectedBreed, selectedColors, listAge);
+                
+                // notification(dataPet.toString(), false);
+                // Navigator.of(context).pop();
+                // Navigator.of(context).pop(dataPet);
+
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context, dataPet);
+                // Navigator.of(context).pop();
               },
-              child: Text('Áp Dụng Bộ Lọc'),
+              child: Text('Apply'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<int> convertRangeValuesToListInt(RangeValues values) {
+    int start = values.start.round();
+    int end = values.end.round();
+    return List<int>.generate(end - start + 1, (i) => i + start);
   }
 }

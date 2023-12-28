@@ -14,6 +14,7 @@ import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -28,11 +29,32 @@ class _PostCardState extends State<PostCard> {
   late int quantityLike = 0;
   late bool liked = false;
   late String selectedOption = '';
+  late io.Socket socket;
+  bool isOnline = false;
+
   @override
   void initState() {
     super.initState();
     clientPost = widget.snap!;
     getLiked();
+
+    // Khởi tạo kết nối Socket.IO
+    socket = io.io(
+        'http://socket-found-adoption-dangvantuan.koyeb.app', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
+    });
+
+
+    socket.on("getOnlineUsers", (data) {
+      print(data);
+      if(data['userId'] == clientPost.userId?.id || data['userId'] == clientPost.petCenterId?.id){
+        setState(() {
+          isOnline = true;
+        });
+      }
+
+    });
   }
 
   Future<void> getLiked() async {
@@ -100,14 +122,30 @@ class _PostCardState extends State<PostCard> {
                       );
                     }
                   },
-                  child: CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: NetworkImage(
-                      clientPost.userId != null
-                          ? '${clientPost.userId!.avatar}'
-                          : '${clientPost.petCenterId.avatar}',
-                    ),
+                  child: Stack(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: NetworkImage(
+                          clientPost.userId != null
+                              ? '${clientPost.userId!.avatar}'
+                              : '${clientPost.petCenterId.avatar}',
+                        ),
+                      ),isOnline?
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 10.0,
+                          height: 10.0,
+                          decoration: BoxDecoration(
+                            color: Colors.green, // Green color
+                            shape: BoxShape.circle, // Circular shape
+                          ),
+                        ),
+                      ):SizedBox(),
+                    ],
                   ),
                 ),
 
@@ -344,10 +382,14 @@ class _PostCardState extends State<PostCard> {
                                     child: Container(
                                       height: 70,
                                       child: ListTile(
-                                        title: Text(item['text'] as String, style: TextStyle(
-                                          fontSize: 12
-                                        ),),
-                                        leading: Icon(item['icon'] as IconData?, size: 20,),
+                                        title: Text(
+                                          item['text'] as String,
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                        leading: Icon(
+                                          item['icon'] as IconData?,
+                                          size: 20,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -475,51 +517,45 @@ class _PostCardState extends State<PostCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                        text: TextSpan(
-                            style: const TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(
-                                text: clientPost.userId != null
-                                    ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
-                                    : clientPost.petCenterId.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                          text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: clientPost.userId != null
+                                ? '${clientPost.userId!.firstName} ${clientPost.userId!.lastName}'
+                                : clientPost.petCenterId.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          // TextSpan(
+                          //   text: '  ${clientPost.content}',
+                          //   style:
+                          //       const TextStyle(fontWeight: FontWeight.normal),
+                          // )
+
+                          TextSpan(
+                            text: isExpanded
+                                ? '  ${clientPost.content}'
+                                : '  ${clientPost.content.substring(0, clientPost.content.length < 100 ? clientPost.content.length : 100)}...',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.normal),
+                          ),
+                          if (clientPost.content.length > 100)
+                            TextSpan(
+                              text: isExpanded ? '  Ẩn bớt' : '  Xem thêm',
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontStyle: FontStyle.italic,
                               ),
-                              // TextSpan(
-                              //   text: '  ${clientPost.content}',
-                              //   style:
-                              //       const TextStyle(fontWeight: FontWeight.normal),
-                              // )
-
-                              TextSpan(
-                  text: isExpanded
-                      ? '  ${clientPost.content}'
-                      : '  ${clientPost.content.substring(0, clientPost.content.length < 100 ? clientPost.content.length : 100)}...',
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                ),
-                if (clientPost.content.length > 100)
-                  TextSpan(
-                    text: isExpanded ? '  Ẩn bớt' : '  Xem thêm',
-                    style: TextStyle(
-                      color: Colors.grey.shade700,
-                      fontStyle: FontStyle.italic,
-                      
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        setState(() {
-                          isExpanded = !isExpanded;
-                        });
-                      },
-                  ),
-
-                              
-                            ]
-
-                            ,
-                  
-                      )
-                  )],
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  setState(() {
+                                    isExpanded = !isExpanded;
+                                  });
+                                },
+                            ),
+                        ],
+                      ))
+                    ],
                   ),
                 ),
                 const SizedBox(

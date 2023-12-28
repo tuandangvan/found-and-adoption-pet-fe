@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
-import 'package:found_adoption_application/screens/filter_dialog.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:found_adoption_application/screens/filter_dialog.dart';
 
 import 'package:hive/hive.dart';
 
@@ -43,17 +44,11 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   List<String> animalTypes = [
     'Cat',
     'Dog',
-    'Parrots',
-    'Fish',
-    'Fish',
   ];
 
   List<IconData> animalIcons = [
     FontAwesomeIcons.cat,
     FontAwesomeIcons.dog,
-    FontAwesomeIcons.crow,
-    FontAwesomeIcons.fish,
-    FontAwesomeIcons.fish
   ];
 
   Widget buildAnimalIcon(int index) {
@@ -108,6 +103,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   // final Filter _filter = Filter(searchKeyword: '', petType: '', breed: '');
 
   List<Pet> _searchResults = []; // Danh sách kết quả tìm kiếm
+  Future<List<Pet>>? futurePets;
 
   @override
   void initState() {
@@ -115,6 +111,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     centerId = widget.centerId;
     getClient() as dynamic;
     _searchController.addListener(_performSearch);
+    futurePets = getAllPet();
   }
 
   @override
@@ -154,8 +151,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-   
-            body: isLoading
+        body: isLoading
             ? const CircularProgressIndicator()
             : Builder(builder: (BuildContext context) {
                 return NestedScrollView(
@@ -296,45 +292,39 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                 ),
 
                                 //SEARCH
-                           
-                            
-                                 
-                                  Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(30),
-                                          topRight: Radius.circular(30),
-                                        ),
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.06),
-                                      ),
-                                      height: 228,
-                                      child: Positioned.fill(
-                                        child: Column(
-                                          children: [
-                                            buildSearchBar(),
-                                            //ANIMATION CÁC LOẠI ĐỘNG VẬT
-                                            Container(
-                                              height: 120,
-                                              child: ListView.builder(
-                                                  padding:
-                                                      EdgeInsets.only(left: 24),
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount: animalTypes.length,
-                                                  itemBuilder: (context, index) {
-                                                    return buildAnimalIcon(index);
-                                                  }),
-                                            ),
-                                                //  Expanded(child: buildAnimalAdopt()),
 
-                                          ],
-                                        ),
-                                      ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(30),
+                                      topRight: Radius.circular(30),
                                     ),
-                                  
-                                
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.06),
+                                  ),
+                                  height: 228,
+                                  child: Positioned.fill(
+                                    child: Column(
+                                      children: [
+                                        buildSearchBar(),
+                                        //ANIMATION CÁC LOẠI ĐỘNG VẬT
+                                        Container(
+                                          height: 120,
+                                          child: ListView.builder(
+                                              padding:
+                                                  EdgeInsets.only(left: 24),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: animalTypes.length,
+                                              itemBuilder: (context, index) {
+                                                return buildAnimalIcon(index);
+                                              }),
+                                        ),
+                                        //  Expanded(child: buildAnimalAdopt()),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ]),
@@ -387,24 +377,16 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             IconButton(
               icon: Icon(Icons.filter_alt_outlined),
               color: Colors.grey,
-
-              onPressed: () {
-                showDialog(
+              onPressed: () async {
+                final result = await showDialog<List<Pet>>(
                   context: context,
-                  builder: (BuildContext context) {
-                    return FractionallySizedBox(
-                      widthFactor: 0.8, // Chiều cao là 50% màn hình
-                      alignment: Alignment.bottomRight,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.0),
-                          topRight: Radius.circular(16.0),
-                        ),
-                        child: FilterDialog()),
-                      heightFactor: 0.8,
-                    );
-                  },
+                  builder: (context) => FilterDialog(),
                 );
+                Navigator.of(context).pop();
+                notification(result, false);
+
+                // Now result contains the dataPet returned from FilterDialog
+                print(result);
               },
             ),
           ],
@@ -417,7 +399,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     return Container(
       color: Theme.of(context).primaryColor.withOpacity(0.06),
       child: FutureBuilder<List<Pet>>(
-        future: getAllPet(),
+        future: futurePets,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
