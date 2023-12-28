@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/screens/animal_detail_screen.dart';
-import 'package:found_adoption_application/screens/filter_test.dart';
+import 'package:found_adoption_application/screens/filter_dialog.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
@@ -483,6 +483,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             distanceString = value.toStringAsFixed(2);
             // Bảo đảm cập nhật lại widget khi giá trị thay đổi
           });
+          print('distance: $distanceString');
 
           return GestureDetector(
             onTap: () {
@@ -577,8 +578,8 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                                       ),
                                     ),
                                     Text(
-                                      // distanceString,
-                                      '4.3 km',
+                                      distanceString,
+                                      // '4.3 km',
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Theme.of(context).primaryColor,
