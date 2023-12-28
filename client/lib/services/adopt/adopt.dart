@@ -90,18 +90,3 @@ Future<void> changeStatusAdoptUser(String adoptId, String statusAdopt) async {
   }
 }
 
-// Future<dynamic> createAdopt(String content) async {
-//   try {
-//     var body = jsonEncode({});
-//   } catch (e) {
-//     Fluttertoast.showToast(
-//       msg: e.toString(),
-//       toastLength: Toast.LENGTH_SHORT, // Thời gian hiển thị
-//       gravity: ToastGravity.BOTTOM, // Vị trí hiển thị
-//       timeInSecForIosWeb: 1, // Thời gian hiển thị cho iOS và web
-//       backgroundColor: Colors.red[20], // Màu nền của toast
-//       textColor: Colors.white, // Màu chữ của toast
-//       fontSize: 16.0,
-//     ); // Kích thước chữ của toast
-//   }
-// }
