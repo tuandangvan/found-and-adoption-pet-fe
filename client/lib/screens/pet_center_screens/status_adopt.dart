@@ -417,12 +417,6 @@ class AdoptionTabView extends StatelessWidget {
                       await _showDeleteConfirmationDialog(
                           context, adopt.id, "ACCEPTED");
                       // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  StatusAdopt() // Thay thế bằng tên lớp tương ứng
-                              ));
                     },
                     icon: const Icon(Icons.check, color: Colors.white),
                     label: const Text('Accept', style: TextStyle(fontSize: 17)),
@@ -445,12 +439,6 @@ class AdoptionTabView extends StatelessWidget {
                       await _showDeleteConfirmationDialog(
                           context, adopt.id, "CANCELLED");
                       // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  StatusAdopt() // Thay thế bằng tên lớp tương ứng
-                              ));
                     },
                     icon: const Icon(Icons.cancel, color: Colors.white),
                     label: const Text(
@@ -537,6 +525,12 @@ class AdoptionTabView extends StatelessWidget {
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            StatusAdopt() // Thay thế bằng tên lớp tương ứng
+                        ));
               },
               child: const Text('Done'),
             ),

@@ -47,7 +47,6 @@ class _PostCardState extends State<PostCard> {
 
 
     socket.on("getOnlineUsers", (data) {
-      print(data);
       if(data['userId'] == clientPost.userId?.id || data['userId'] == clientPost.petCenterId?.id){
         setState(() {
           isOnline = true;

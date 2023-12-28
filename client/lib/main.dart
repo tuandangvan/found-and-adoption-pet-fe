@@ -210,9 +210,6 @@ Future<bool> checkRefreshToken() async {
       final expirationTime = refreshTokenTimestamp.add(
         Duration(days: refreshTokenValidityDays),
       );
-      print('The current client is Logged in at: ${refreshTokenTimestamp}');
-      print('The RefreshToken is expired at: ${expirationTime}');
-      print('The currentClient is $name with role: ${currentClient!.role}');
 
       if (now.isBefore(expirationTime)) {
         return true;

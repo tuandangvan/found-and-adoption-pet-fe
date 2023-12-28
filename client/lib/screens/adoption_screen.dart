@@ -14,8 +14,6 @@ import 'package:found_adoption_application/screens/filter_dialog.dart';
 
 import 'package:hive/hive.dart';
 
-
-
 class AdoptionScreen extends StatefulWidget {
   final centerId;
 
@@ -26,7 +24,6 @@ class AdoptionScreen extends StatefulWidget {
 }
 
 class _AdoptionScreenState extends State<AdoptionScreen> {
- 
   late List<Pet> animals = [];
   List<Pet> filteredAnimals = [];
 
@@ -103,7 +100,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   void initState() {
     super.initState();
     centerId = widget.centerId;
-  
+
     getClient() as dynamic;
     _searchController.addListener(_performSearch);
     futurePets = getAllPet();
@@ -117,8 +114,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   void _performSearch() {
     setState(() {
-   
-
       if (selectedPetType != '') {
         _searchResults =
             animals.where((pet) => pet.petType == selectedPetType).toList();
@@ -140,18 +135,21 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   }
 
   Future<void> showFilterDialog() async {
-  final List<Pet>? result = await showDialog<List<Pet>>(
-    context: context,
-    builder: (BuildContext context) => FilterDialog(),
-  );
-  print('Get from Dialog result: $result'); 
-  if (result != null) {
-    setState(() {
-      filteredAnimals = result;
-    });
-    print('láy dc dư lieuj chưa: $filteredAnimals');
+    final Future<List<Pet>>? result = await showDialog<Future<List<Pet>>>(
+      context: context,
+      builder: (BuildContext context) => FilterDialog(),
+    );
+
+    if (result != null) {
+      setState(() {
+        futurePets = result;
+      });
+    } else {
+      setState(() {
+        futurePets = result;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -392,30 +390,28 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   Widget buildAnimalAdopt() {
     return Container(
-  color: Theme.of(context).primaryColor.withOpacity(0.06),
-  child: FutureBuilder<List<Pet>>(
-    future: futurePets,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (snapshot.hasError) {
-        return const Center(child: Text('Please try again later'));
-      } else {
-        animals = snapshot.data ?? [];
-        return Column(  // Wrap Expanded with a Column
-          children: [
-            Expanded(child: buildAnimalList(animals,filteredAnimals)),
-          ],
-        );
-      }
-    },
-  ),
-);
-
-
-
+      color: Theme.of(context).primaryColor.withOpacity(0.06),
+      child: FutureBuilder<List<Pet>>(
+        future: futurePets,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Please try again later'));
+          } else {
+            animals = snapshot.data ?? [];
+            return Column(
+              // Wrap Expanded with a Column
+              children: [
+                Expanded(child: buildAnimalList(animals, filteredAnimals)),
+              ],
+            );
+          }
+        },
+      ),
+    );
   }
 
   Widget fieldInforPet(String infor, String inforDetail) {
@@ -444,34 +440,31 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     );
   }
 
-
-
   Widget buildAnimalList(List<Pet> animals, List<Pet> filteredAnimals) {
-  final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
 
-  return ListView.builder(
-    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-    itemCount: filteredAnimals.isNotEmpty
-        ? filteredAnimals.length
-        : _searchKeyword.isEmpty && selectedPetType == ''
-            ? animals.length
-            : _searchResults.length,
-    itemBuilder: (context, index) {
-      final animal = filteredAnimals.isNotEmpty
-          ? filteredAnimals[index]
+    return ListView.builder(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      itemCount: filteredAnimals.isNotEmpty
+          ? filteredAnimals.length
           : _searchKeyword.isEmpty && selectedPetType == ''
-              ? animals[index]
-              : _searchResults[index];
-    
+              ? animals.length
+              : _searchResults.length,
+      itemBuilder: (context, index) {
+        final animal = filteredAnimals.isNotEmpty
+            ? filteredAnimals[index]
+            : _searchKeyword.isEmpty && selectedPetType == ''
+                ? animals[index]
+                : _searchResults[index];
+
         String distanceString = '';
-    
+
         calculateDistance(currentClient.address, animal.centerId!.address)
             .then((value) {
           distanceString = value.toStringAsFixed(2);
-        
         });
         print('distance: $distanceString');
-    
+
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -520,8 +513,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                               const SizedBox(height: 10),
                               fieldInforPet('Breed', animal.breed),
                               const SizedBox(height: 10),
-                              fieldInforPet(
-                                  'Age', '${animal.age * 12} months'),
+                              fieldInforPet('Age', '${animal.age * 12} months'),
                               const SizedBox(height: 10),
                               Row(
                                 children: [

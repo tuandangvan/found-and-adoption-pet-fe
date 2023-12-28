@@ -11,7 +11,7 @@ Future<bool> changePassword(String password, String newPassword) async {
     responseData = await api('/auth/change-password', 'PUT', body);
     // notification(responseData[], true);
 
-    if (responseData['message'] == 'Password changed successfully') {
+    if (responseData['message'] == 'Password changed successfully!') {
       notification(responseData['message'], false);
       return true;
     } else {

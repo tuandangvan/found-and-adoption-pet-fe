@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/models/pet.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
-import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 class FilterDialog extends StatelessWidget {
   @override
@@ -104,16 +103,14 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 try{
                 List<int> listAge =
                     convertRangeValuesToListInt(selectedAgeRange);
 
-                List<Pet> dataPet = await filterPet(
+                Future<List<Pet>> dataPet = filterPet(
                     selectedBreed, selectedColors, listAge);
-
-                    print('hú hú: $dataPet');
-                Navigator.pop<List<Pet>>(context, dataPet); 
+                Navigator.pop<Future<List<Pet>>>(context, dataPet); 
                 
               }catch(e){
                 print('errorr12: ${e.toString()}');

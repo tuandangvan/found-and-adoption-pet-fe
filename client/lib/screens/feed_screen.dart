@@ -24,8 +24,6 @@
 //     posts = getAllPost();
 //   }
 
-  
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -127,8 +125,6 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/custom_widget/post_card.dart';
@@ -183,17 +179,17 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   void _loadVisiblePosts() {
-  int start = currentPage * itemsPerPage;
-  int end = start + itemsPerPage;
+    int start = currentPage * itemsPerPage;
+    int end = start + itemsPerPage;
 
-  if (end > allPosts.length) {
-    end = allPosts.length;
-  }
+    if (end > allPosts.length) {
+      end = allPosts.length;
+    }
 
-  if (start < allPosts.length) {
-    visiblePosts.addAll(allPosts.sublist(start, end));
+    if (start < allPosts.length) {
+      visiblePosts.addAll(allPosts.sublist(start, end));
+    }
   }
-}
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 2));
@@ -210,8 +206,6 @@ class _FeedScreenState extends State<FeedScreen> {
         currentPage++;
         _loadVisiblePosts();
       });
-
-    
     }
   }
 
