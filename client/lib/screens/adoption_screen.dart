@@ -386,7 +386,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
                 notification(result, false);
 
                 // Now result contains the dataPet returned from FilterDialog
-                print(result);
+
               },
             ),
           ],

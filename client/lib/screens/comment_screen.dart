@@ -341,7 +341,6 @@ class _CommentScreenState extends State<CommentScreen> {
                 withBorder: false,
                 sendButtonMethod: () async {
                   if (formKey.currentState!.validate()) {
-                    print(commentController.text);
 
                     var id = await postComment(
                         widget.postId, commentController.text.toString());
