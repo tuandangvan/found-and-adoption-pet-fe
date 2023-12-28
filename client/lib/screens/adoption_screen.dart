@@ -14,19 +14,11 @@ import 'package:found_adoption_application/screens/filter_dialog.dart';
 
 import 'package:hive/hive.dart';
 
-// class Filter {
-//   String searchKeyword;
-//   String petType;
-//   String breed; // Thêm thuộc tính breed
 
-//   Filter(
-//       {required this.searchKeyword,
-//       required this.petType,
-//       required this.breed});
-// }
 
 class AdoptionScreen extends StatefulWidget {
   final centerId;
+
   const AdoptionScreen({super.key, required this.centerId});
 
   @override
@@ -34,8 +26,10 @@ class AdoptionScreen extends StatefulWidget {
 }
 
 class _AdoptionScreenState extends State<AdoptionScreen> {
-  //
+ 
   late List<Pet> animals = [];
+  List<Pet> filteredAnimals = [];
+
   var centerId;
   late var currentClient;
   bool isLoading = true;
@@ -109,24 +103,21 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
   void initState() {
     super.initState();
     centerId = widget.centerId;
+  
     getClient() as dynamic;
     _searchController.addListener(_performSearch);
     futurePets = getAllPet();
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _searchController.dispose();
+  //   super.dispose();
+  // }
 
   void _performSearch() {
     setState(() {
-      // _searchResults = animals
-      //     .where((pet) =>
-      //         // pet.breed.toLowerCase().contains(_searchKeyword.toLowerCase()) ||
-      //         pet.petType == selectedPetType)
-      //     .toList();
+   
 
       if (selectedPetType != '') {
         _searchResults =
@@ -147,6 +138,20 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
       isLoading = false;
     });
   }
+
+  Future<void> showFilterDialog() async {
+  final List<Pet>? result = await showDialog<List<Pet>>(
+    context: context,
+    builder: (BuildContext context) => FilterDialog(),
+  );
+  print('Get from Dialog result: $result'); 
+  if (result != null) {
+    setState(() {
+      filteredAnimals = result;
+    });
+    print('láy dc dư lieuj chưa: $filteredAnimals');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -377,17 +382,7 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             IconButton(
               icon: Icon(Icons.filter_alt_outlined),
               color: Colors.grey,
-              onPressed: () async {
-                final result = await showDialog<List<Pet>>(
-                  context: context,
-                  builder: (context) => FilterDialog(),
-                );
-                Navigator.of(context).pop();
-                notification(result, false);
-
-                // Now result contains the dataPet returned from FilterDialog
-                print(result);
-              },
+              onPressed: showFilterDialog,
             ),
           ],
         ),
@@ -397,23 +392,30 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   Widget buildAnimalAdopt() {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.06),
-      child: FutureBuilder<List<Pet>>(
-        future: futurePets,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Please try again later'));
-          } else {
-            animals = snapshot.data ?? [];
-            return buildAnimalList(animals);
-          }
-        },
-      ),
-    );
+  color: Theme.of(context).primaryColor.withOpacity(0.06),
+  child: FutureBuilder<List<Pet>>(
+    future: futurePets,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (snapshot.hasError) {
+        return const Center(child: Text('Please try again later'));
+      } else {
+        animals = snapshot.data ?? [];
+        return Column(  // Wrap Expanded with a Column
+          children: [
+            Expanded(child: buildAnimalList(animals,filteredAnimals)),
+          ],
+        );
+      }
+    },
+  ),
+);
+
+
+
   }
 
   Widget fieldInforPet(String infor, String inforDetail) {
@@ -442,164 +444,140 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
     );
   }
 
-  Widget buildAnimalList(List<Pet> animals) {
-    final deviceWidth = MediaQuery.of(context).size.width;
 
-    return Expanded(
-      child: ListView.builder(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        itemCount: _searchKeyword.isEmpty && selectedPetType == ''
+
+  Widget buildAnimalList(List<Pet> animals, List<Pet> filteredAnimals) {
+  final deviceWidth = MediaQuery.of(context).size.width;
+
+  return ListView.builder(
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    itemCount: filteredAnimals.isNotEmpty
+        ? filteredAnimals.length
+        : _searchKeyword.isEmpty && selectedPetType == ''
             ? animals.length
             : _searchResults.length,
-        itemBuilder: (context, index) {
-          final animal = _searchKeyword.isEmpty && selectedPetType == ''
+    itemBuilder: (context, index) {
+      final animal = filteredAnimals.isNotEmpty
+          ? filteredAnimals[index]
+          : _searchKeyword.isEmpty && selectedPetType == ''
               ? animals[index]
               : _searchResults[index];
-
-          // Biến tạm thời để giữ giá trị khoảng cách
-          String distanceString = '';
-
-          // Gọi hàm tính khoảng cách và gán giá trị vào biến tạm thời
-          calculateDistance(currentClient.address, animal.centerId!.address)
-              .then((value) {
-            distanceString = value.toStringAsFixed(2);
-            // Bảo đảm cập nhật lại widget khi giá trị thay đổi
-          });
-          print('distance: $distanceString');
-
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return AnimalDetailScreen(
-                      animal: animal,
-                      currentId: currentClient,
-                    );
-                  },
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 28, right: 10, left: 20),
-              child: Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Material(
-                    borderRadius: BorderRadius.circular(20),
-                    elevation: 4.0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(width: deviceWidth * 0.4),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // Text(
-                                    //   'Name: ${animal.namePet}',
-                                    //   style: TextStyle(
-                                    //     fontSize: 16,
-                                    //     color: Theme.of(context).primaryColor,
-                                    //     fontWeight: FontWeight.bold,
-                                    //   ),
-                                    // ),
-                                    fieldInforPet('Name', animal.namePet),
-
-                                    Icon(
-                                      animal.gender == "FEMALE"
-                                          ? FontAwesomeIcons.venus
-                                          : FontAwesomeIcons.mars,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                // Text(
-                                //   'Breed: ${animal.breed}',
-                                //   style: TextStyle(
-                                //     fontSize: 14,
-                                //     color: Theme.of(context).primaryColor,
-                                //     fontWeight: FontWeight.w500,
-                                //   ),
-                                // ),
-                                fieldInforPet('Breed', animal.breed),
-                                const SizedBox(height: 10),
-                                // Text(
-                                //   'Age: ${animal.age} years old',
-                                //   style: const TextStyle(
-                                //     color: Colors.grey,
-                                //     fontWeight: FontWeight.w600,
-                                //   ),
-                                // ),
-                                fieldInforPet(
-                                    'Age', '${animal.age * 12} months'),
-                                const SizedBox(height: 10),
-
-                                Row(
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.mapMarkerAlt,
+    
+        String distanceString = '';
+    
+        calculateDistance(currentClient.address, animal.centerId!.address)
+            .then((value) {
+          distanceString = value.toStringAsFixed(2);
+        
+        });
+        print('distance: $distanceString');
+    
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AnimalDetailScreen(
+                    animal: animal,
+                    currentId: currentClient,
+                  );
+                },
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 28, right: 10, left: 20),
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Material(
+                  borderRadius: BorderRadius.circular(20),
+                  elevation: 4.0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: deviceWidth * 0.4),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  fieldInforPet('Name', animal.namePet),
+                                  Icon(
+                                    animal.gender == "FEMALE"
+                                        ? FontAwesomeIcons.venus
+                                        : FontAwesomeIcons.mars,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              fieldInforPet('Breed', animal.breed),
+                              const SizedBox(height: 10),
+                              fieldInforPet(
+                                  'Age', '${animal.age * 12} months'),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.mapMarkerAlt,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 16.0,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Distance: ',
+                                    style: TextStyle(
+                                      fontSize: 15,
                                       color: Theme.of(context).primaryColor,
-                                      size: 16.0,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      'Distance: ',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                  ),
+                                  Text(
+                                    distanceString,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                    Text(
-                                      distanceString,
-                                      // '4.3 km',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Hero(
-                          tag: animal.namePet,
-                          child: Image(
-                            image: NetworkImage(animal.images.first),
-                            height: 190,
-                            width: deviceWidth * 0.4,
-                            fit: BoxFit.cover,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                      ],
+                    ),
+                  ),
+                ),
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Hero(
+                        tag: animal.namePet,
+                        child: Image(
+                          image: NetworkImage(animal.images.first),
+                          height: 190,
+                          width: deviceWidth * 0.4,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

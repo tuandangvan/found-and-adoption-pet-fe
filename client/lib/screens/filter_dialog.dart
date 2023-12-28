@@ -6,14 +6,11 @@ import 'package:found_adoption_application/utils/messageNotifi.dart';
 class FilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Bộ Lọc Thú Cưng'),
-        ),
-        body: FilterScreen(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bộ Lọc Thú Cưng'),
       ),
+      body: FilterScreen(),
     );
   }
 }
@@ -108,20 +105,19 @@ class _FilterScreenState extends State<FilterScreen> {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
+                try{
                 List<int> listAge =
                     convertRangeValuesToListInt(selectedAgeRange);
 
                 List<Pet> dataPet = await filterPet(
                     selectedBreed, selectedColors, listAge);
-                
-                // notification(dataPet.toString(), false);
-                // Navigator.of(context).pop();
-                // Navigator.of(context).pop(dataPet);
 
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context, dataPet);
-                // Navigator.of(context).pop();
-              },
+                    print('hú hú: $dataPet');
+                Navigator.pop<List<Pet>>(context, dataPet); 
+                
+              }catch(e){
+                print('errorr12: ${e.toString()}');
+              }},
               child: Text('Apply'),
             ),
           ],
