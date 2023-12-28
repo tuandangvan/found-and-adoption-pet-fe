@@ -4,7 +4,6 @@ import 'package:found_adoption_application/custom_widget/input_widget.dart';
 import 'package:found_adoption_application/screens/login_screen.dart';
 import 'package:found_adoption_application/services/auth/signup_api.dart';
 import 'package:found_adoption_application/utils/loading.dart';
-import 'package:hive/hive.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -167,11 +166,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         passwordController.text.toString(), signupType);
                     Navigator.of(context).pop();
 
-                    final email = emailController.text.toString();
-                    final emailRegisterBox =
-                        await Hive.openBox('emailRegisterBox');
-                    emailRegisterBox.put('email', email);
-                    emailRegisterBox.put('role', signupType);
                   },
                   elevation: 0,
                   shape: RoundedRectangleBorder(

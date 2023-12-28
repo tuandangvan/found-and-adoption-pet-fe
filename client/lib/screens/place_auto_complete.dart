@@ -8,7 +8,6 @@ import 'package:google_places_flutter/model/prediction.dart';
 import 'package:http/http.dart' as http;
 
 Widget placesAutoCompleteTextField(TextEditingController controller) {
-  print('test key: $GOOGLE_MAPS_API_KEY');
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 20),
     child: GooglePlaceAutoCompleteTextField(
@@ -29,7 +28,6 @@ Widget placesAutoCompleteTextField(TextEditingController controller) {
       countries: const ["vn"],
       isLatLngRequired: false,
       getPlaceDetailWithLatLng: (Prediction prediction) {
-        print("placeDetails" + prediction.lat.toString());
       },
       itemClick: (Prediction prediction) {
         controller.text = prediction.description ?? "";
@@ -93,17 +91,15 @@ Future<LatLng> convertAddressToLatLng(String inputAddress) async {
   LatLng coordinate;
   try {
     // Thay thế bằng API key của bạn
-    const apiKey = 'AIzaSyDYwGbz4F815dZreWn-rUqR8HK7wyChHtI';
+    const apiKey = 'AIzaSyChnbx9TGSXLu6GePcdzb9IjYBGWHRsqcc';
 
 
     final encodedAddress = Uri.encodeComponent(inputAddress);
-    print('test 111: $encodedAddress');
 
     final endpoint =
-        'http://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey';
+        'https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey';
 
     final response = await http.get(Uri.parse(endpoint));
-    print('test endpoint: $endpoint');
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -111,7 +107,6 @@ Future<LatLng> convertAddressToLatLng(String inputAddress) async {
       if (data['status'] == 'OK') {
         final location = data['results'][0]['geometry']['location'];
         coordinate = LatLng(location['lat'], location['lng']);
-        print('Tọa độ mới: $coordinate');
       } else {
         throw Exception('Geocoding failed: ${data['status']}');
       }
@@ -121,7 +116,6 @@ Future<LatLng> convertAddressToLatLng(String inputAddress) async {
 
     return coordinate;
   } catch (e) {
-    print('Error: ${e.toString()}');
     return LatLng(0.0, 0.0);
   }
 }

@@ -48,7 +48,7 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
 
     //sao chép danh sách screens vào screensnapshot
     screenSnapshot = screens.values.toList();
-    print(widget.centerId);
+    // print(widget.centerId);
     screens[2] = ProfileCenterPage(centerId: widget.centerId);
     screens[0] = AdoptionScreen(centerId: widget.centerId);
   }
@@ -57,6 +57,8 @@ class _MenuFrameCenterState extends State<MenuFrameCenter>
   Map<int, Widget> screens = {
     0: AdoptionScreen(
       centerId: null,
+      
+    
     ),
     1: FeedScreen(),
     2: ProfileCenterPage(

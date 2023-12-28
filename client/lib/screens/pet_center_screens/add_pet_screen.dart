@@ -59,7 +59,6 @@ class _AddPetScreenState extends State<AddPetScreen> {
     finalResult2 = result.map((url) => url).toList();
 
     // print('test selectedImage: $finalResult');
-    print('test selectedImage: $finalResult2');
 
     // Check if the widget is still mounted before calling setState
     if (mounted) {
@@ -70,7 +69,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
   }
 
   Future<void> postPet() async {
-    print('test images here: $finalResult');
+    // print('test images here: $finalResult');
 
     // Kiểm tra trạng thái mounted trước khi gọi setState
     if (mounted) {

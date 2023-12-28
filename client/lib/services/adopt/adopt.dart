@@ -8,7 +8,6 @@ Future<String> createAdopt(String petId, String descriptionAdoption) async {
     var body = jsonEncode(
         {'petId': petId, 'descriptionAdoption': descriptionAdoption});
     var responseData = await api('/adopt', 'POST', body);
-    print(responseData);
 
     if (responseData['success']) {
       notification(responseData['message'], false);
@@ -17,7 +16,7 @@ Future<String> createAdopt(String petId, String descriptionAdoption) async {
       notification(responseData['message'], true);
     }
   } catch (e) {
-    print(e.toString());
+    // print(e.toString());
     notification("Adopt: ${e.toString()}", true);
   }
   return '';
@@ -35,7 +34,7 @@ Future<List<Adopt>> getStatusAdoptCenter(String status) async {
       return adopts;
     }
   } catch (e) {
-    print(e);
+    // print(e);
     // notification(e.toString(), true);
   }
   // ignore: cast_from_null_always_fails
@@ -54,7 +53,7 @@ Future<List<Adopt>> getStatusAdoptUser(String status) async {
       return adopts;
     }
   } catch (e) {
-    print(e);
+    // print(e);
     // notification(e.toString(), true);
   }
   // ignore: cast_from_null_always_fails
@@ -71,7 +70,7 @@ Future<void> changeStatusAdoptCenter(String adoptId, String statusAdopt) async {
       notification(responseData['message'], false);
     }
   } catch (e) {
-    print(e);
+    // print(e);
     // notification(e.toString(), true);
   }
 }
@@ -86,7 +85,7 @@ Future<void> changeStatusAdoptUser(String adoptId, String statusAdopt) async {
       notification(responseData['message'], false);
     }
   } catch (e) {
-    print(e);
+    // print(e);
     // notification(e.toString(), true);
   }
 }
