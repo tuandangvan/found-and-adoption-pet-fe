@@ -45,14 +45,13 @@ class _PostCardState extends State<PostCard> {
       'autoConnect': true,
     });
 
-
     socket.on("getOnlineUsers", (data) {
-      if(data['userId'] == clientPost.userId?.id || data['userId'] == clientPost.petCenterId?.id){
+      if (data['userId'] == clientPost.userId?.id ||
+          data['userId'] == clientPost.petCenterId?.id) {
         setState(() {
           isOnline = true;
         });
       }
-
     });
   }
 
@@ -131,19 +130,21 @@ class _PostCardState extends State<PostCard> {
                               ? '${clientPost.userId!.avatar}'
                               : '${clientPost.petCenterId.avatar}',
                         ),
-                      ),isOnline?
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 10.0,
-                          height: 10.0,
-                          decoration: BoxDecoration(
-                            color: Colors.green, // Green color
-                            shape: BoxShape.circle, // Circular shape
-                          ),
-                        ),
-                      ):SizedBox(),
+                      ),
+                      isOnline
+                          ? Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                width: 10.0,
+                                height: 10.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.green, // Green color
+                                  shape: BoxShape.circle, // Circular shape
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
@@ -408,7 +409,15 @@ class _PostCardState extends State<PostCard> {
 
           if (clientPost.images != null && clientPost.images.isNotEmpty)
             clientPost.images.length == 1
-                ? Image.network(clientPost.images.first)
+                ? Image.network(
+                    clientPost.images.first,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Return an Icon widget when there's an error
+                      return Icon(Icons.image_not_supported, color: Colors.red);
+                    },
+                  )
                 : _slider(clientPost.images)
           else
             const SizedBox(),
@@ -578,6 +587,10 @@ class _PostCardState extends State<PostCard> {
                   item,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Return an Icon widget when there's an error
+                    return Icon(Icons.image_not_supported, color: Colors.red);
+                  },
                 ),
               )
               .toList(),
