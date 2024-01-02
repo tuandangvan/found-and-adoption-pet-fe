@@ -29,7 +29,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
 
   String _selectedPetType = '';
   String _selectedGender = '';
-  String _selectedLevel = 'NORMAL';
+  // String _selectedLevel = 'NORMAL';
 
   int currentIndex = 0;
   final CarouselController carouselController = CarouselController();
@@ -51,7 +51,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
     _colorController.text = widget.pet.color;
     _ageController.text = widget.pet.age.toString();
     _descriptionController.text = widget.pet.description;
-    _selectedLevel = widget.pet.level;
+    // _selectedLevel = widget.pet.level;
     _selectedPetType = widget.pet.petType;
     _selectedGender = widget.pet.gender;
     finalResult.addAll(widget.pet.images);
@@ -80,7 +80,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
           _selectedGender,
           _colorController.text.toString(),
           _descriptionController.text.toString(),
-          _selectedLevel,
+          // _selectedLevel,
           imageFileList,
           imageFileList.isNotEmpty ? true : false,
           widget.pet.id);
@@ -194,26 +194,26 @@ class _EditPetScreenState extends State<EditPetScreen> {
               ),
 
               //DropdownButtonFormField LEVEL
-              DropdownButtonFormField<String>(
-                value: _selectedLevel,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedLevel = value!;
-                  });
-                },
-                decoration: const InputDecoration(labelText: 'Level'),
-                items: ['URGENT', 'NORMAL']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 192, 77, 36)),
-                    ),
-                  );
-                }).toList(),
-              ),
+              // DropdownButtonFormField<String>(
+              //   value: _selectedLevel,
+              //   onChanged: (String? value) {
+              //     setState(() {
+              //       _selectedLevel = value!;
+              //     });
+              //   },
+              //   decoration: const InputDecoration(labelText: 'Level'),
+              //   items: ['URGENT', 'NORMAL']
+              //       .map<DropdownMenuItem<String>>((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(
+              //         value,
+              //         style: const TextStyle(
+              //             color: Color.fromARGB(255, 192, 77, 36)),
+              //       ),
+              //     );
+              //   }).toList(),
+              // ),
 
               // Your other form fields go here
 

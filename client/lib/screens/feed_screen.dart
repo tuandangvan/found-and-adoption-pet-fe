@@ -7,6 +7,7 @@ import 'package:found_adoption_application/screens/pet_center_screens/menu_frame
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/messageNotifi.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -58,7 +59,6 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 2));
     setState(() {
       visiblePosts.clear();
       currentPage = 1;
@@ -165,6 +165,49 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _refresh,
+        backgroundColor: Theme.of(context).primaryColor,
+        tooltip: 'Reload',
+        child: Icon(Icons.refresh),
+      ),
     );
   }
 }
+
+// RefreshIndicator(
+//           onRefresh: _refresh,
+//           child: FutureBuilder<PostResult>(
+//             future: getAllPost(1, 10),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.waiting) {
+//                 return const Center(
+//                   child: CircularProgressIndicator(),
+//                 );
+//               } else if (snapshot.hasError) {
+//                 return const Center(child: Text('Please try again later'));
+//               } else {
+//                 List<Post>? postList = snapshot.data!.posts;
+
+//                 if (postList != null) {
+//                   return ListView.builder(
+//                     itemCount: postList.length,
+//                     itemBuilder: (context, index) =>
+//                         PostCard(snap: postList[index]),
+//                   );
+//                 } else {
+//                   // Xử lý trường hợp postList là null
+//                   return const Scaffold(
+//                     body: Center(
+//                       child: Icon(
+//                         Icons.cloud_off, // Thay thế bằng icon bạn muốn sử dụng
+//                         size: 48.0,
+//                         color: Colors.grey,
+//                       ),
+//                     ),
+//                   );
+//                 }
+//               }
+//             },
+//           ),
+//         ));
