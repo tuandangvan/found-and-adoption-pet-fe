@@ -142,7 +142,7 @@ Future<void> updatePet(
     String gender,
     String color,
     String description,
-    String level,
+    // String level,
     List<XFile> imagePaths,
     bool isNewUpload,
     String petId) async {
@@ -163,7 +163,7 @@ Future<void> updatePet(
     "gender": gender,
     "color": color,
     "description": description,
-    "level": level,
+    // "level": level,
     if (isNewUpload) "images": finalResult,
   });
   try {

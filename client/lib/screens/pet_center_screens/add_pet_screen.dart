@@ -54,8 +54,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
     if (selectedImages.isNotEmpty) {
       imageFileList.addAll(selectedImages);
     }
-
+    Loading(context);
     var result = await uploadMultiImage(imageFileList);
+    Navigator.of(context).pop();
     finalResult2 = result.map((url) => url).toList();
 
     // print('test selectedImage: $finalResult');

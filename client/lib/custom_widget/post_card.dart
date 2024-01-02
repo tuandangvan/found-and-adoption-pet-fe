@@ -11,6 +11,7 @@ import 'package:found_adoption_application/screens/user_screens/profile_user.dar
 import 'package:found_adoption_application/services/post/like_post_api.dart';
 import 'package:found_adoption_application/services/post/post.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
+import 'package:found_adoption_application/utils/loading.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -81,7 +82,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final int maxLines = 3;
+    // final int maxLines = 3;
     return Card(
       color: Colors.white,
       elevation: 5,
@@ -273,12 +274,14 @@ class _PostCardState extends State<PostCard> {
                                                   title: const Text(
                                                       'Violates community standards'),
                                                   onTap: () async {
+                                                    Loading(context);
                                                     await reportPost(
                                                         clientPost.id,
                                                         'POST',
                                                         'Violates community standards');
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
+                                                    Navigator.pop(context);
                                                   },
                                                 ),
                                                 ListTile(
@@ -287,10 +290,12 @@ class _PostCardState extends State<PostCard> {
                                                   title: const Text(
                                                       'Misleading language'),
                                                   onTap: () async {
+                                                    Loading(context);
                                                     await reportPost(
                                                         clientPost.id,
                                                         'POST',
                                                         'Misleading language');
+                                                    Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                   },
@@ -300,10 +305,12 @@ class _PostCardState extends State<PostCard> {
                                                       const Icon(Icons.warning),
                                                   title: const Text('Violence'),
                                                   onTap: () async {
+                                                    Loading(context);
                                                     await reportPost(
                                                         clientPost.id,
                                                         'POST',
                                                         'Violence');
+                                                    Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                   },
@@ -314,10 +321,12 @@ class _PostCardState extends State<PostCard> {
                                                   title: const Text(
                                                       'Inappropriate content'),
                                                   onTap: () async {
+                                                    Loading(context);
                                                     await reportPost(
                                                         clientPost.id,
                                                         'POST',
                                                         'Inappropriate content');
+                                                    Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
                                                   },
@@ -351,6 +360,9 @@ class _PostCardState extends State<PostCard> {
                                                                   'Submit'),
                                                               onPressed:
                                                                   () async {
+                                                                Loading(
+                                                                    context);
+
                                                                 await reportPost(
                                                                     clientPost
                                                                         .id,
@@ -358,6 +370,9 @@ class _PostCardState extends State<PostCard> {
                                                                     reasonController
                                                                         .text
                                                                         .toString());
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
                                                                 Navigator.of(
                                                                         context)
                                                                     .pop();
@@ -543,13 +558,13 @@ class _PostCardState extends State<PostCard> {
                           TextSpan(
                             text: isExpanded
                                 ? '  ${clientPost.content}'
-                                : '  ${clientPost.content.substring(0, clientPost.content.length < 100 ? clientPost.content.length : 100)}...',
+                                : '  ${clientPost.content.substring(0, clientPost.content.length < 100 ? clientPost.content.length : 100)}',
                             style:
                                 const TextStyle(fontWeight: FontWeight.normal),
                           ),
                           if (clientPost.content.length > 100)
                             TextSpan(
-                              text: isExpanded ? '  Ẩn bớt' : '  Xem thêm',
+                              text: isExpanded ? ' Show less' : '... See more',
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontStyle: FontStyle.italic,
@@ -654,9 +669,12 @@ class _PostCardState extends State<PostCard> {
                       leading: const Icon(Icons.check_circle),
                       title: const Text('Active'),
                       onTap: () async {
+                        Loading(context);
                         var message = await changeStatusPost(postId, 'ACTIVE');
+
                         setState(() {
                           notification(message, false);
+                          Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
                         });
@@ -666,9 +684,11 @@ class _PostCardState extends State<PostCard> {
                       leading: const Icon(Icons.visibility_off),
                       title: const Text('Hidden'),
                       onTap: () async {
+                        Loading(context);
                         var message = await changeStatusPost(postId, 'HIDDEN');
                         setState(() {
                           notification(message, false);
+                          Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
                         });
@@ -697,8 +717,10 @@ class _PostCardState extends State<PostCard> {
             ),
             TextButton(
               onPressed: () async {
+                Loading(context);
                 var message = await deleteOnePost(postId);
                 // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 notification(message, false);
