@@ -7,7 +7,8 @@ class FilterDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bộ Lọc Thú Cưng'),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text('Pets Filter'),
       ),
       body: FilterScreen(),
     );
@@ -71,6 +72,8 @@ class _FilterScreenState extends State<FilterScreen> {
             Text(
                 'Select old: ${selectedAgeRange.start.toInt()} - ${selectedAgeRange.end.toInt()} năm'),
             RangeSlider(
+              activeColor: Theme.of(context).primaryColor,
+              inactiveColor: Colors.grey,
               values: selectedAgeRange,
               min: 0,
               max: 10,
@@ -103,6 +106,9 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
               onPressed: () {
                 try{
                 List<int> listAge =

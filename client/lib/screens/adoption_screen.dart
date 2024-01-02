@@ -7,7 +7,6 @@ import 'package:found_adoption_application/screens/place_auto_complete.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
 import 'package:found_adoption_application/services/center/petApi.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
-import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:found_adoption_application/screens/filter_dialog.dart';
@@ -136,9 +135,20 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
 
   Future<void> showFilterDialog() async {
     final Future<List<Pet>>? result = await showDialog<Future<List<Pet>>>(
-      context: context,
-      builder: (BuildContext context) => FilterDialog(),
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return FractionallySizedBox(
+            widthFactor: 0.8, // Chiều cao là 50% màn hình
+            alignment: Alignment.bottomRight,
+            heightFactor: 0.8,
+            child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                child: FilterDialog()),
+          );
+        });
 
     if (result != null) {
       setState(() {
@@ -463,7 +473,6 @@ class _AdoptionScreenState extends State<AdoptionScreen> {
             .then((value) {
           distanceString = value.toStringAsFixed(2);
         });
-        print('distance: $distanceString');
 
         return GestureDetector(
           onTap: () {
