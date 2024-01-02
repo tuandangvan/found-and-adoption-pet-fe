@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:found_adoption_application/models/adopt.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
@@ -7,6 +8,7 @@ import 'package:found_adoption_application/screens/user_screens/profile_user.dar
 import 'package:found_adoption_application/services/adopt/adopt.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:found_adoption_application/utils/loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StatusAdopt extends StatefulWidget {
   @override
@@ -222,13 +224,27 @@ class AdoptionTabView extends StatelessWidget {
                             color: Color.fromRGBO(48, 96, 96, 1.0),
                           ),
                           const SizedBox(width: 4.0),
-                          Text(
-                            '${adopt.userId!.phoneNumber}', // Thay đổi bằng biến chứa số điện thoại của người dùng
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              color: Color.fromRGBO(48, 96, 96, 1.0),
+                          InkWell(
+                            onLongPress: () {
+                              _copyToClipboard('${adopt.userId!.phoneNumber}');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Copied to Clipboard: ${adopt.userId!.phoneNumber}'),
+                                ),
+                              );
+                            },
+                            onTap: () {
+                              makePhoneCall('tel:${adopt.userId!.phoneNumber}');
+                            },
+                            child: Text(
+                              '${adopt.centerId!.phoneNumber}', // Thay đổi bằng biến chứa số điện thoại của người dùng
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Color.fromRGBO(48, 96, 96, 1.0),
+                              ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ],
@@ -538,5 +554,19 @@ class AdoptionTabView extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+  }
+
+  void makePhoneCall(String phoneNumber) async {
+    // ignore: deprecated_member_use
+    if (await canLaunch(phoneNumber)) {
+      // ignore: deprecated_member_use
+      await launch(phoneNumber);
+    } else {
+      throw 'Không thể gọi điện thoại';
+    }
   }
 }

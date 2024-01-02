@@ -627,10 +627,13 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             ),
             TextButton(
               onPressed: () async {
+                Loading(context);
                 await deletePet(petId);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
+
               },
               child: const Text('Delete'),
             ),
