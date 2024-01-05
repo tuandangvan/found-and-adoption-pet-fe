@@ -32,9 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                MaterialPageRoute(builder: (context) =>  WelcomeScreen()));
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
             color: Colors.white,
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(

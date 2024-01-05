@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:found_adoption_application/screens/login_screen.dart';
+import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/services/auth_api.dart';
 import 'package:found_adoption_application/utils/messageNotifi.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -8,7 +10,6 @@ import 'package:found_adoption_application/models/current_center.dart';
 import 'package:found_adoption_application/models/current_user.dart';
 import 'package:found_adoption_application/screens/pet_center_screens/menu_frame_center.dart';
 import 'package:found_adoption_application/screens/user_screens/menu_frame_user.dart';
-import 'package:found_adoption_application/screens/user_screens/welcome_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -18,7 +19,13 @@ void main() async {
   Hive.registerAdapter(CenterAdapter());
   HttpOverrides.global = MyHttpOverrides();
 
-  runApp(MyApp());
+  runApp(
+    Directionality(
+      textDirection: TextDirection
+          .ltr, // Change this to TextDirection.rtl for RTL languages
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -103,11 +110,13 @@ class _MyAppState extends State<MyApp> {
                         bool isTokenExpired = now.isAfter(expirationTime);
                         if (!isTokenExpired) {
                           // refreshAccessToken();
+                          return  WelcomeScreen();
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => WelcomeScreen())));
+                                  builder: ((context) =>
+                                       WelcomeScreen())));
                           notification(
                               "The login session has expired, please log in again!",
                               false);
@@ -147,31 +156,24 @@ class _MyAppState extends State<MyApp> {
                           }
                         }
                       }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return  WelcomeScreen();
                     },
                   );
                 }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return  WelcomeScreen();
               },
             );
           } else {
             return MaterialApp(
-              title: 'Flutter Demo',
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 primaryColor: mainColor,
               ),
-              home: WelcomeScreen(),
+              home: LoginScreen(),
             );
           }
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return  WelcomeScreen();
       },
     );
   }
