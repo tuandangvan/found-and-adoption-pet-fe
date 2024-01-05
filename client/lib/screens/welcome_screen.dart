@@ -10,8 +10,6 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -22,35 +20,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       body: SafeArea(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Center(
+                  child: Container(
+                      height: 470,
+                      alignment: Alignment.bottomCenter,
+                      child: bannerCard()),
+                ),
+                Center(
                     child: Container(
-                        height: 470,
-                        alignment: Alignment.bottomCenter,
-                        child: bannerCard()),
-                  ),
-                  Center(child: _imgBanner()),
-                ],
-              ),
-            ],
-          ),
+                  height: 350,
+                  child: Image.asset('assets/images/dog_banner.png'),
+                )),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
-
-  Widget _imgBanner() {
-    return Container(
-      height: 350,
-      child:  
-        Image.asset('assets/images/dog_banner.png'),
-      
-    );
-  }
 }
+
+
+
+
+
+
 
