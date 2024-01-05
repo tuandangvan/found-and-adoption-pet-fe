@@ -201,12 +201,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 ),
                                 Container(
                                   height: screenHeight * 0.15,
-                                  child: Text(
-                                    widget.animal.description.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
+                                  child: SingleChildScrollView(
+                                    child: Text(
+                                      widget.animal.description.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -283,13 +285,21 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                   ),
                                 ],
                               ),
-                              Text(
-                                widget.animal.description.toString(),
-                                style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14),
-                              ),
+                              Container(
+                                  height: screenHeight * 0.15,
+                                  child: SingleChildScrollView(
+                                    child: Text(
+                                      widget.animal.description.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                ),
+
+
+                              
                             ],
                           ),
                         ),
