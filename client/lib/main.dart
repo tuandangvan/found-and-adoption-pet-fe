@@ -75,7 +75,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      future: hasValidRefreshToken,
+      // future: hasValidRefreshToken, 
+      future: Future.delayed(Duration(seconds: 4), () => hasValidRefreshToken),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final refreshTokenIsValid = snapshot.data;
@@ -109,14 +110,14 @@ class _MyAppState extends State<MyApp> {
 
                         bool isTokenExpired = now.isAfter(expirationTime);
                         if (!isTokenExpired) {
-                          // refreshAccessToken();
-                          return  WelcomeScreen();
+                          refreshAccessToken();
+                          
                         } else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: ((context) =>
-                                       WelcomeScreen())));
+                                       LoginScreen())));
                           notification(
                               "The login session has expired, please log in again!",
                               false);
@@ -156,11 +157,11 @@ class _MyAppState extends State<MyApp> {
                           }
                         }
                       }
-                      return  WelcomeScreen();
+                      return const  CircularProgressIndicator();
                     },
                   );
                 }
-                return  WelcomeScreen();
+                return const  CircularProgressIndicator();
               },
             );
           } else {
