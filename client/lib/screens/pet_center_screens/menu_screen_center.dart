@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/main.dart';
+import 'package:found_adoption_application/screens/login_screen.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
 import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:hive/hive.dart';
@@ -220,7 +221,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
                 Navigator.of(context).pop();
                 //Navigate
                 Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => WelcomeScreen())));
+                    MaterialPageRoute(builder: ((context) => LoginScreen())));
 
                 var userBox = await Hive.openBox('userBox');
                 await userBox.put('currentUser', null);
