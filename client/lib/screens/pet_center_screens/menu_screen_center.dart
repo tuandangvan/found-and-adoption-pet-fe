@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:found_adoption_application/main.dart';
+import 'package:found_adoption_application/screens/login_screen.dart';
 import 'package:found_adoption_application/screens/welcome_screen.dart';
+import 'package:found_adoption_application/utils/getCurrentClient.dart';
 import 'package:hive/hive.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -72,6 +74,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Material(
       child: Container(
         decoration: BoxDecoration(
@@ -86,42 +89,78 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 24.0,
-                      backgroundImage: AssetImage('assets/images/Lan.jpg')
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Trung tâm abc',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20),
-                          ),
-                          Row(
-      children: [
-        Icon(
-          Icons.circle, // Chọn một icon màu xanh, ví dụ: đánh dấu đúng (check mark)
-          color: Colors.green, // Màu xanh
-          size: 12,
-        ),
-        SizedBox(width: 8.0), // Khoảng cách giữa icon và văn bản
-        Text(
-          'Đang hoạt động',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ],
+                 Row(
+  children: [
+    FutureBuilder(
+      // Trả về một Future có kiểu dữ liệu là String (URL của avatar)
+      future: getCurrentClient().then((currentClient) => currentClient.avatar),
+      builder: (context, snapshotAvatar) {
+        if (snapshotAvatar.connectionState == ConnectionState.waiting) {
+          // Hiển thị một vòng tròn chờ nếu đang tải dữ liệu
+          return const CircleAvatar(
+            radius: 24.0,
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshotAvatar.hasError) {
+          // Xử lý lỗi nếu có
+          return Text('Error: ${snapshotAvatar.error}');
+        } else {
+          // Hiển thị CircleAvatar khi dữ liệu avatar sẵn sàng
+          return CircleAvatar(
+            radius: 24.0,
+            backgroundImage: NetworkImage(snapshotAvatar.data!),
+          );
+        }
+      },
     ),
-                        ])
-                  ],
+    const SizedBox(width: 8),
+    FutureBuilder(
+      // Trả về một Future có kiểu dữ liệu là String (tên trung tâm)
+      future: getCurrentClient().then((currentClient) => currentClient.name),
+      builder: (context, snapshotName) {
+        if (snapshotName.connectionState == ConnectionState.waiting) {
+          // Hiển thị một vòng tròn chờ nếu đang tải dữ liệu
+          return const CircularProgressIndicator();
+        } else if (snapshotName.hasError) {
+          // Xử lý lỗi nếu có
+          return Text('Error: ${snapshotName.error}');
+        } else {
+          // Hiển thị tên trung tâm khi dữ liệu tên sẵn sàng
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                snapshotName.data!,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
                 ),
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.circle,
+                    color: Colors.green,
+                    size: 12,
+                  ),
+                  SizedBox(width: 8.0),
+                  Text(
+                    'Đang hoạt động',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+      },
+    ),
+  ],
+),
+
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: menuItems
@@ -132,25 +171,8 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
                 ),
                 Row(
                   children: [
-                    // Icon(
-                    //   FontAwesomeIcons.gear,
-                    //   color: Colors.white.withOpacity(0.5),
-                    // ),
-                    // SizedBox(width: 16),
-                    // TextButton(
-                    //   onPressed: () {},
-                    //   child: Text(
-                    //     'Settings      |',
-                    //     style: TextStyle(
-                    //         color: Colors.white.withOpacity(0.5),
-                    //         fontSize: 20,
-                    //         fontWeight: FontWeight.w600),
-                    //   ),
-                    // ),
-                    Icon(
-                      Icons.logout_rounded,
-                      color: Colors.white.withOpacity(0.5)
-                    ),
+                    Icon(Icons.logout_rounded,
+                        color: Colors.white.withOpacity(0.5)),
                     TextButton(
                         onPressed: () async {
                           _showLogoutDialog(context);
@@ -199,7 +221,7 @@ class _MenuCenterScreenState extends State<MenuCenterScreen> {
                 Navigator.of(context).pop();
                 //Navigate
                 Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => WelcomeScreen())));
+                    MaterialPageRoute(builder: ((context) => LoginScreen())));
 
                 var userBox = await Hive.openBox('userBox');
                 await userBox.put('currentUser', null);
